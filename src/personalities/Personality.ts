@@ -1,4 +1,4 @@
-import { ConversationMessage } from '../conversations/ConversationMessage.ts';
+import { ConversationMessage } from "../conversations/ConversationMessage.ts";
 
 export class Personality {
   public Commands?: ConversationMessage[];

@@ -1,1 +1,1 @@
-export * from './personalities/ConfigPersonalityProvider.tests.ts';
+export * from "./personalities/ConfigPersonalityProvider.tests.ts";

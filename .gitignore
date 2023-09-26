@@ -1,0 +1,9 @@
+.env
+cov/
+build/
+coverage/
+lcov/
+target/
+
+# Synaptic build directory
+_synaptic/

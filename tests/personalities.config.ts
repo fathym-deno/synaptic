@@ -1,12 +1,11 @@
-import { PersonalitiesConfig } from '../src/personalities/PersonalitiesConfig.ts';
-import { Personality } from '../src/personalities/Personality.ts';
+import { PersonalitiesConfig } from "../src/personalities/PersonalitiesConfig.ts";
 
 const personalities: PersonalitiesConfig = {};
 
-export const HarborPersonality = Symbol.for('harbor');
+export const HarborPersonality = Symbol.for("harbor");
 
 personalities[HarborPersonality] = {
-  Declarations: ['You are a helpful industrial information assistant.'],
+  Declarations: ["You are a helpful industrial information assistant."],
 };
 
 export default personalities;
