@@ -1,4 +1,4 @@
-import { ConfigPersonalityProvider } from "../../src/personalities/providers/ConfigPersonalityProvider.ts";
+import { ConfigPersonalityProvider } from "../../src/personalities/ConfigPersonalityProvider.ts";
 import { assertEquals, assertExists } from "../tests.deps.ts";
 import personalities, { HarborPersonality } from "../personalities.config.ts";
 

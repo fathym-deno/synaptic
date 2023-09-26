@@ -1,7 +1,7 @@
-import { Personality } from "../Personality.ts";
-import { IPersonalityProvider } from "../IPersonalityProvider.ts";
-import { PersonalityKey } from "../PersonalityKey.ts";
-import { PersonalitiesConfig } from "../PersonalitiesConfig.ts";
+import { Personality } from "./Personality.ts";
+import { IPersonalityProvider } from "./IPersonalityProvider.ts";
+import { PersonalityKey } from "./PersonalityKey.ts";
+import { PersonalitiesConfig } from "./PersonalitiesConfig.ts";
 
 export class ConfigPersonalityProvider implements IPersonalityProvider {
   constructor(protected config: PersonalitiesConfig) {}

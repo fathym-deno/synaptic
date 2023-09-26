@@ -1,15 +1,15 @@
 import { ConversationMessage } from "../conversations/ConversationMessage.ts";
 
-export class Personality {
-  public Commands?: ConversationMessage[];
+export type Personality = {
+  Commands?: ConversationMessage[];
 
-  public Declarations?: string[];
+  Declarations?: string[];
 
-  public Instructions?: string[];
+  Instructions?: string[];
 
-  public MaxTokens?: number;
+  MaxTokens?: number;
 
-  public Messages?: ConversationMessage[];
+  Messages?: ConversationMessage[];
 
-  public Temperature?: number = 0.2;
-}
+  Temperature?: number;
+};
