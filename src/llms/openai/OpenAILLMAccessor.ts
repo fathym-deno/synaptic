@@ -1,11 +1,11 @@
-import { ConversationMessage } from '../../conversations/ConversationMessage.ts';
-import { Personality } from '../../personalities/Personality.ts';
-import { AzureExtensionsOptions, OpenAIClient } from '../../src.deps.ts';
+import { ConversationMessage } from "../../conversations/ConversationMessage.ts";
+import { Personality } from "../../personalities/Personality.ts";
+import { AzureExtensionsOptions, OpenAIClient } from "../../src.deps.ts";
 import {
   convertAsyncIterable,
   ILLMAccessor,
   LLMAccessorOptions,
-} from '../ILLMAccessor.ts';
+} from "../ILLMAccessor.ts";
 
 export type OpenAILLMAccessorOptions = {
   Extensions?: AzureExtensionsOptions;
@@ -14,16 +14,15 @@ export type OpenAILLMAccessorOptions = {
 } & LLMAccessorOptions;
 
 export class OpenAILLMAccessor
-  implements ILLMAccessor<OpenAILLMAccessorOptions>
-{
+  implements ILLMAccessor<OpenAILLMAccessorOptions> {
   constructor(protected openAiClient: OpenAIClient) {}
 
   public async ChatStream(
-    messages: ConversationMessage[],
     personality: Personality,
+    messages: ConversationMessage[],
     options: OpenAILLMAccessorOptions = {
-      Model: 'gpt-35-turbo',
-    }
+      Model: "gpt-35-turbo",
+    },
   ): Promise<AsyncIterable<string | null | undefined>> {
     const chatMessages = messages.map((msg) => {
       return {
@@ -36,7 +35,7 @@ export class OpenAILLMAccessor
       options?.Model!,
       [
         {
-          role: 'system',
+          role: "system",
           content: `${personality.Declarations} ${personality.Instructions}`,
         },
         ...chatMessages,
@@ -48,7 +47,7 @@ export class OpenAILLMAccessor
         stream: options?.Stream,
         // functionCall: reports ? { name: "GlenReport" } : null,
         // functions: reports,
-      }
+      },
     );
 
     const iterable = convertAsyncIterable(chatCompletions, (event) => {
