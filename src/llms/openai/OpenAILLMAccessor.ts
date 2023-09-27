@@ -1,11 +1,11 @@
 import { ConversationMessage } from "../../conversations/ConversationMessage.ts";
 import { Personality } from "../../personalities/Personality.ts";
-import { AzureExtensionsOptions, OpenAIClient } from "../../src.deps.ts";
 import {
+  AzureExtensionsOptions,
   convertAsyncIterable,
-  ILLMAccessor,
-  LLMAccessorOptions,
-} from "../ILLMAccessor.ts";
+  OpenAIClient,
+} from "../../src.deps.ts";
+import { ILLMAccessor, LLMAccessorOptions } from "../ILLMAccessor.ts";
 
 export type OpenAILLMAccessorOptions = {
   Extensions?: AzureExtensionsOptions;
