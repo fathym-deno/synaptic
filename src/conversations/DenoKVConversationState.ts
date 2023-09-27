@@ -24,6 +24,28 @@ export class DenoKVConversationState implements IConversationState {
     );
   }
 
+  public async ClearAll(): Promise<void> {
+    const convos = await this.kv.list({
+      prefix: this.convoRoot,
+    });
+
+    for await (const convo of convos) {
+      const { key } = convo;
+
+      await this.kv.delete(key);
+    }
+
+    const convoMsgs = await this.kv.list({
+      prefix: this.convosRoot,
+    });
+
+    for await (const message of convoMsgs) {
+      const { key } = message;
+
+      await this.kv.delete(key);
+    }
+  }
+
   public async Create(convoLookup: string, convo: Conversation): Promise<void> {
     await this.kv.set([...this.convoRoot, convoLookup], convo);
   }

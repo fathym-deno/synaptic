@@ -4,6 +4,8 @@ import { ConversationMessage } from "./ConversationMessage.ts";
 export interface IConversationState {
   Add(convoLookup: string, message: ConversationMessage): Promise<void>;
 
+  ClearAll(): Promise<void>;
+
   Create(convoLookup: string, convo: Conversation): Promise<void>;
 
   Delete(convoLookup: string): Promise<void>;
