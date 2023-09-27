@@ -1,4 +1,5 @@
 .env
+.env.ts
 cov/
 build/
 coverage/
