@@ -10,6 +10,7 @@ import { FunctionToCall } from '../../../src/llms/ILLMAccessor.ts';
 
 Deno.test('OpenAILLMAccessor tests', async (t) => {
   const endpoint = Deno.env.get('OPENAI_ENDPOINT') || '';
+
   const azureApiKey = Deno.env.get('OPENAI_API_KEY') || '';
 
   const client = new OpenAIClient(
