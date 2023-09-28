@@ -1,3 +1,4 @@
+import { ChatCompletions, FunctionCall } from "npm:@azure/openai@next";
 import { ConversationMessage } from "../../conversations/ConversationMessage.ts";
 import { Personality } from "../../personalities/Personality.ts";
 import {
@@ -55,7 +56,7 @@ export class OpenAILLMAccessor
         ...chatMessages,
       ],
       {
-        // azureExtensionOptions: options?.Extensions,
+        azureExtensionOptions: options?.Extensions,
         maxTokens: personality.MaxTokens,
         temperature: personality.Temperature,
         functionCall: funcCall,
@@ -64,15 +65,17 @@ export class OpenAILLMAccessor
     );
 
     const funcToCall = chatCompletions.choices[0]?.message?.functionCall
-      ? {
-        name: chatCompletions.choices[0]?.message?.functionCall.name,
-        arguments: JSON.parse(
-          chatCompletions.choices[0]?.message?.functionCall.arguments,
-        ) as FunctionToCall,
-      }
+      ? this.toFunctionToCall(chatCompletions.choices[0]?.message?.functionCall)
       : undefined;
 
     return funcToCall || chatCompletions.choices[0]?.message?.content;
+  }
+
+  protected toFunctionToCall(call: FunctionCall): FunctionToCall {
+    return {
+      name: call.name,
+      arguments: JSON.parse(call.arguments) as FunctionToCall,
+    };
   }
 
   public async ChatStream(
@@ -89,10 +92,9 @@ export class OpenAILLMAccessor
       };
     });
 
-    // TODO: Support through streaming
-    // const funcCall = options?.FunctionRequired
-    //   ? options?.Functions![options.FunctionRequired].name
-    //   : undefined;
+    const funcCall = options?.FunctionRequired
+      ? { name: options?.Functions![options.FunctionRequired].name }
+      : undefined;
 
     const chatCompletions = await this.openAiClient.listChatCompletions(
       options?.Model!,
@@ -108,14 +110,23 @@ export class OpenAILLMAccessor
         maxTokens: personality.MaxTokens,
         temperature: personality.Temperature,
         stream: options?.Stream,
-        // functionCall: funcCall,
-        // functions: options?.Functions,
+        functionCall: funcCall,
+        functions: options?.Functions,
       },
     );
 
-    const iterable = convertAsyncIterable(chatCompletions, (event) => {
-      return Promise.resolve(event.choices[0]?.delta?.content);
-    });
+    const iterable = convertAsyncIterable<ChatCompletions, ChatResponse>(
+      chatCompletions,
+      (event) => {
+        if (event.choices[0]?.delta?.functionCall) {
+          return Promise.resolve(
+            this.toFunctionToCall(event.choices[0]?.delta?.functionCall),
+          );
+        } else {
+          return Promise.resolve(event.choices[0]?.delta?.content);
+        }
+      },
+    );
 
     return iterable;
   }

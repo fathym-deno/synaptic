@@ -48,6 +48,39 @@ Deno.test("OpenAILLMAccessor tests", async (t) => {
     assertFalse(!full.startsWith("Once upon a time"));
   });
 
+  // await t.step('Function Call ChatStream tests', async () => {
+  //   const funcToCall = await llm.ChatStream(
+  //     personality,
+  //     [
+  //       {
+  //         From: 'user',
+  //         Content: 'Please provide with a report about the state of IIoT.',
+  //       },
+  //     ],
+  //     {
+  //       Model: 'gpt-35-turbo-16k',
+  //       FunctionRequired: 1,
+  //       Functions: [loadTestFunction()],
+  //     }
+  //   );
+
+  //   let i = 0;
+
+  //   let full = '';
+  //   for await (const funcPart of funcToCall) {
+  //     i++;
+
+  //     if (funcPart) {
+  //       full += funcPart as FunctionToCall;
+  //     }
+  //   }
+
+  //   assertFalse(i == 1);
+  //   assertExists(funcToCall);
+  //   // assertExists(funcToCall.arguments.reportTitle);
+  //   // assertExists(funcToCall.arguments.reportSubhead);
+  // });
+
   await t.step("Chat tests", async () => {
     const fullChat = (await llm.Chat(personality, [
       {
