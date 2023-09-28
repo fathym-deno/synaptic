@@ -79,7 +79,7 @@ export class OpenAILLMAccessor
     personality: Personality,
     messages: ConversationMessage[],
     options: OpenAILLMAccessorOptions = {
-      Model: "gpt-35-turbo",
+      Model: "gpt-35-turbo-16k",
     },
   ): Promise<AsyncIterable<ChatResponse>> {
     const chatMessages = messages.map((msg) => {
