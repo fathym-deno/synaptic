@@ -7,7 +7,6 @@ import {
 } from "../../../src/src.deps.ts";
 import { assertExists, assertFalse } from "../../tests.deps.ts";
 import { FunctionToCall } from "../../../src/llms/ILLMAccessor.ts";
-import {} from "../../../.env.ts";
 
 Deno.test("OpenAILLMAccessor tests", async (t) => {
   const endpoint = Deno.env.get("OPENAI_ENDPOINT") || "";

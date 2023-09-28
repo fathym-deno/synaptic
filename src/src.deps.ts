@@ -1,3 +1,4 @@
+import "https://deno.land/std@0.203.0/dotenv/load.ts";
 export { convertAsyncIterable } from "https://deno.land/x/fathym_common@v0.0.95-integration/mod.ts";
 export {
   type AzureExtensionsOptions,
