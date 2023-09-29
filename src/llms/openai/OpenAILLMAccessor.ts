@@ -35,7 +35,13 @@ export class OpenAILLMAccessor
       Model: "gpt-35-turbo-16k",
     },
   ): Promise<ChatResponse> {
-    const chatMessages = messages.map((msg) => {
+    const finalMessages = [
+      ...(personality.Messages || []),
+      ...messages,
+      ...(personality.Commands || []),
+    ];
+
+    const chatMessages = finalMessages.map((msg) => {
       return {
         role: msg.From,
         content: msg.Content,
