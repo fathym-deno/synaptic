@@ -77,13 +77,6 @@ export class OpenAILLMAccessor
     return funcToCall || chatCompletions.choices[0]?.message?.content;
   }
 
-  protected toFunctionToCall(call: FunctionCall): FunctionToCall {
-    return {
-      name: call.name,
-      arguments: JSON.parse(call.arguments) as FunctionToCall,
-    };
-  }
-
   public async ChatStream(
     personality: Personality,
     messages: ConversationMessage[],
@@ -141,5 +134,31 @@ export class OpenAILLMAccessor
     );
 
     return iterable;
+  }
+
+  public async Embedding(
+    input: string[],
+    model = "text-embedding-ada-002",
+    user = "system",
+  ): Promise<number[]> {
+    const embeddingsResp = await this.openAiClient.getEmbeddings(model, input, {
+      user: user,
+    });
+
+    const embeddings = new Array(input.length);
+
+    for (const embeddingItem of embeddingsResp.data) {
+      embeddings[embeddingItem.index] = embeddingItem.embedding;
+    }
+
+    return embeddings;
+  }
+
+  protected toFunctionToCall(call: FunctionCall): FunctionToCall {
+    console.log(call.arguments);
+    return {
+      name: call.name,
+      arguments: JSON.parse(call.arguments),
+    } as FunctionToCall;
   }
 }
