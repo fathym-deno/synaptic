@@ -54,7 +54,7 @@ Deno.test("OpenAILLMAccessor tests", async (t) => {
   //     [
   //       {
   //         From: 'user',
-  //         Content: 'Please provide with a report about the state of IIoT.',
+  //         Content: 'Please provide with a page about the state of IIoT.',
   //       },
   //     ],
   //     {
@@ -77,8 +77,8 @@ Deno.test("OpenAILLMAccessor tests", async (t) => {
 
   //   assertFalse(i == 1);
   //   assertExists(funcToCall);
-  //   // assertExists(funcToCall.arguments.reportTitle);
-  //   // assertExists(funcToCall.arguments.reportSubhead);
+  //   // assertExists(funcToCall.arguments.pageTitle);
+  //   // assertExists(funcToCall.arguments.pageSubhead);
   // });
 
   await t.step("Chat tests", async () => {
@@ -99,7 +99,7 @@ Deno.test("OpenAILLMAccessor tests", async (t) => {
       [
         {
           From: "user",
-          Content: "Please provide with a report about the state of IIoT.",
+          Content: "Please provide with a page about the state of IIoT.",
         },
       ],
       {
@@ -109,8 +109,8 @@ Deno.test("OpenAILLMAccessor tests", async (t) => {
     )) as FunctionToCall;
 
     assertExists(funcToCall);
-    assertExists(funcToCall.arguments.reportTitle);
-    assertExists(funcToCall.arguments.reportSubhead);
+    assertExists(funcToCall.arguments.pageTitle);
+    assertExists(funcToCall.arguments.pageSubhead);
   });
 });
 
@@ -121,17 +121,17 @@ export function loadTestFunction(): FunctionDefinition {
     parameters: {
       type: "object",
       properties: {
-        reportTitle: {
+        pageTitle: {
           type: "string",
-          description: "The title of the report.",
+          description: "The title of the page.",
         },
-        reportSubhead: {
+        pageSubhead: {
           type: "string",
           description:
-            "A more detailed description of the report for us in describing what can be found.",
+            "A more detailed description of the page for us in describing what can be found.",
         },
       },
-      required: ["reportTitle", "reportSubhead"],
+      required: ["pageTitle", "pageSubhead"],
     },
   };
 }

@@ -11,8 +11,8 @@ import { PersonalityKey } from "../../personalities/PersonalityKey.ts";
 import { Handlers, JSX } from "../../src.deps.ts";
 import { SynapticConfig } from "../SynapticConfig.ts";
 
-export function loadAllConversationApis(config: SynapticConfig) {
-  const getAllConvos = getAllConversationsRoute(
+export function loadAllConversationsApis(config: SynapticConfig) {
+  const convos = conversationsRoute(
     config.ConvoState,
     config.APIRoot,
     config.Conversations?.Root,
@@ -35,15 +35,15 @@ export function loadAllConversationApis(config: SynapticConfig) {
 
   return {
     Handlers: {
-      GetAllConversations: getAllConvos.handler,
+      Conversations: convos.handler,
       ConvoLookup: convoLookup.handler,
       ChatConvoLookup: chatConvoLookup.handler,
     },
-    Routes: [getAllConvos, convoLookup, chatConvoLookup],
+    Routes: [convos, convoLookup, chatConvoLookup],
   };
 }
 
-export function getAllConversationsRoute(
+export function conversationsRoute(
   convoState: IConversationState,
   apiRoot?: string,
   conversationsRoot?: string,

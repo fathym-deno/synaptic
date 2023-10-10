@@ -155,7 +155,6 @@ export class OpenAILLMAccessor
   }
 
   protected toFunctionToCall(call: FunctionCall): FunctionToCall {
-    console.log(call.arguments);
     return {
       name: call.name,
       arguments: JSON.parse(call.arguments),
