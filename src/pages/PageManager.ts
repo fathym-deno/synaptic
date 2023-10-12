@@ -1,21 +1,18 @@
-export type PageLayout = {
-  Columns: number;
-
-  RowHeight?: number;
-};
+// deno-lint-ignore-file no-explicit-any
+import { PageLayoutConfig } from "./PageLayoutConfig.ts";
 
 export type PageLayoutSlot = {
-  ColumnSpan?: number;
+  Details: any;
 
   PageBlockLookup: string;
-
-  RowSpan?: number;
 };
 
 export type Page = {
-  Lookup: string;
+  Details: any;
 
-  Layout: string;
+  LayoutLookup: string;
+
+  Lookup: string;
 
   Name: string;
 
@@ -23,7 +20,11 @@ export type Page = {
 };
 
 export class PageManager {
-  constructor(protected kv: Deno.Kv, protected pagesRoot = ["Pages"]) {}
+  constructor(
+    protected kv: Deno.Kv,
+    protected pageLayouts: PageLayoutConfig[],
+    protected pagesRoot = ["Pages"],
+  ) {}
 
   public async Delete(pageLookup: string): Promise<void> {
     await this.kv.delete([...this.pagesRoot, pageLookup]);
@@ -49,21 +50,11 @@ export class PageManager {
     return pages;
   }
 
-  public Layouts(): PageLayout[] {
-    return loadLayouts();
+  public Layouts(): Promise<PageLayoutConfig[]> {
+    return Promise.resolve(this.pageLayouts);
   }
 
   public async Save(page: Page): Promise<void> {
     await this.kv.set([...this.pagesRoot, page.Lookup], page);
   }
-}
-
-export function loadLayouts(): PageLayout[] {
-  return [basicLayout()];
-}
-
-export function basicLayout(): PageLayout {
-  return {
-    Columns: 3,
-  };
 }

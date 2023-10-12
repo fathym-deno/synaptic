@@ -1,4 +1,5 @@
-import { FunctionDefinition } from "npm:@azure/openai@next";
+// deno-lint-ignore-file no-explicit-any
+import { FunctionConfig } from "./FunctionConfig.ts";
 
 export type PageBlock = {
   Lookup: string;
@@ -7,14 +8,13 @@ export type PageBlock = {
 
   Type: string;
 
-  // deno-lint-ignore no-explicit-any
   Details: any;
 };
 
 export class PageBlockManager {
   constructor(
     protected kv: Deno.Kv,
-    protected functions: FunctionDefinition[],
+    protected functions: FunctionConfig[],
     protected pageBlocksRoot = ["PageBlocks"],
   ) {}
 
@@ -47,7 +47,7 @@ export class PageBlockManager {
     return pageBlocks;
   }
 
-  public Options(): FunctionDefinition[] {
+  public Functions(): FunctionConfig[] {
     return this.functions;
   }
 

@@ -108,7 +108,7 @@ export function pageBlockFunctionsRoute(
 ) {
   const handler: Handlers<JSX.Element, Record<string, unknown>> = {
     async GET(_req, _ctx) {
-      const body = JSON.stringify(await pageBlocks.Options());
+      const body = JSON.stringify(await pageBlocks.Functions());
 
       return new Response(body, {
         headers: {
@@ -201,10 +201,10 @@ export function pageBlockRegenerateConvoLookupRoute(
         messages.push(commandMsg);
       }
 
-      const options = await pageBlocks.Options();
+      const functions = await pageBlocks.Functions();
 
-      const currentOptionIndex = options.findIndex(
-        (o) => o.name === apiReq.portrayal.Type,
+      const currentOptionIndex = functions.findIndex(
+        (o) => o.Definition.name === apiReq.portrayal.Type,
       );
 
       // const azureSearchIndexName = Deno.env.get("AZURE_SEARCH_INDEX_NAME");
@@ -213,7 +213,7 @@ export function pageBlockRegenerateConvoLookupRoute(
         Model: "gpt-4-32k",
         // Extensions: loadAzureExtensionOptions(azureSearchIndexName!),
         FunctionRequired: 0,
-        Functions: [options[currentOptionIndex]],
+        Functions: [functions[currentOptionIndex].Definition],
       })) as FunctionToCall;
 
       const body = JSON.stringify({
