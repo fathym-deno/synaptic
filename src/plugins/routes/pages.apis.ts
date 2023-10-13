@@ -50,6 +50,7 @@ export function pagesRoute(
     async POST(req, _ctx) {
       const page: Page = await req.json();
 
+      console.log(page);
       await pages.Save(page);
 
       return new Response(JSON.stringify({ Status: "Success" }), {
