@@ -1,3 +1,5 @@
+![Synaptic Cover](./assets/synaptic-cover.png)
+
 # Synaptic
 
 Welcome to Synaptic, a revolutionary bot building framework that goes beyond mere conversation. Our goal is to create bots that don't just talk, but actually do something meaningful.
