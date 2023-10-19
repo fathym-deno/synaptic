@@ -1,0 +1,42 @@
+{
+  "lock": false,
+  "tasks": {
+    "check": "deno fmt && deno lint && deno check ./mod.ts", // && deno check **/*.tsx",
+    "start": "deno run -A --unstable --watch bot.ts",
+    // "start": "deno run -A --unstable --watch=static/,routes/ dev.ts",
+    "build": "deno task check",
+    "deploy": "deno task build && deno task test && ftm git",
+    // "preview": "deno run -A main.ts",
+    "test": "deno test -A --unstable --allow-env .env tests/tests.ts --coverage=cov"
+  },
+  "lint": {
+    "rules": {
+      "tags": [
+        "recommended"
+      ]
+    },
+    "exclude": [
+      "_synaptic"
+    ]
+  },
+  "fmt": {
+    "exclude": [
+      "_synaptic"
+    ]
+  },
+  "imports": {
+    "@fathym/synaptic": "../mod.ts",
+    "@fathym/synaptic/runtime": "../runtime.ts"
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "lib": [
+      "dom",
+      "dom.asynciterable",
+      "dom.iterable",
+      "deno.ns",
+      "deno.unstable"
+    ]
+  }
+}
