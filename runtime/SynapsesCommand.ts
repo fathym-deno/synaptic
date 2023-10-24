@@ -1,4 +1,4 @@
-export type Synapses = {
+export type SynapsesCommand = {
   // deno-lint-ignore no-explicit-any
   Data: any;
 
