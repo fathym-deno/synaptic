@@ -1,4 +1,4 @@
-import { ChatCompletions, FunctionCall } from "npm:@azure/openai@next";
+import { ChatCompletions, FunctionCall } from "npm:@azure/openai@1.0.0-beta.7";
 import { ConversationMessage } from "../../conversations/ConversationMessage.ts";
 import { Personality } from "../../personalities/Personality.ts";
 import {
@@ -49,7 +49,7 @@ export class OpenAILLMAccessor
     });
 
     const funcCall = options?.FunctionRequired
-      ? options?.Functions![options.FunctionRequired].name
+      ? options.Functions![options.FunctionRequired].name
       : undefined;
 
     const chatCompletions = await this.openAiClient.getChatCompletions(
@@ -98,7 +98,7 @@ export class OpenAILLMAccessor
     });
 
     const funcCall = options?.FunctionRequired
-      ? { name: options?.Functions![options.FunctionRequired].name }
+      ? { name: options.Functions![options.FunctionRequired].name }
       : undefined;
 
     const chatCompletions = await this.openAiClient.listChatCompletions(

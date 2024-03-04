@@ -1,4 +1,4 @@
-import { AzureExtensionsOptions } from "npm:@azure/openai@next";
+import { AzureExtensionsOptions } from "npm:@azure/openai@1.0.0-beta.7";
 import { IConversationState } from "../../conversations/IConversationState.ts";
 import { ChatResponse } from "../ILLMAccessor.ts";
 

@@ -1,9 +1,9 @@
-import { ConversationMessage } from '../src/conversations/ConversationMessage.ts';
-import { ISynapticBotRuntime } from './ISynapticBotRuntime.ts';
-import { MessageReceivedRequest } from './MessageReceivedRequest.ts';
-import { MessageReceivedResult } from './MessageReceivedResult.ts';
-import { Synapses, SynapsesCommand } from './SynapsesCommand.ts';
-import { SynapsesConfig } from './SynapsesConfig.ts';
+import { ConversationMessage } from "../src/conversations/ConversationMessage.ts";
+import { ISynapticBotRuntime } from "./ISynapticBotRuntime.ts";
+import { MessageReceivedRequest } from "./MessageReceivedRequest.ts";
+import { MessageReceivedResult } from "./MessageReceivedResult.ts";
+import { Synapses, SynapsesCommand } from "./SynapsesCommand.ts";
+import { SynapsesConfig } from "./SynapsesConfig.ts";
 
 export abstract class SynapticBotRuntime implements ISynapticBotRuntime {
   //#region Constructors
@@ -12,24 +12,24 @@ export abstract class SynapticBotRuntime implements ISynapticBotRuntime {
 
   //#region API Methods
   public Closed(event: CloseEvent): void {
-    console.log('Bot runtime closed:');
+    console.log("Bot runtime closed:");
     console.log(event);
   }
 
   public Errored(event: Event): void {
-    console.log('Bot runtime closed:');
+    console.log("Bot runtime closed:");
     console.error(event);
   }
 
   public async MessageReceived(
-    event: MessageEvent<MessageReceivedRequest>
+    event: MessageEvent<MessageReceivedRequest>,
   ): Promise<MessageReceivedResult | undefined> {
     const { data } = event;
 
     let result: MessageReceivedResult | undefined = undefined;
 
     switch (data.Type) {
-      case 'synapses': {
+      case "synapses": {
         const synapsesResult = await this.handleSynapses(data.Data);
 
         result = {
@@ -50,7 +50,7 @@ export abstract class SynapticBotRuntime implements ISynapticBotRuntime {
   }
 
   public Opened(event: Event): void {
-    console.log('Bot runtime opened:');
+    console.log("Bot runtime opened:");
     console.log(event);
   }
   //#endregion
@@ -61,7 +61,7 @@ export abstract class SynapticBotRuntime implements ISynapticBotRuntime {
   }
 
   protected handleUnknownMessageType(
-    _req: MessageReceivedRequest
+    _req: MessageReceivedRequest,
   ): Promise<MessageReceivedResult> {
     throw new Error();
   }

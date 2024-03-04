@@ -2,7 +2,7 @@ import {
   StandaloneSynapticServer,
   SynapsesConfig,
   SynapticBotRuntime,
-} from '@fathym/synaptic/runtime';
+} from "@fathym/synaptic/runtime";
 
 export class DemoBotRuntime extends SynapticBotRuntime {}
 
@@ -14,7 +14,7 @@ const server = new StandaloneSynapticServer(
   {
     Port: 8100,
   },
-  bot
+  bot,
 );
 
 server.Start();
