@@ -1,4 +1,4 @@
-import { Plugin } from "../src.deps.ts";
+import { Plugin } from "../fresh.deps.ts";
 import { SynapticConfig } from "./SynapticConfig.ts";
 import { loadAllConversationsApis } from "./routes/conversations.apis.ts";
 import { loadAllPageBlocksApis } from "./routes/page-blocks.apis.ts";

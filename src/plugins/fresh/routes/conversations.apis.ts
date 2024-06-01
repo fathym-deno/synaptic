@@ -8,7 +8,8 @@ import {
 } from "../../llms/openai/utils.ts";
 import { IPersonalityProvider } from "../../personalities/IPersonalityProvider.ts";
 import { PersonalityKey } from "../../personalities/PersonalityKey.ts";
-import { Handlers, JSX } from "../../src.deps.ts";
+import { JSX } from "../../src.deps.ts";
+import { Handlers } from "../../fresh.deps.ts";
 import { SynapticConfig } from "../SynapticConfig.ts";
 
 export function loadAllConversationsApis(config: SynapticConfig) {

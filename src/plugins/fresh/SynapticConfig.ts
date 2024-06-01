@@ -1,9 +1,9 @@
-import { IConversationState } from "../conversations/IConversationState.ts";
-import { OpenAILLMAccessor } from "../llms/openai/OpenAILLMAccessor.ts";
-import { PageManager } from "../pages/PageManager.ts";
-import { PageBlockManager } from "../pages/blocks/PageBlockManager.ts";
-import { IPersonalityProvider } from "../personalities/IPersonalityProvider.ts";
-import { PersonalityKey } from "../personalities/PersonalityKey.ts";
+import { IConversationState } from "../../conversations/IConversationState.ts";
+import { OpenAILLMAccessor } from "../../llms/openai/OpenAILLMAccessor.ts";
+import { PageManager } from "../../pages/PageManager.ts";
+import { PageBlockManager } from "../../pages/blocks/PageBlockManager.ts";
+import { IPersonalityProvider } from "../../personalities/IPersonalityProvider.ts";
+import { PersonalityKey } from "../../personalities/PersonalityKey.ts";
 
 export type SynapticConversationsAPIConfig = {
   ChatPersonalityKey: PersonalityKey;

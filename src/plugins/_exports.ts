@@ -1,2 +1,2 @@
-export * from "./synaptic.plugin.ts";
-export * from "./SynapticConfig.ts";
+import FtmSynECSvcsPlgn from "./FathymSynapticEaCServicesPlugin.ts";
+export const FathymSynapticEaCServicesPlugin = FtmSynECSvcsPlgn;

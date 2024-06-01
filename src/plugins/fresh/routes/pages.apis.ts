@@ -1,5 +1,6 @@
 import { Page, PageManager } from "../../pages/PageManager.ts";
-import { Handlers, JSX } from "../../src.deps.ts";
+import { JSX } from "../../src.deps.ts";
+import { Handlers } from "../../fresh.deps.ts";
 import { SynapticConfig } from "../SynapticConfig.ts";
 
 export function loadAllPagesApis(config: SynapticConfig) {
