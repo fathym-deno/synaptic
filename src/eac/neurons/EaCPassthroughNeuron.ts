@@ -1,13 +1,13 @@
-import { EaCNeuron, isEaCNeuron } from '../EaCNeuron.ts';
+import { EaCNeuron, isEaCNeuron } from "../EaCNeuron.ts";
 
 export type EaCPassthroughNeuron = {
   Field?: string;
-} & EaCNeuron<'Passthrough'>;
+} & EaCNeuron<"Passthrough">;
 
 export function isEaCPassthroughNeuron(
-  details: unknown
+  details: unknown,
 ): details is EaCPassthroughNeuron {
   const x = details as EaCPassthroughNeuron;
 
-  return isEaCNeuron('Passthrough', x);
+  return isEaCNeuron("Passthrough", x);
 }

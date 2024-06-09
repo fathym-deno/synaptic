@@ -5,29 +5,30 @@ import { EaCIndexerAsCode } from "./EaCIndexerAsCode.ts";
 import { EaCNeuron } from "./EaCNeuron.ts";
 import { EaCRetrieverAsCode } from "./EaCRetrieverAsCode.ts";
 import { EaCTextSplitterAsCode } from "./EaCTextSplitterAsCode.ts";
-import { EaCToolAsCode } from './EaCToolAsCode.ts';
+import { EaCToolAsCode } from "./EaCToolAsCode.ts";
 import { EaCVectorStoreAsCode } from "./EaCVectorStoreAsCode.ts";
 
+export type EaCSynapticAIAsCode = {
+  Indexers?: Record<string, EaCIndexerAsCode>;
+
+  Loaders?: Record<string, EaCDocumentLoaderAsCode>;
+
+  TextSplitters?: Record<string, EaCTextSplitterAsCode>;
+
+  Tools?: Record<string, EaCToolAsCode>;
+
+  VectorStores?: Record<string, EaCVectorStoreAsCode>;
+} & EaCAIAsCode;
+
 export type EverythingAsCodeSynaptic = {
-  AIs?: Record<
-    string,
-    {
-      Indexers?: Record<string, EaCIndexerAsCode>;
+  AIs?: Record<string, EaCSynapticAIAsCode>;
 
-      Loaders?: Record<string, EaCDocumentLoaderAsCode>;
-
-      TextSplitters?: Record<string, EaCTextSplitterAsCode>;
-
-      Tools?: Record<string, EaCToolAsCode>;
-
-      VectorStores?: Record<string, EaCVectorStoreAsCode>;
-    } & EaCAIAsCode
-  >;
-
-  Circuits?: { $neurons?: Record<string, EaCNeuron> } & Record<
-    string,
-    EaCCircuitAsCode
-  >;
+  Circuits?:
+    & { $neurons?: Record<string, EaCNeuron> }
+    & Record<
+      string,
+      EaCCircuitAsCode
+    >;
 
   Retrievers?: Record<string, EaCRetrieverAsCode>;
 } & EaCMetadataBase;

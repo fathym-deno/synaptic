@@ -1,17 +1,17 @@
-import { EaCToolDetails, isEaCToolDetails } from '../EaCToolDetails.ts';
+import { EaCToolDetails, isEaCToolDetails } from "../EaCToolDetails.ts";
 
 export type EaCSERPToolDetails = {
   APIKey: string;
-} & EaCToolDetails<'SERP'>;
+} & EaCToolDetails<"SERP">;
 
 export function isEaCSERPToolDetails(
-  details: unknown
+  details: unknown,
 ): details is EaCSERPToolDetails {
   const x = details as EaCSERPToolDetails;
 
   return (
-    isEaCToolDetails('SERP', x) &&
+    isEaCToolDetails("SERP", x) &&
     x.APIKey !== undefined &&
-    typeof x.APIKey === 'string'
+    typeof x.APIKey === "string"
   );
 }

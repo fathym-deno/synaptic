@@ -1,17 +1,17 @@
-import { EaCNeuron, isEaCNeuron } from '../EaCNeuron.ts';
+import { EaCNeuron, isEaCNeuron } from "../EaCNeuron.ts";
 
 export type EaCPromptNeuron = {
   PromptTemplate: string;
-} & EaCNeuron<'Prompt'>;
+} & EaCNeuron<"Prompt">;
 
 export function isEaCPromptNeuron(
-  details: unknown
+  details: unknown,
 ): details is EaCPromptNeuron {
   const x = details as EaCPromptNeuron;
 
   return (
-    isEaCNeuron('Prompt', x) &&
+    isEaCNeuron("Prompt", x) &&
     x.PromptTemplate !== undefined &&
-    typeof x.PromptTemplate === 'string'
+    typeof x.PromptTemplate === "string"
   );
 }

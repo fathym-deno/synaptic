@@ -1,17 +1,17 @@
-import { EaCNeuron, isEaCNeuron } from '../EaCNeuron.ts';
+import { EaCNeuron, isEaCNeuron } from "../EaCNeuron.ts";
 
 export type EaCCircuitNeuron = {
   CircuitLookup: string;
-} & EaCNeuron<'Circuit'>;
+} & EaCNeuron<"Circuit">;
 
 export function isEaCCircuitNeuron(
-  details: unknown
+  details: unknown,
 ): details is EaCCircuitNeuron {
   const x = details as EaCCircuitNeuron;
 
   return (
-    isEaCNeuron('Circuit', x) &&
+    isEaCNeuron("Circuit", x) &&
     x.CircuitLookup !== undefined &&
-    typeof x.CircuitLookup === 'string'
+    typeof x.CircuitLookup === "string"
   );
 }

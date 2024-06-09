@@ -1,5 +1,5 @@
-import { EaCDetails } from '../src.deps.ts';
-import { EaCToolDetails, isEaCToolDetails } from './EaCToolDetails.ts';
+import { EaCDetails } from "../src.deps.ts";
+import { EaCToolDetails, isEaCToolDetails } from "./EaCToolDetails.ts";
 
 export type EaCToolAsCode = EaCDetails<EaCToolDetails>;
 

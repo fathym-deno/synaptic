@@ -1,5 +1,5 @@
-import { BaseMessage, BaseMessagePromptTemplateLike } from '../../src.deps.ts';
-import { EaCNeuron, isEaCNeuron } from '../EaCNeuron.ts';
+import { BaseMessage, BaseMessagePromptTemplateLike } from "../../src.deps.ts";
+import { EaCNeuron, isEaCNeuron } from "../EaCNeuron.ts";
 
 export type EaCChatPromptNeuron = {
   Messages?: BaseMessage[];
@@ -7,12 +7,12 @@ export type EaCChatPromptNeuron = {
   NewMessages?: BaseMessagePromptTemplateLike[];
 
   SystemMessage?: string;
-} & EaCNeuron<'ChatPrompt'>;
+} & EaCNeuron<"ChatPrompt">;
 
 export function isEaCChatPromptNeuron(
-  details: unknown
+  details: unknown,
 ): details is EaCChatPromptNeuron {
   const x = details as EaCChatPromptNeuron;
 
-  return isEaCNeuron('ChatPrompt', x);
+  return isEaCNeuron("ChatPrompt", x);
 }
