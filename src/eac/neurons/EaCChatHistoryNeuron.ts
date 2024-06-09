@@ -1,4 +1,5 @@
-import { EaCNeuron, isEaCNeuron } from "./EaCNeuron.ts";
+import { BaseMessage } from '../../src.deps.ts';
+import { EaCNeuron, isEaCNeuron } from '../EaCNeuron.ts';
 
 export type EaCChatHistoryNeuron = {
   ChatHistoryLookup: string;
@@ -6,16 +7,18 @@ export type EaCChatHistoryNeuron = {
   HistoryKey?: string;
 
   InputKey?: string;
-} & EaCNeuron<"ChatHistory">;
+
+  Messages?: BaseMessage[];
+} & EaCNeuron<'ChatHistory'>;
 
 export function isEaCChatHistoryNeuron(
-  details: unknown,
+  details: unknown
 ): details is EaCChatHistoryNeuron {
   const x = details as EaCChatHistoryNeuron;
 
   return (
-    isEaCNeuron("ChatHistory", x) &&
+    isEaCNeuron('ChatHistory', x) &&
     x.ChatHistoryLookup !== undefined &&
-    typeof x.ChatHistoryLookup === "string"
+    typeof x.ChatHistoryLookup === 'string'
   );
 }

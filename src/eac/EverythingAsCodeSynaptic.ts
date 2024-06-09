@@ -5,6 +5,7 @@ import { EaCIndexerAsCode } from "./EaCIndexerAsCode.ts";
 import { EaCNeuron } from "./EaCNeuron.ts";
 import { EaCRetrieverAsCode } from "./EaCRetrieverAsCode.ts";
 import { EaCTextSplitterAsCode } from "./EaCTextSplitterAsCode.ts";
+import { EaCToolAsCode } from './EaCToolAsCode.ts';
 import { EaCVectorStoreAsCode } from "./EaCVectorStoreAsCode.ts";
 
 export type EverythingAsCodeSynaptic = {
@@ -17,16 +18,16 @@ export type EverythingAsCodeSynaptic = {
 
       TextSplitters?: Record<string, EaCTextSplitterAsCode>;
 
+      Tools?: Record<string, EaCToolAsCode>;
+
       VectorStores?: Record<string, EaCVectorStoreAsCode>;
     } & EaCAIAsCode
   >;
 
-  Circuits?:
-    & { $neurons?: Record<string, EaCNeuron> }
-    & Record<
-      string,
-      EaCCircuitAsCode
-    >;
+  Circuits?: { $neurons?: Record<string, EaCNeuron> } & Record<
+    string,
+    EaCCircuitAsCode
+  >;
 
   Retrievers?: Record<string, EaCRetrieverAsCode>;
 } & EaCMetadataBase;
