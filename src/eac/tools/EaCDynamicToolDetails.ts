@@ -20,7 +20,7 @@ export type EaCDynamicToolDetails<
   Name: string;
 
   Schema: T;
-} & EaCToolDetails<'Structured'>;
+} & EaCToolDetails<'Dynamic'>;
 
 export function isEaCDynamicToolDetails(
   details: unknown
@@ -28,7 +28,7 @@ export function isEaCDynamicToolDetails(
   const x = details as EaCDynamicToolDetails;
 
   return (
-    isEaCToolDetails('Structured', x) &&
+    isEaCToolDetails('Dynamic', x) &&
     x.Description !== undefined &&
     typeof x.Description === 'string' &&
     x.Name !== undefined &&
