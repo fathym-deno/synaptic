@@ -1,5 +1,6 @@
 import { RunnableConfig, StateGraphArgs } from '../src.deps.ts';
 import { EaCCircuitDetails, isEaCCircuitDetails } from './EaCCircuitDetails.ts';
+import { EaCNeuronLike } from './EaCNeuron.ts';
 
 export type EaCGraphCircuitEdge = {
   Condition?: (
@@ -23,6 +24,8 @@ export type EaCGraphCircuitDetails = {
 
     Before?: string[];
   };
+
+  PersistenceNeuron?: EaCNeuronLike;
 
   State?: Partial<StateGraphArgs<unknown>['channels']>;
 } & EaCCircuitDetails<'Graph'>;

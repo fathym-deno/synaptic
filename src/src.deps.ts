@@ -44,6 +44,7 @@ export {
   type LanguageModelLike,
 } from "npm:@langchain/core/language_models/base";
 export { CallbackManagerForToolRun } from "npm:@langchain/core/callbacks/manager";
+export { type ToolDefinition } from 'npm:@langchain/core/language_models/base';
 export {
   BaseMessage,
   FunctionMessage,
@@ -69,7 +70,11 @@ export {
   RunnablePassthrough,
   RunnableWithMessageHistory,
 } from "npm:@langchain/core/runnables";
-export { DynamicStructuredTool, Tool } from "npm:@langchain/core/tools";
+export {
+  DynamicTool,
+  DynamicStructuredTool,
+  Tool,
+} from 'npm:@langchain/core/tools';
 export {
   convertToOpenAIFunction,
   convertToOpenAITool,
