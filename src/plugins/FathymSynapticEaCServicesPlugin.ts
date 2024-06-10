@@ -33,6 +33,7 @@ import {
   isEaCDenoKVChatHistoryDetails,
   isEaCWatsonXLLMDetails,
   LanguageModelLike,
+  MemorySaver,
   MemoryVectorStore,
   merge,
   MessageGraph,
@@ -59,7 +60,7 @@ import {
   ToolNode,
   VectorStore,
   WatsonxAI,
-} from "../src.deps.ts";
+} from '../src.deps.ts';
 import {
   EaCHNSWVectorStoreDetails,
   isEaCHNSWVectorStoreDetails,
@@ -515,7 +516,11 @@ export default class FathymSynapticEaCServicesPlugin
               });
             });
 
-            const circuit = graph.compile();
+            const circuit = graph.compile({
+              checkpointer: new MemorySaver(),
+              interruptAfter: details.Interrupts?.After as any,
+              interruptBefore: details.Interrupts?.Before as any,
+            });
 
             return circuit;
           },
