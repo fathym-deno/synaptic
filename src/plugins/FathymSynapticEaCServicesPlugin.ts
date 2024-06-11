@@ -55,7 +55,6 @@ import {
   TavilySearchResults,
   TextSplitter,
   Tool,
-  ToolDefinition,
   ToolExecutor,
   ToolInvocationInterface,
   ToolMessage,
@@ -67,10 +66,7 @@ import {
   EaCHNSWVectorStoreDetails,
   isEaCHNSWVectorStoreDetails,
 } from '../eac/EaCHNSWVectorStoreDetails.ts';
-import {
-  EaCMemoryVectorStoreDetails,
-  isEaCMemoryVectorStoreDetails,
-} from '../eac/EaCMemoryVectorStoreDetails.ts';
+import { isEaCMemoryVectorStoreDetails } from '../eac/EaCMemoryVectorStoreDetails.ts';
 import {
   EaCAzureSearchAIVectorStoreDetails,
   isEaCAzureSearchAIVectorStoreDetails,
@@ -90,10 +86,7 @@ import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from '../eac/EaCNeuron.ts';
 import { isEaCLLMNeuron } from '../eac/neurons/EaCLLMNeuron.ts';
 import { isEaCPromptNeuron } from '../eac/neurons/EaCPromptNeuron.ts';
 import { isEaCChatPromptNeuron } from '../eac/neurons/EaCChatPromptNeuron.ts';
-import {
-  EaCChatHistoryNeuron,
-  isEaCChatHistoryNeuron,
-} from '../eac/neurons/EaCChatHistoryNeuron.ts';
+import { isEaCChatHistoryNeuron } from '../eac/neurons/EaCChatHistoryNeuron.ts';
 import { isEaCCircuitDetails } from '../eac/EaCCircuitDetails.ts';
 import {
   EaCRecursiveCharacterTextSplitterDetails,
@@ -108,10 +101,7 @@ import {
   isEaCGraphCircuitDetails,
 } from '../eac/EaCGraphCircuitDetails.ts';
 import { isEaCCircuitNeuron } from '../eac/neurons/EaCCircuitNeuron.ts';
-import {
-  EaCSERPToolDetails,
-  isEaCSERPToolDetails,
-} from '../eac/tools/EaCSERPToolDetails.ts';
+import { isEaCSERPToolDetails } from '../eac/tools/EaCSERPToolDetails.ts';
 import { isEaCToolNeuron } from '../eac/neurons/EaCToolNeuron.ts';
 import { isEaCStringOutputParserNeuron } from '../eac/neurons/EaCStringOutputParserNeuron.ts';
 import { isEaCTavilySearchResultsToolDetails } from '../eac/tools/EaCTavilySearchResultsToolDetails.ts';
@@ -119,6 +109,9 @@ import { isEaCPassthroughNeuron } from '../eac/neurons/EaCPassthroughNeuron.ts';
 import { isEaCToolExecutorNeuron } from '../eac/neurons/EaCToolExecutorNeuron.ts';
 import { isEaCDynamicToolDetails } from '../eac/tools/EaCDynamicToolDetails.ts';
 import { isEaCToolNodeNeuron } from '../eac/neurons/EaCToolNodeNeuron.ts';
+import { isEaCMemorySaverPersistenceDetails } from '../eac/EaCMemorySaverPersistenceDetails.ts';
+import { isEaCDenoKVSaverPersistenceDetails } from '../eac/EaCDenoKVSaverPersistenceDetails.ts';
+import { DenoKVSaver } from '../memory/DenoKVSaver.ts';
 
 import jsonpath from 'https://cdn.skypack.dev/jsonpath';
 import { DynamicTool } from 'npm:@langchain/core/tools';
@@ -136,13 +129,11 @@ export class JSONPathRunnablePassthrough<
   ): Promise<RunInput> {
     input = this.jsonPath ? jsonpath.query(input, this.jsonPath)[0] : input;
 
-    return super.invoke(input, options);
+    return await super.invoke(input, options);
   }
 }
 
-export default class FathymSynapticEaCServicesPlugin
-  implements EaCRuntimePlugin
-{
+export default class FathymSynapticEaCServicesPlugin implements EaCRuntimePlugin {
   public async AfterEaCResolved(
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer
@@ -483,7 +474,7 @@ export default class FathymSynapticEaCServicesPlugin
               const edgeNode: EaCGraphCircuitEdgeLike =
                 details.Edges![edgeNodeLookup];
 
-              let edgeConfigs: EaCGraphCircuitEdge[] = [];
+              const edgeConfigs: EaCGraphCircuitEdge[] = [];
 
               if (typeof edgeNode === 'string') {
                 edgeConfigs.push({
@@ -523,8 +514,11 @@ export default class FathymSynapticEaCServicesPlugin
 
             let checkpointer: BaseCheckpointSaver | undefined;
 
-            if (details.PersistenceNeuron) {
-              checkpointer = new MemorySaver();
+            if (details.PersistenceLookup) {
+              checkpointer = await ioc.Resolve<BaseCheckpointSaver>(
+                ioc.Symbol('Persistence'),
+                details.PersistenceLookup
+              );
             }
 
             const circuit = graph.compile({
@@ -752,6 +746,50 @@ export default class FathymSynapticEaCServicesPlugin
     });
   }
 
+  protected configureEaCPersistence(
+    eac: EverythingAsCodeSynaptic,
+    ioc: IoCContainer
+  ): void {
+    const aiLookups = Object.keys(eac!.AIs || {});
+
+    aiLookups.forEach((aiLookup) => {
+      const ai = eac!.AIs![aiLookup];
+
+      const persistenceLookups = Object.keys(ai.Persistence || {});
+
+      persistenceLookups.forEach((persistenceLookup) => {
+        const persistence = ai.Persistence![persistenceLookup];
+
+        const details = persistence.Details;
+
+        if (isEaCMemorySaverPersistenceDetails(details)) {
+          ioc.Register(() => new MemorySaver(), {
+            Lazy: false,
+            Name: `${aiLookup}|${persistenceLookup}`,
+            Type: ioc.Symbol('Persistence'),
+          });
+        } else if (isEaCDenoKVSaverPersistenceDetails(details)) {
+          ioc.Register(
+            async () => {
+              const kv = await ioc.Resolve(Deno.Kv, details.DatabaseLookup);
+
+              return new DenoKVSaver(
+                kv,
+                details.RootKey,
+                details.CheckpointTTL
+              );
+            },
+            {
+              Lazy: false,
+              Name: `${aiLookup}|${persistenceLookup}`,
+              Type: ioc.Symbol('Persistence'),
+            }
+          );
+        }
+      });
+    });
+  }
+
   protected async configureEaCRetrievers(
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer
@@ -857,18 +895,18 @@ export default class FathymSynapticEaCServicesPlugin
     });
   }
 
-  protected async configureEaCTools(
+  protected configureEaCTools(
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer
-  ): Promise<void> {
+  ): void {
     const aiLookups = Object.keys(eac!.AIs || {});
 
-    const calls = aiLookups.map(async (aiLookup) => {
+    aiLookups.forEach((aiLookup) => {
       const ai = eac!.AIs![aiLookup];
 
       const toolLookups = Object.keys(ai.Tools || {});
 
-      const toolCalls = toolLookups.map(async (toolLookup) => {
+      toolLookups.forEach((toolLookup) => {
         const tool = ai.Tools![toolLookup];
 
         const details = tool.Details;
@@ -890,17 +928,6 @@ export default class FathymSynapticEaCServicesPlugin
               return new TavilySearchResults({
                 apiKey: details.APIKey,
               });
-            },
-            {
-              Lazy: false,
-              Name: `${aiLookup}|${toolLookup}`,
-              Type: ioc.Symbol('Tool'),
-            }
-          );
-
-          ioc.Register(
-            () => {
-              return new SerpAPI(details.APIKey);
             },
             {
               Lazy: false,
@@ -932,11 +959,7 @@ export default class FathymSynapticEaCServicesPlugin
           );
         }
       });
-
-      await Promise.all(toolCalls);
     });
-
-    await Promise.all(calls);
   }
 
   protected async configureEaCVectorStores(
@@ -965,7 +988,6 @@ export default class FathymSynapticEaCServicesPlugin
 
             ioc.Register(
               () => {
-                debugger;
                 return new AzureAISearchVectorStore(embeddings, {
                   endpoint: vectorStoreDetails.Endpoint,
                   key: vectorStoreDetails.APIKey,
@@ -996,9 +1018,6 @@ export default class FathymSynapticEaCServicesPlugin
               }
             );
           } else if (isEaCMemoryVectorStoreDetails(vectorStore.Details)) {
-            const vectorStoreDetails =
-              vectorStore.Details as EaCMemoryVectorStoreDetails;
-
             ioc.Register(() => new MemoryVectorStore(embeddings), {
               Lazy: false,
               Name: `${aiLookup}|${vectorStoreLookup}`,
@@ -1035,6 +1054,8 @@ export default class FathymSynapticEaCServicesPlugin
     this.configureEaCChatHistories(eac, ioc);
 
     await this.configureEaCRetrievers(eac, ioc);
+
+    this.configureEaCPersistence(eac, ioc);
 
     this.configureEaCCircuits(eac, ioc);
   }

@@ -1,4 +1,5 @@
 import "https://deno.land/std@0.203.0/dotenv/load.ts";
+import { BaseCheckpointSaver } from "npm:@langchain/langgraph";
 export { delay } from "https://deno.land/std@0.220.1/async/delay.ts";
 export { IoCContainer } from "https://deno.land/x/fathym_ioc@v0.0.10/mod.ts";
 export * from "https://deno.land/x/fathym_common@v0.0.184/mod.ts";
@@ -44,7 +45,7 @@ export {
   type LanguageModelLike,
 } from "npm:@langchain/core/language_models/base";
 export { CallbackManagerForToolRun } from "npm:@langchain/core/callbacks/manager";
-export { type ToolDefinition } from 'npm:@langchain/core/language_models/base';
+export { type ToolDefinition } from "npm:@langchain/core/language_models/base";
 export {
   BaseMessage,
   FunctionMessage,
@@ -71,10 +72,10 @@ export {
   RunnableWithMessageHistory,
 } from "npm:@langchain/core/runnables";
 export {
-  DynamicTool,
   DynamicStructuredTool,
+  DynamicTool,
   Tool,
-} from 'npm:@langchain/core/tools';
+} from "npm:@langchain/core/tools";
 export {
   convertToOpenAIFunction,
   convertToOpenAITool,
@@ -91,3 +92,22 @@ export {
   TextSplitter,
 } from "npm:langchain/text_splitter";
 export { MemoryVectorStore } from "npm:langchain/vectorstores/memory";
+
+type ExampleConstructorParams = ConstructorParameters<
+  typeof BaseCheckpointSaver
+>;
+
+export type SerializerProtocolOrUndefined = ExampleConstructorParams[0];
+
+export type SerializerProtocol = Exclude<
+  SerializerProtocolOrUndefined,
+  undefined
+>;
+
+type GetTupleReturnType = ReturnType<BaseCheckpointSaver["getTuple"]>;
+
+type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
+
+type CheckpointTupleOrUndefined = UnwrapPromise<GetTupleReturnType>;
+
+export type CheckpointTuple = Exclude<CheckpointTupleOrUndefined, undefined>;

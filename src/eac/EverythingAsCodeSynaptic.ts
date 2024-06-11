@@ -3,6 +3,7 @@ import { EaCCircuitAsCode } from "./EaCCircuitAsCode.ts";
 import { EaCDocumentLoaderAsCode } from "./EaCDocumentLoaderAsCode.ts";
 import { EaCIndexerAsCode } from "./EaCIndexerAsCode.ts";
 import { EaCNeuron } from "./EaCNeuron.ts";
+import { EaCPersistenceAsCode } from "./EaCPersistenceAsCode.ts";
 import { EaCRetrieverAsCode } from "./EaCRetrieverAsCode.ts";
 import { EaCTextSplitterAsCode } from "./EaCTextSplitterAsCode.ts";
 import { EaCToolAsCode } from "./EaCToolAsCode.ts";
@@ -12,6 +13,8 @@ export type EaCSynapticAIAsCode = {
   Indexers?: Record<string, EaCIndexerAsCode>;
 
   Loaders?: Record<string, EaCDocumentLoaderAsCode>;
+
+  Persistence?: Record<string, EaCPersistenceAsCode>;
 
   TextSplitters?: Record<string, EaCTextSplitterAsCode>;
 

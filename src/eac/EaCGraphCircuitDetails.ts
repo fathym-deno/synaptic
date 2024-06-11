@@ -25,7 +25,7 @@ export type EaCGraphCircuitDetails = {
     Before?: string[];
   };
 
-  PersistenceNeuron?: EaCNeuronLike;
+  PersistenceLookup?: string;
 
   State?: Partial<StateGraphArgs<unknown>['channels']>;
 } & EaCCircuitDetails<'Graph'>;
