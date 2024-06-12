@@ -5,14 +5,14 @@ import {
   CheckpointTuple,
   RunnableConfig,
   SerializerProtocol,
-} from '../src.deps.ts';
+} from "../src.deps.ts";
 
 export class DenoKVSaver extends BaseCheckpointSaver {
   constructor(
     protected denoKv: Deno.Kv,
     protected rootKey: Deno.KvKey,
     protected checkpointTtl?: number,
-    serde?: SerializerProtocol
+    serde?: SerializerProtocol,
   ) {
     super(serde);
   }
@@ -24,9 +24,9 @@ export class DenoKVSaver extends BaseCheckpointSaver {
     if (checkpoint_id) {
       const checkpoint = await this.denoKv.get<[string, string]>([
         ...this.rootKey,
-        'Thread',
+        "Thread",
         thread_id,
-        'Checkpoint',
+        "Checkpoint",
         checkpoint_id,
       ]);
 
@@ -41,7 +41,7 @@ export class DenoKVSaver extends BaseCheckpointSaver {
       }
     } else {
       const checkpoints = await this.denoKv.list<[string, string]>({
-        prefix: [...this.rootKey, 'Thread', thread_id, 'Checkpoint'],
+        prefix: [...this.rootKey, "Thread", thread_id, "Checkpoint"],
       });
 
       let checkpoint: [string, string, string] | undefined;
@@ -67,12 +67,12 @@ export class DenoKVSaver extends BaseCheckpointSaver {
   async *list(
     config: RunnableConfig,
     limit?: number,
-    before?: RunnableConfig
+    before?: RunnableConfig,
   ): AsyncGenerator<CheckpointTuple> {
     const thread_id = config.configurable?.thread_id;
 
     const checkpointsRes = await this.denoKv.list<[string, string]>({
-      prefix: [...this.rootKey, 'Thread', thread_id, 'Checkpoint'],
+      prefix: [...this.rootKey, "Thread", thread_id, "Checkpoint"],
     });
 
     const checkpoints: [string, string, string][] = [];
@@ -82,12 +82,14 @@ export class DenoKVSaver extends BaseCheckpointSaver {
     }
 
     // sort in desc order
-    for await (const [id, cp, meta] of checkpoints
-      .filter((c) =>
-        before ? c[0] < before.configurable?.checkpoint_id : true
-      )
-      .sort((a, b) => b[0].localeCompare(a[0]))
-      .slice(0, limit)) {
+    for await (
+      const [id, cp, meta] of checkpoints
+        .filter((c) =>
+          before ? c[0] < before.configurable?.checkpoint_id : true
+        )
+        .sort((a, b) => b[0].localeCompare(a[0]))
+        .slice(0, limit)
+    ) {
       yield {
         config: { configurable: { thread_id, checkpoint_id: id } },
         checkpoint: (await this.serde.parse(cp)) as Checkpoint,
@@ -99,16 +101,16 @@ export class DenoKVSaver extends BaseCheckpointSaver {
   async put(
     config: RunnableConfig,
     checkpoint: Checkpoint,
-    metadata: CheckpointMetadata
+    metadata: CheckpointMetadata,
   ): Promise<RunnableConfig> {
     const thread_id = config.configurable?.thread_id;
 
     await this.denoKv.set(
-      [...this.rootKey, 'Thread', thread_id, 'Checkpoint', checkpoint.id],
+      [...this.rootKey, "Thread", thread_id, "Checkpoint", checkpoint.id],
       [this.serde.stringify(checkpoint), this.serde.stringify(metadata)],
       {
         expireIn: this.checkpointTtl,
-      }
+      },
     );
 
     return {

@@ -1,5 +1,6 @@
 export * from "./neurons/_exports.ts";
 export * from "./tools/_exports.ts";
+export * from './EaCSynapticCircuitsProcessor.ts';
 export * from "./EaCAzureSearchAIVectorStoreDetails.ts";
 export * from "./EaCCheerioWebDocumentLoaderDetails.ts";
 export * from "./EaCCircuitAsCode.ts";

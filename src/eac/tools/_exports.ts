@@ -1,3 +1,4 @@
-export * from "./EaCDynamicToolDetails.ts";
-export * from "./EaCSERPToolDetails.ts";
-export * from "./EaCTavilySearchResultsToolDetails.ts";
+export * from './EaCCircuitToolDetails.ts';
+export * from './EaCDynamicToolDetails.ts';
+export * from './EaCSERPToolDetails.ts';
+export * from './EaCTavilySearchResultsToolDetails.ts';

@@ -1,7 +1,11 @@
 import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from "../EaCNeuron.ts";
 
 export type EaCStuffDocumentsNeuron = {
-  LLMNeuron: EaCNeuronLike;
+  Neurons: {
+    LLM: EaCNeuronLike;
+
+    Prompt: EaCNeuronLike;
+  };
 } & EaCNeuron<"StuffDocuments">;
 
 export function isEaCStuffDocumentsNeuron(
@@ -9,5 +13,10 @@ export function isEaCStuffDocumentsNeuron(
 ): details is EaCStuffDocumentsNeuron {
   const x = details as EaCStuffDocumentsNeuron;
 
-  return isEaCNeuron("StuffDocuments", x);
+  return (
+    isEaCNeuron("StuffDocuments", x) &&
+    x.Neurons !== undefined &&
+    x.Neurons.LLM !== undefined &&
+    x.Neurons.Prompt !== undefined
+  );
 }

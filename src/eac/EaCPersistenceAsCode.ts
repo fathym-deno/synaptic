@@ -1,13 +1,13 @@
-import { EaCDetails } from '../src.deps.ts';
+import { EaCDetails } from "../src.deps.ts";
 import {
   EaCPersistenceDetails,
   isEaCPersistenceDetails,
-} from './EaCPersistenceDetails.ts';
+} from "./EaCPersistenceDetails.ts";
 
 export type EaCPersistenceAsCode = EaCDetails<EaCPersistenceDetails>;
 
 export function isEaCPersistenceAsCode(
-  eac: unknown
+  eac: unknown,
 ): eac is EaCPersistenceAsCode {
   const x = eac as EaCPersistenceAsCode;
 

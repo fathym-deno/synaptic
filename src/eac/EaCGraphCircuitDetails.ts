@@ -1,11 +1,10 @@
-import { RunnableConfig, StateGraphArgs } from '../src.deps.ts';
-import { EaCCircuitDetails, isEaCCircuitDetails } from './EaCCircuitDetails.ts';
-import { EaCNeuronLike } from './EaCNeuron.ts';
+import { RunnableConfig, StateGraphArgs } from "../src.deps.ts";
+import { EaCCircuitDetails, isEaCCircuitDetails } from "./EaCCircuitDetails.ts";
 
 export type EaCGraphCircuitEdge = {
   Condition?: (
     state: unknown,
-    cfg: RunnableConfig | undefined
+    cfg: RunnableConfig | undefined,
   ) => string | string[] | Promise<string> | Promise<string[]>;
 
   Node?: string | Record<string, string>;
@@ -27,13 +26,13 @@ export type EaCGraphCircuitDetails = {
 
   PersistenceLookup?: string;
 
-  State?: Partial<StateGraphArgs<unknown>['channels']>;
-} & EaCCircuitDetails<'Graph'>;
+  State?: Partial<StateGraphArgs<unknown>["channels"]>;
+} & EaCCircuitDetails<"Graph">;
 
 export function isEaCGraphCircuitDetails(
-  details: unknown
+  details: unknown,
 ): details is EaCGraphCircuitDetails {
   const x = details as EaCGraphCircuitDetails;
 
-  return isEaCCircuitDetails('Graph', x) && x.Edges !== undefined;
+  return isEaCCircuitDetails("Graph", x) && x.Edges !== undefined;
 }
