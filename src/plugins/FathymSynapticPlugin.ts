@@ -122,10 +122,9 @@ import { isEaCOpenAIFunctionsAgentNeuron } from '../eac/neurons/EaCOpenAIFunctio
 import { isEaCPullChatPromptNeuron } from '../eac/neurons/EaCPullChatPromptNeuron.ts';
 import { JSONPathRunnablePassthrough } from '../runnables/JSONPathRunnablePassthrough.ts';
 import { isEaCCircuitToolDetails } from '../eac/tools/EaCCircuitToolDetails.ts';
+import { EaCSynapticCircuitsProcessorHandlerResolver } from './EaCSynapticCircuitsProcessorHandlerResolver.ts';
 
-export default class FathymSynapticEaCServicesPlugin
-  implements EaCRuntimePlugin
-{
+export default class FathymSynapticPlugin implements EaCRuntimePlugin {
   public async AfterEaCResolved(
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer
@@ -136,7 +135,16 @@ export default class FathymSynapticEaCServicesPlugin
   public Setup(_config: EaCRuntimeConfig): Promise<EaCRuntimePluginConfig> {
     const pluginConfig: EaCRuntimePluginConfig = {
       Name: 'FathymSynapticEaCServicesPlugin',
+      IoC: new IoCContainer(),
     };
+
+    pluginConfig.IoC!.Register(
+      () => EaCSynapticCircuitsProcessorHandlerResolver,
+      {
+        Name: 'EaCSynapticCircuitsProcessor',
+        Type: pluginConfig.IoC!.Symbol('ProcessorHandlerResolver'),
+      }
+    );
 
     return Promise.resolve(pluginConfig);
   }

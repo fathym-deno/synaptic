@@ -14,6 +14,7 @@ export {
 } from 'npm:@azure/openai@1.0.0-beta.7';
 
 export { z, ZodObject } from 'npm:zod';
+export { zodToJsonSchema } from 'npm:zod-to-json-schema';
 
 import jsonpath from 'https://cdn.skypack.dev/jsonpath';
 export { jsonpath };

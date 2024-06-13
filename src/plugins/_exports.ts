@@ -1,2 +1,5 @@
-import FtmSynECSvcsPlgn from "./FathymSynapticEaCServicesPlugin.ts";
-export const FathymSynapticEaCServicesPlugin = FtmSynECSvcsPlgn;
+export * from './DefaultSynapticProcessorHandlerResolver.ts';
+export * from './EaCSynapticCircuitsProcessorHandlerResolver.ts';
+
+import FtmSynECSvcsPlgn from './FathymSynapticPlugin.ts';
+export const FathymSynapticPlugin = FtmSynECSvcsPlgn;
