@@ -1,15 +1,15 @@
-import { EaCProcessor, isEaCProcessor } from '../src.deps.ts';
+import { EaCProcessor, isEaCProcessor } from "../src.deps.ts";
 
 export type EaCSynapticCircuitsProcessor = {
   Excludes?: string[];
 
   Includes?: string[];
-} & EaCProcessor<'SynapticCircuits'>;
+} & EaCProcessor<"SynapticCircuits">;
 
 export function isEaCSynapticCircuitsProcessor(
-  proc: unknown
+  proc: unknown,
 ): proc is EaCSynapticCircuitsProcessor {
   const x = proc as EaCSynapticCircuitsProcessor;
 
-  return isEaCProcessor('SynapticCircuits', x);
+  return isEaCProcessor("SynapticCircuits", x);
 }

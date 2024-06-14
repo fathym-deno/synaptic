@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
-import { EaCVertexDetails, ZodObject } from '../src.deps.ts';
-import { EaCNeuronLike } from './EaCNeuron.ts';
+import { EaCVertexDetails, ZodObject } from "../src.deps.ts";
+import { EaCNeuronLike } from "./EaCNeuron.ts";
 
 export type EaCCircuitDetails<TType = unknown> = {
   InputSchema?: ZodObject<any>;
@@ -16,7 +16,7 @@ export type EaCCircuitDetails<TType = unknown> = {
 
 export function isEaCCircuitDetails<TType = unknown>(
   type: TType,
-  details: unknown
+  details: unknown,
 ): details is EaCCircuitDetails {
   const x = details as EaCCircuitDetails;
 

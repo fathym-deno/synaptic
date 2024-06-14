@@ -1,37 +1,45 @@
-import { HumanMessage } from 'npm:@langchain/core/messages';
-import { EaCCircuitAsCode } from '../eac/EaCCircuitAsCode.ts';
-import { isEaCSynapticCircuitsProcessor } from '../eac/EaCSynapticCircuitsProcessor.ts';
-import { EverythingAsCodeSynaptic } from '../eac/EverythingAsCodeSynaptic.ts';
+import { EaCCircuitAsCode } from "../eac/EaCCircuitAsCode.ts";
+import { isEaCSynapticCircuitsProcessor } from "../eac/EaCSynapticCircuitsProcessor.ts";
+import { EverythingAsCodeSynaptic } from "../eac/EverythingAsCodeSynaptic.ts";
 import {
+  delay,
+  jsonClone,
   ProcessorHandlerResolver,
   Runnable,
-  delay,
-  zodToJsonSchema,
-} from '../src.deps.ts';
-import {
+  RunnableConfig,
   ServerSentEventMessage,
   ServerSentEventStream,
-} from 'https://deno.land/std@0.220.1/http/server_sent_event_stream.ts';
+  zodToJsonSchema,
+} from "../src.deps.ts";
+import { RemoteCircuitDefinition } from "./FathymSynapticPlugin.ts";
 
 export type SynapticCircuitsExecuteRequest = {
-  ConversationID?: string;
+  config: Partial<RunnableConfig> & {
+    version?: "v1" | "v2";
+  };
 
-  Input: unknown;
+  input: unknown;
+
+  kwargs?: unknown;
 };
 
-export const EaCSynapticCircuitsProcessorHandlerResolver: ProcessorHandlerResolver =
-  {
-    async Resolve(ioc, appProcCfg, eac: EverythingAsCodeSynaptic) {
+export const EaCSynapticCircuitsProcessorHandlerResolver:
+  ProcessorHandlerResolver = {
+    async Resolve(ioc, appProcCfg, rEaC) {
+      const eac = rEaC as EverythingAsCodeSynaptic;
+
       const processor = appProcCfg.Application.Processor;
 
       if (!isEaCSynapticCircuitsProcessor(processor)) {
         throw new Deno.errors.NotSupported(
-          'The provided processor is not supported for the EaCSynapticCircuitsProcessorHandlerResolver.'
+          "The provided processor is not supported for the EaCSynapticCircuitsProcessorHandlerResolver.",
         );
       }
 
+      const skipCircuits = ["$neurons", "$remotes"];
+
       const eacCircuits = Object.keys(eac.Circuits || {}).reduce((acc, key) => {
-        if (key !== '$neurons') {
+        if (!skipCircuits.includes(key)) {
           const eacCircuit = eac.Circuits![key];
 
           let addCircuit = false;
@@ -56,108 +64,111 @@ export const EaCSynapticCircuitsProcessorHandlerResolver: ProcessorHandlerResolv
         Object.keys(eacCircuits).map(async (key) => {
           return [
             key,
-            await ioc.Resolve<Runnable>(ioc.Symbol('Circuit'), key),
+            await ioc.Resolve<Runnable>(ioc.Symbol("Circuit"), key),
           ] as [string, Runnable];
-        })
+        }),
       );
 
-      const circuits = circuitsSet.reduce((acc, [lookup, circuit]) => {
-        const eacCircuit = eacCircuits[lookup];
+      const circuits = circuitsSet.reduce(
+        (acc, [lookup, circuit]) => {
+          const eacCircuit = eacCircuits[lookup];
 
-        if (circuit) {
-          acc[lookup] = { Circuit: eacCircuit, Runnable: circuit };
-        }
+          if (circuit) {
+            acc[lookup] = { Circuit: eacCircuit, Runnable: circuit };
+          }
 
-        return acc;
-      }, {} as Record<string, { Circuit: EaCCircuitAsCode; Runnable: Runnable }>);
+          return acc;
+        },
+        {} as Record<string, { Circuit: EaCCircuitAsCode; Runnable: Runnable }>,
+      );
 
       return async (req, ctx) => {
         if (
-          ctx.Runtime.URLMatch.Path === '/' ||
-          ctx.Runtime.URLMatch.Path === ''
+          ctx.Runtime.URLMatch.Path === "/" ||
+          ctx.Runtime.URLMatch.Path === ""
         ) {
           return Response.json(
-            Object.keys(circuits).reduce(
-              (acc, lookup) => {
-                const circuit = circuits[lookup];
+            Object.keys(circuits).reduce((acc, lookup) => {
+              const circuit = circuits[lookup];
 
-                acc[lookup] = {
-                  Name: circuit.Circuit.Details!.Name!,
-                  Description: circuit.Circuit.Details!.Description!,
-                  InputSchema: zodToJsonSchema(
-                    circuit.Circuit.Details!.InputSchema!
-                  ),
-                };
+              acc[lookup] = {
+                Name: circuit.Circuit.Details!.Name!,
+                Description: circuit.Circuit.Details!.Description!,
+                InputSchema: zodToJsonSchema(
+                  circuit.Circuit.Details!.InputSchema!,
+                ),
+              };
 
-                return acc;
-              },
-              {} as Record<
-                string,
-                {
-                  Name: string;
-                  Description: string;
-                  InputSchema: any;
-                }
-              >
-            )
+              return acc;
+            }, {} as Record<string, RemoteCircuitDefinition>),
           );
         } else {
           const pathMatch = new URLPattern({
-            pathname: '/:circuitLookup',
+            pathname: "/:circuitLookup/:action",
           });
 
           if (
             pathMatch.test(
-              new URL(ctx.Runtime.URLMatch.Path, 'https://notused.com')
+              new URL(ctx.Runtime.URLMatch.Path, "https://notused.com"),
             )
           ) {
             const result = pathMatch.exec(
-              new URL(ctx.Runtime.URLMatch.Path, 'https://notused.com')
+              new URL(ctx.Runtime.URLMatch.Path, "https://notused.com"),
             );
 
-            let matchedCircuitLookup = result?.pathname.groups['circuitLookup'];
+            let matchedCircuitLookup = result?.pathname.groups["circuitLookup"];
 
-            if (matchedCircuitLookup?.startsWith('/')) {
+            if (matchedCircuitLookup?.startsWith("/")) {
               matchedCircuitLookup = matchedCircuitLookup.slice(1);
             }
 
             if (matchedCircuitLookup && matchedCircuitLookup in circuits) {
+              const action = (result?.pathname.groups["action"] as
+                | "invoke"
+                | "stream"
+                | "stream_log"
+                | "stream_events") || "invoke";
+
               const circuit = circuits[matchedCircuitLookup];
 
-              const controls = new URL(req.url).searchParams;
+              if (req.method.toUpperCase() === "POST") {
+                const circuitsReq: SynapticCircuitsExecuteRequest = await req
+                  .json();
 
-              if (req.method.toUpperCase() === 'POST') {
-                const circuitsReq: SynapticCircuitsExecuteRequest =
-                  await req.json();
+                // https://github.com/langchain-ai/langserve/blob/main/langserve/api_handler.py#L1026
 
-                const stream = JSON.parse(controls.get('stream') || 'false');
-
-                const streamEvents = JSON.parse(
-                  controls.get('streamEvents') || 'false'
-                );
-
-                if (stream) {
+                if (action === "stream") {
                   const streamed = await circuit.Runnable.stream(
-                    circuitsReq.Input,
-                    {
-                      configurable: {
-                        sessionId: circuitsReq.ConversationID,
-                        thread_id: circuitsReq.ConversationID,
-                      },
-                    }
+                    circuitsReq.input,
+                    circuitsReq.config,
                   );
 
                   const body = new ReadableStream({
                     async start(controller) {
+                      const hasSentMetadata = false;
+
                       for await (const event of streamed) {
+                        if (!hasSentMetadata) {
+                          //  TODO:  Support Metadata
+                        }
+
                         controller.enqueue({
                           id: Date.now(),
-                          event: 'message',
-                          data: JSON.stringify(event),
+                          event: "data",
+                          data: JSON.stringify(
+                            jsonClone({
+                              ...event,
+                            }),
+                          ),
                         } as ServerSentEventMessage);
 
                         await delay(1);
                       }
+
+                      controller.enqueue({
+                        id: Date.now(),
+                        event: "end",
+                      } as ServerSentEventMessage);
 
                       controller.close();
                     },
@@ -170,21 +181,18 @@ export const EaCSynapticCircuitsProcessorHandlerResolver: ProcessorHandlerResolv
                     body.pipeThrough(new ServerSentEventStream()),
                     {
                       headers: {
-                        'Content-Type': 'text/event-stream',
-                        'Cache-Control': 'no-cache',
+                        "Content-Type": "text/event-stream",
+                        "Cache-Control": "no-cache",
                       },
-                    }
+                    },
                   );
-                } else if (streamEvents) {
+                } else if (action === "stream_events") {
                   const streamed = await circuit.Runnable.streamEvents(
-                    circuitsReq.Input,
+                    circuitsReq.input,
                     {
-                      version: 'v1',
-                      configurable: {
-                        sessionId: circuitsReq.ConversationID,
-                        thread_id: circuitsReq.ConversationID,
-                      },
-                    }
+                      ...circuitsReq.config,
+                      version: circuitsReq.config.version || "v1",
+                    },
                   );
 
                   const body = new ReadableStream({
@@ -192,8 +200,55 @@ export const EaCSynapticCircuitsProcessorHandlerResolver: ProcessorHandlerResolv
                       for await (const event of streamed) {
                         controller.enqueue({
                           id: Date.now(),
-                          event: 'message',
-                          data: JSON.stringify(event),
+                          event: "data",
+                          data: JSON.stringify(
+                            jsonClone({
+                              ...event,
+                            }),
+                          ),
+                        } as ServerSentEventMessage);
+
+                        await delay(1);
+                      }
+
+                      controller.enqueue({
+                        id: Date.now(),
+                        event: "end",
+                      } as ServerSentEventMessage);
+
+                      controller.close();
+                    },
+                    cancel() {
+                      // divined.cancel();
+                    },
+                  });
+
+                  return new Response(
+                    body.pipeThrough(new ServerSentEventStream()),
+                    {
+                      headers: {
+                        "Content-Type": "text/event-stream",
+                        "Cache-Control": "no-cache",
+                      },
+                    },
+                  );
+                } else if (action === "stream_log") {
+                  const streamed = await circuit.Runnable.streamLog(
+                    circuitsReq.input,
+                    circuitsReq.config,
+                  );
+
+                  const body = new ReadableStream({
+                    async start(controller) {
+                      for await (const event of streamed) {
+                        controller.enqueue({
+                          id: Date.now(),
+                          event: "data",
+                          data: JSON.stringify(
+                            jsonClone({
+                              ...event,
+                            }),
+                          ),
                         } as ServerSentEventMessage);
 
                         await delay(1);
@@ -210,41 +265,45 @@ export const EaCSynapticCircuitsProcessorHandlerResolver: ProcessorHandlerResolv
                     body.pipeThrough(new ServerSentEventStream()),
                     {
                       headers: {
-                        'Content-Type': 'text/event-stream',
-                        'Cache-Control': 'no-cache',
+                        "Content-Type": "text/event-stream",
+                        "Cache-Control": "no-cache",
                       },
-                    }
+                    },
                   );
                 } else {
-                  console.log(circuitsReq.Input);
-                  const res = await circuit.Runnable.invoke(circuitsReq.Input, {
-                    configurable: {
-                      sessionId: circuitsReq.ConversationID,
-                      thread_id: circuitsReq.ConversationID,
+                  const res = await circuit.Runnable.invoke(
+                    circuitsReq.input,
+                    circuitsReq.config,
+                  );
+                  console.log(res);
+                  console.log(Object.keys(res));
+
+                  return Response.json({
+                    output: {
+                      // ...jsonClone(res),
+                      ...jsonClone({
+                        ...res,
+                      }),
                     },
                   });
-
-                  console.log(res);
-
-                  return Response.json(res);
                 }
               } else {
                 return Response.json({
                   Name: circuit.Circuit.Details!.Name!,
                   Description: circuit.Circuit.Details!.Description!,
                   InputSchema: zodToJsonSchema(
-                    circuit.Circuit.Details!.InputSchema!
+                    circuit.Circuit.Details!.InputSchema!,
                   ),
-                });
+                } as RemoteCircuitDefinition);
               }
             } else {
               throw new Deno.errors.NotFound(
-                `There is no circuit configured for ${ctx.Runtime.URLMatch.Path}.`
+                `There is no circuit configured for ${ctx.Runtime.URLMatch.Path}.`,
               );
             }
           } else {
             throw new Deno.errors.NotFound(
-              `The circuit could not be found for path ${ctx.Runtime.URLMatch.Path}.`
+              `The circuit could not be found for path ${ctx.Runtime.URLMatch.Path}.`,
             );
           }
         }

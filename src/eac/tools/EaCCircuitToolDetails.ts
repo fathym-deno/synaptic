@@ -1,17 +1,17 @@
-import { EaCToolDetails, isEaCToolDetails } from '../EaCToolDetails.ts';
+import { EaCToolDetails, isEaCToolDetails } from "../EaCToolDetails.ts";
 
 export type EaCCircuitToolDetails = {
   CircuitLookup: string;
-} & EaCToolDetails<'Circuit'>;
+} & EaCToolDetails<"Circuit">;
 
 export function isEaCCircuitToolDetails(
-  details: unknown
+  details: unknown,
 ): details is EaCCircuitToolDetails {
   const x = details as EaCCircuitToolDetails;
 
   return (
-    isEaCToolDetails('Circuit', x) &&
+    isEaCToolDetails("Circuit", x) &&
     x.CircuitLookup !== undefined &&
-    typeof x.CircuitLookup === 'string'
+    typeof x.CircuitLookup === "string"
   );
 }

@@ -1,29 +1,28 @@
-import { isEaCSynapticCircuitsProcessor } from '../eac/EaCSynapticCircuitsProcessor.ts';
+import { isEaCSynapticCircuitsProcessor } from "../eac/EaCSynapticCircuitsProcessor.ts";
 import {
   EaCApplicationProcessorConfig,
   EaCRuntimeEaC,
   IoCContainer,
   ProcessorHandlerResolver,
-} from '../src.deps.ts';
+} from "../src.deps.ts";
 
 export class DefaultSynapticProcessorHandlerResolver
-  implements ProcessorHandlerResolver
-{
+  implements ProcessorHandlerResolver {
   public async Resolve(
     ioc: IoCContainer,
     appProcCfg: EaCApplicationProcessorConfig,
-    eac: EaCRuntimeEaC
+    eac: EaCRuntimeEaC,
   ) {
-    let toResolveName: string = '';
+    let toResolveName: string = "";
 
     if (isEaCSynapticCircuitsProcessor(appProcCfg.Application.Processor)) {
-      toResolveName = 'EaCSynapticCircuitsProcessor';
+      toResolveName = "EaCSynapticCircuitsProcessor";
     }
 
     if (toResolveName) {
       const resolver = await ioc.Resolve<ProcessorHandlerResolver>(
-        ioc.Symbol('ProcessorHandlerResolver'),
-        toResolveName
+        ioc.Symbol("ProcessorHandlerResolver"),
+        toResolveName,
       );
 
       return await resolver.Resolve(ioc, appProcCfg, eac);
