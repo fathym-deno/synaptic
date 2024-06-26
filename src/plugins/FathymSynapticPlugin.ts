@@ -147,7 +147,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
   public Setup(_config: EaCRuntimeConfig): Promise<EaCRuntimePluginConfig> {
     const pluginConfig: EaCRuntimePluginConfig = {
-      Name: "FathymSynapticEaCServicesPlugin",
+      Name: "FathymSynapticPlugin",
       IoC: new IoCContainer(),
     };
 
@@ -209,232 +209,239 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
   ): Promise<void> {
     const circuitLookups = Object.keys(eac.Circuits || {});
 
-    const resolveNeuron = async (neuron: EaCNeuronLike): Promise<Runnable> => {
-      let runnable: Runnable = new RunnablePassthrough();
+    const resolveNeuron = (neuron: EaCNeuronLike): Runnable => {
+      return RunnableLambda.from(async () => {
+        let runnable: Runnable = new RunnablePassthrough();
 
-      if (neuron) {
-        if (typeof neuron === "string") {
-          const lookup = neuron;
+        if (neuron) {
+          if (typeof neuron === "string") {
+            const lookup = neuron;
 
-          neuron = eac.Circuits!.$neurons![lookup];
+            neuron = eac.Circuits!.$neurons![lookup];
 
-          if (!neuron) {
-            throw new Deno.errors.NotFound(
-              `Unable to locate a neuron '${lookup}' in the $neurons bank.`,
-            );
-          }
-        } else if (Array.isArray(neuron)) {
-          const [neoronLookup, neuronOverride] = neuron as [string, EaCNeuron];
-
-          neuron = eac.Circuits!.$neurons![neoronLookup];
-
-          neuron = merge(neuron, neuronOverride);
-        }
-
-        neuron = neuron as EaCNeuron;
-
-        if (isEaCNeuron(neuron.Type, neuron)) {
-          if (isEaCLLMNeuron(neuron)) {
-            const llm = await ioc.Resolve<BaseLanguageModel>(
-              ioc.Symbol(BaseLanguageModel.name),
-              neuron.LLMLookup,
-            );
-
-            runnable = llm;
-          } else if (isEaCPromptNeuron(neuron)) {
-            const prompt = PromptTemplate.fromTemplate(neuron.PromptTemplate);
-
-            runnable = prompt;
-          } else if (isEaCChatPromptNeuron(neuron)) {
-            const messages: BaseMessagePromptTemplateLike[] = [];
-
-            if (neuron.SystemMessage) {
-              messages.push(["system", neuron.SystemMessage]);
+            if (!neuron) {
+              throw new Deno.errors.NotFound(
+                `Unable to locate a neuron '${lookup}' in the $neurons bank.`,
+              );
             }
+          } else if (Array.isArray(neuron)) {
+            const [neoronLookup, neuronOverride] = neuron as [
+              string,
+              EaCNeuron,
+            ];
 
-            if (neuron.Messages) {
-              messages.push(...neuron.Messages);
-            }
+            neuron = eac.Circuits!.$neurons![neoronLookup];
 
-            if (neuron.NewMessages) {
-              messages.push(...neuron.NewMessages);
-            }
-
-            const prompt = ChatPromptTemplate.fromMessages(messages);
-
-            runnable = prompt;
-          } else if (isEaCPullChatPromptNeuron(neuron)) {
-            runnable = (await pull("hwchase17/openai-functions-agent")) as any;
-          } else if (isEaCCircuitNeuron(neuron)) {
-            const circuit = await ioc.Resolve<Runnable>(
-              ioc.Symbol("Circuit"),
-              neuron.CircuitLookup,
-            );
-
-            runnable = circuit;
-          } else if (isEaCToolNeuron(neuron)) {
-            const tools = await resolveTools([neuron.ToolLookup], ioc);
-
-            runnable = tools[0];
-          } else if (isEaCToolExecutorNeuron(neuron)) {
-            const tools = await resolveTools(neuron.ToolLookups, ioc);
-
-            runnable = new ToolExecutor({ tools });
-
-            const msgsPath = neuron.MessagesPath;
-
-            if (msgsPath) {
-              const origRunnable = runnable;
-
-              runnable = RunnableLambda.from(async (state) => {
-                const messages = jsonpath.query(
-                  state,
-                  msgsPath,
-                )[0] as BaseMessage[];
-
-                const lastMessage = messages[messages.length - 1];
-
-                if (!lastMessage) {
-                  throw new Error("No messages found.");
-                }
-
-                if (
-                  !lastMessage.additional_kwargs.function_call &&
-                  !lastMessage.additional_kwargs.tool_calls
-                ) {
-                  throw new Error("No function call found in message.");
-                }
-
-                const actions: (ToolInvocationInterface & {
-                  callId?: string;
-                })[] = [];
-
-                if (lastMessage.additional_kwargs.function_call) {
-                  actions.push({
-                    tool: lastMessage.additional_kwargs.function_call.name,
-                    toolInput: JSON.parse(
-                      lastMessage.additional_kwargs.function_call.arguments,
-                    ),
-                  });
-                } else if (lastMessage.additional_kwargs.tool_calls) {
-                  actions.push(
-                    ...lastMessage.additional_kwargs.tool_calls.map(
-                      (toolCall) => {
-                        return {
-                          callId: toolCall.id,
-                          tool: toolCall.function.name,
-                          toolInput: JSON.parse(toolCall.function.arguments),
-                        };
-                      },
-                    ),
-                  );
-                }
-
-                const msgs = await Promise.all(
-                  actions.map(async (action) => {
-                    const response = await origRunnable.invoke(action);
-
-                    if (lastMessage.additional_kwargs.tool_calls) {
-                      return new ToolMessage({
-                        tool_call_id: action.callId!,
-                        content: response,
-                        name: action.tool,
-                      });
-                    } else {
-                      return new FunctionMessage({
-                        content: response,
-                        name: action.tool,
-                      });
-                    }
-                  }),
-                );
-
-                return msgs;
-              });
-            }
-          } else if (isEaCToolNodeNeuron(neuron)) {
-            const tools = await resolveTools(neuron.ToolLookups, ioc);
-
-            runnable = new ToolNode(tools);
-          } else if (isEaCStringOutputParserNeuron(neuron)) {
-            runnable = new StringOutputParser();
-          } else if (isEaCPassthroughNeuron(neuron)) {
-            if (neuron.Field) {
-              runnable = new JSONPathRunnablePassthrough(neuron.Field);
-            }
+            neuron = merge(neuron, neuronOverride);
           }
 
-          if (neuron.Neurons) {
-            if (isEaCChatHistoryNeuron(neuron)) {
-              const getMessageHistory = await ioc.Resolve<
-                (sessionId: string) => BaseListChatMessageHistory
-              >(ioc.Symbol("ChatHistory"), neuron.ChatHistoryLookup);
+          neuron = neuron as EaCNeuron;
 
-              const rootMessages = neuron.Messages;
+          if (isEaCNeuron(neuron.Type, neuron)) {
+            if (isEaCLLMNeuron(neuron)) {
+              const llm = await ioc.Resolve<BaseLanguageModel>(
+                ioc.Symbol(BaseLanguageModel.name),
+                neuron.LLMLookup,
+              );
 
-              const childRunnable = await resolveNeurons(neuron.Neurons);
+              runnable = llm;
+            } else if (isEaCPromptNeuron(neuron)) {
+              const prompt = PromptTemplate.fromTemplate(neuron.PromptTemplate);
 
-              if (childRunnable) {
-                runnable = new RunnableWithMessageHistory({
-                  runnable: childRunnable,
-                  getMessageHistory: async (sessionId: string) => {
-                    const chatHistory = getMessageHistory(sessionId);
+              runnable = prompt;
+            } else if (isEaCChatPromptNeuron(neuron)) {
+              const messages: BaseMessagePromptTemplateLike[] = [];
 
-                    const messages = await chatHistory.getMessages();
-
-                    if (!messages.length) {
-                      await chatHistory.addMessages(rootMessages || []);
-                    }
-
-                    return chatHistory;
-                  },
-                  inputMessagesKey: neuron.InputKey,
-                  historyMessagesKey: neuron.HistoryKey,
-                });
+              if (neuron.SystemMessage) {
+                messages.push(["system", neuron.SystemMessage]);
               }
-            } else if (isEaCStuffDocumentsNeuron(neuron)) {
-              runnable = (await createStuffDocumentsChain({
-                llm: (await resolveNeuron(
-                  neuron.Neurons.LLM,
-                )) as LanguageModelLike as any,
-                prompt: (await resolveNeuron(
-                  neuron.Neurons.Prompt,
-                )) as BasePromptTemplate as any,
-              })) as any;
-            } else if (isEaCOpenAIFunctionsAgentNeuron(neuron)) {
+
+              if (neuron.Messages) {
+                messages.push(...neuron.Messages);
+              }
+
+              if (neuron.NewMessages) {
+                messages.push(...neuron.NewMessages);
+              }
+
+              const prompt = ChatPromptTemplate.fromMessages(messages);
+
+              runnable = prompt;
+            } else if (isEaCPullChatPromptNeuron(neuron)) {
+              runnable = (await pull(
+                "hwchase17/openai-functions-agent",
+              )) as any;
+            } else if (isEaCCircuitNeuron(neuron)) {
+              const circuit = await ioc.Resolve<Runnable>(
+                ioc.Symbol("Circuit"),
+                neuron.CircuitLookup,
+              );
+
+              runnable = circuit;
+            } else if (isEaCToolNeuron(neuron)) {
+              const tools = await resolveTools([neuron.ToolLookup], ioc);
+
+              runnable = tools[0];
+            } else if (isEaCToolExecutorNeuron(neuron)) {
               const tools = await resolveTools(neuron.ToolLookups, ioc);
 
-              runnable = (await createOpenAIFunctionsAgent({
-                llm: (await resolveNeuron(
-                  neuron.Neurons.LLM,
-                )) as LanguageModelLike as any,
-                prompt: (await resolveNeuron(
-                  neuron.Neurons.Prompt,
-                )) as BasePromptTemplate as any,
-                tools: tools as any,
-              })) as any;
-            } else {
-              const childRunnable = await resolveNeurons(neuron.Neurons);
+              runnable = new ToolExecutor({ tools });
 
-              if (childRunnable) {
-                runnable = runnable.pipe(childRunnable);
+              const msgsPath = neuron.MessagesPath;
+
+              if (msgsPath) {
+                const origRunnable = runnable;
+
+                runnable = RunnableLambda.from(async (state) => {
+                  const messages = jsonpath.query(
+                    state,
+                    msgsPath,
+                  )[0] as BaseMessage[];
+
+                  const lastMessage = messages[messages.length - 1];
+
+                  if (!lastMessage) {
+                    throw new Error("No messages found.");
+                  }
+
+                  if (
+                    !lastMessage.additional_kwargs.function_call &&
+                    !lastMessage.additional_kwargs.tool_calls
+                  ) {
+                    throw new Error("No function call found in message.");
+                  }
+
+                  const actions: (ToolInvocationInterface & {
+                    callId?: string;
+                  })[] = [];
+
+                  if (lastMessage.additional_kwargs.function_call) {
+                    actions.push({
+                      tool: lastMessage.additional_kwargs.function_call.name,
+                      toolInput: JSON.parse(
+                        lastMessage.additional_kwargs.function_call.arguments,
+                      ),
+                    });
+                  } else if (lastMessage.additional_kwargs.tool_calls) {
+                    actions.push(
+                      ...lastMessage.additional_kwargs.tool_calls.map(
+                        (toolCall) => {
+                          return {
+                            callId: toolCall.id,
+                            tool: toolCall.function.name,
+                            toolInput: JSON.parse(toolCall.function.arguments),
+                          };
+                        },
+                      ),
+                    );
+                  }
+
+                  const msgs = await Promise.all(
+                    actions.map(async (action) => {
+                      const response = await origRunnable.invoke(action);
+
+                      if (lastMessage.additional_kwargs.tool_calls) {
+                        return new ToolMessage({
+                          tool_call_id: action.callId!,
+                          content: response,
+                          name: action.tool,
+                        });
+                      } else {
+                        return new FunctionMessage({
+                          content: response,
+                          name: action.tool,
+                        });
+                      }
+                    }),
+                  );
+
+                  return msgs;
+                });
+              }
+            } else if (isEaCToolNodeNeuron(neuron)) {
+              const tools = await resolveTools(neuron.ToolLookups, ioc);
+
+              runnable = new ToolNode(tools);
+            } else if (isEaCStringOutputParserNeuron(neuron)) {
+              runnable = new StringOutputParser();
+            } else if (isEaCPassthroughNeuron(neuron)) {
+              if (neuron.Field) {
+                runnable = new JSONPathRunnablePassthrough(neuron.Field);
               }
             }
-          }
 
-          if (neuron.Bootstrap) {
-            runnable = await neuron.Bootstrap(runnable, neuron);
-          }
+            if (neuron.Neurons) {
+              if (isEaCChatHistoryNeuron(neuron)) {
+                const getMessageHistory = await ioc.Resolve<
+                  (sessionId: string) => BaseListChatMessageHistory
+                >(ioc.Symbol("ChatHistory"), neuron.ChatHistoryLookup);
 
-          const synapses = await resolveNeurons(neuron.Synapses);
+                const rootMessages = neuron.Messages;
 
-          if (synapses) {
-            runnable = runnable ? runnable.pipe(synapses) : runnable;
+                const childRunnable = await resolveNeurons(neuron.Neurons);
+
+                if (childRunnable) {
+                  runnable = new RunnableWithMessageHistory({
+                    runnable: childRunnable,
+                    getMessageHistory: async (sessionId: string) => {
+                      const chatHistory = getMessageHistory(sessionId);
+
+                      const messages = await chatHistory.getMessages();
+
+                      if (!messages.length) {
+                        await chatHistory.addMessages(rootMessages || []);
+                      }
+
+                      return chatHistory;
+                    },
+                    inputMessagesKey: neuron.InputKey,
+                    historyMessagesKey: neuron.HistoryKey,
+                  });
+                }
+              } else if (isEaCStuffDocumentsNeuron(neuron)) {
+                runnable = (await createStuffDocumentsChain({
+                  llm: (await resolveNeuron(
+                    neuron.Neurons.LLM,
+                  )) as LanguageModelLike as any,
+                  prompt: (await resolveNeuron(
+                    neuron.Neurons.Prompt,
+                  )) as BasePromptTemplate as any,
+                })) as any;
+              } else if (isEaCOpenAIFunctionsAgentNeuron(neuron)) {
+                const tools = await resolveTools(neuron.ToolLookups, ioc);
+
+                runnable = (await createOpenAIFunctionsAgent({
+                  llm: (await resolveNeuron(
+                    neuron.Neurons.LLM,
+                  )) as LanguageModelLike as any,
+                  prompt: (await resolveNeuron(
+                    neuron.Neurons.Prompt,
+                  )) as BasePromptTemplate as any,
+                  tools: tools as any,
+                })) as any;
+              } else {
+                const childRunnable = await resolveNeurons(neuron.Neurons);
+
+                if (childRunnable) {
+                  runnable = runnable.pipe(childRunnable);
+                }
+              }
+            }
+
+            if (neuron.Bootstrap) {
+              runnable = await neuron.Bootstrap(runnable, neuron);
+            }
+
+            const synapses = await resolveNeurons(neuron.Synapses);
+
+            if (synapses) {
+              runnable = runnable ? runnable.pipe(synapses) : runnable;
+            }
           }
         }
-      }
 
-      return runnable;
+        return runnable;
+      });
     };
 
     const resolveNeurons = async (
@@ -508,127 +515,119 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
       });
     }
 
-    circuitLookups.forEach((circuitLookup) => {
-      const eacCircuit = eac.Circuits![circuitLookup];
+    await Promise.all(
+      circuitLookups.map(async (circuitLookup) => {
+        const eacCircuit = eac.Circuits![circuitLookup];
 
-      if (isEaCGraphCircuitDetails(eacCircuit.Details)) {
-        const details = eacCircuit.Details as EaCGraphCircuitDetails;
+        let circuit: Runnable | undefined;
 
-        ioc.Register(
-          async () => {
-            let graph = details.State
-              ? new StateGraph({
-                channels: details.State as StateGraphArgs<unknown>["channels"],
-              })
-              : new MessageGraph();
+        if (isEaCGraphCircuitDetails(eacCircuit.Details)) {
+          const details = eacCircuit.Details as EaCGraphCircuitDetails;
 
-            const neuronLookups = Object.keys(details.Neurons ?? {});
+          let graph = details.State
+            ? new StateGraph({
+              channels: details.State as StateGraphArgs<unknown>["channels"],
+            })
+            : new MessageGraph();
 
-            const nodes = await Promise.all(
-              neuronLookups.map(async (neuronLookup) => {
-                const runnable = await resolveNeurons({
-                  "": details.Neurons![neuronLookup],
-                });
+          const neuronLookups = Object.keys(details.Neurons ?? {});
 
-                return [neuronLookup, runnable!] as [string, RunnableLike];
-              }),
-            );
+          const nodes = await Promise.all(
+            neuronLookups.map(async (neuronLookup) => {
+              const runnable = await resolveNeurons({
+                "": details.Neurons![neuronLookup],
+              });
 
-            nodes.forEach(([neuronLookup, runnable]) => {
-              graph = graph.addNode(neuronLookup, runnable as any) as any;
-            });
+              return [neuronLookup, runnable!] as [string, RunnableLike];
+            }),
+          );
 
-            const edgeNodeLookups = Object.keys(details.Edges ?? {});
+          nodes.forEach(([neuronLookup, runnable]) => {
+            graph = graph.addNode(neuronLookup, runnable as any) as any;
+          });
 
-            edgeNodeLookups.forEach((edgeNodeLookup) => {
-              const edgeNode: EaCGraphCircuitEdgeLike =
-                details.Edges![edgeNodeLookup];
+          const edgeNodeLookups = Object.keys(details.Edges ?? {});
 
-              const edgeConfigs: EaCGraphCircuitEdge[] = [];
+          edgeNodeLookups.forEach((edgeNodeLookup) => {
+            const edgeNode: EaCGraphCircuitEdgeLike =
+              details.Edges![edgeNodeLookup];
 
-              if (typeof edgeNode === "string") {
-                edgeConfigs.push({
-                  Node: edgeNode,
-                });
-              } else if (!Array.isArray(edgeNode)) {
-                edgeConfigs.push(edgeNode as EaCGraphCircuitEdge);
-              } else {
-                const workingNodes = edgeNode as (
-                  | string
-                  | EaCGraphCircuitEdge
-                )[];
+            const edgeConfigs: EaCGraphCircuitEdge[] = [];
 
-                workingNodes.forEach((node) => {
-                  if (typeof node === "string") {
-                    edgeConfigs.push({
-                      Node: node,
-                    });
-                  } else if (!Array.isArray(node)) {
-                    edgeConfigs.push(node as EaCGraphCircuitEdge);
-                  }
-                });
-              }
+            if (typeof edgeNode === "string") {
+              edgeConfigs.push({
+                Node: edgeNode,
+              });
+            } else if (!Array.isArray(edgeNode)) {
+              edgeConfigs.push(edgeNode as EaCGraphCircuitEdge);
+            } else {
+              const workingNodes = edgeNode as (string | EaCGraphCircuitEdge)[];
 
-              edgeConfigs.forEach((config) => {
-                if (typeof config.Node === "string") {
-                  graph.addEdge(edgeNodeLookup as any, config.Node as any);
-                } else {
-                  graph.addConditionalEdges(
-                    edgeNodeLookup as any,
-                    config.Condition as any,
-                    config.Node as any,
-                  );
+              workingNodes.forEach((node) => {
+                if (typeof node === "string") {
+                  edgeConfigs.push({
+                    Node: node,
+                  });
+                } else if (!Array.isArray(node)) {
+                  edgeConfigs.push(node as EaCGraphCircuitEdge);
                 }
               });
-            });
-
-            let checkpointer: BaseCheckpointSaver | undefined;
-
-            if (details.PersistenceLookup) {
-              checkpointer = await ioc.Resolve<BaseCheckpointSaver>(
-                ioc.Symbol("Persistence"),
-                details.PersistenceLookup,
-              );
             }
 
-            const circuit = graph.compile({
-              checkpointer,
-              interruptAfter: details.Interrupts?.After as any,
-              interruptBefore: details.Interrupts?.Before as any,
+            edgeConfigs.forEach((config) => {
+              if (typeof config.Node === "string") {
+                graph.addEdge(edgeNodeLookup as any, config.Node as any);
+              } else {
+                graph.addConditionalEdges(
+                  edgeNodeLookup as any,
+                  config.Condition as any,
+                  config.Node as any,
+                );
+              }
             });
+          });
 
-            return circuit;
-          },
-          {
-            Lazy: false,
-            Name: circuitLookup,
-            Type: ioc.Symbol("Circuit"),
-          },
-        );
-      } else if (
-        isEaCLinearCircuitDetails(eacCircuit.Details) ||
-        isEaCCircuitDetails(undefined, eacCircuit.Details)
-      ) {
-        ioc.Register(
-          async () => {
-            let circuit = await resolveNeurons(eacCircuit.Details!.Neurons);
+          let checkpointer: BaseCheckpointSaver | undefined;
 
-            const synapses = await resolveNeurons(eacCircuit.Details!.Synapses);
+          if (details.PersistenceLookup) {
+            checkpointer = await ioc.Resolve<BaseCheckpointSaver>(
+              ioc.Symbol("Persistence"),
+              details.PersistenceLookup,
+            );
+          }
 
-            if (synapses) {
-              circuit = circuit ? circuit.pipe(synapses) : synapses;
-            }
+          circuit = graph.compile({
+            checkpointer,
+            interruptAfter: details.Interrupts?.After as any,
+            interruptBefore: details.Interrupts?.Before as any,
+          });
+        } else if (
+          isEaCLinearCircuitDetails(eacCircuit.Details) ||
+          isEaCCircuitDetails(undefined, eacCircuit.Details)
+        ) {
+          circuit = await resolveNeurons(eacCircuit.Details!.Neurons);
 
-            return circuit;
-          },
-          {
-            Lazy: false,
-            Name: circuitLookup,
-            Type: ioc.Symbol("Circuit"),
-          },
-        );
-      }
-    });
+          const synapses = await resolveNeurons(eacCircuit.Details!.Synapses);
+
+          if (synapses) {
+            circuit = circuit ? circuit.pipe(synapses) : synapses;
+          }
+        }
+
+        if (eacCircuit?.Details?.Bootstrap) {
+          circuit = await eacCircuit.Details.Bootstrap(
+            circuit!,
+            eacCircuit.Details,
+          );
+        }
+
+        ioc.Register(() => circuit, {
+          Lazy: false,
+          Name: circuitLookup,
+          Type: ioc.Symbol("Circuit"),
+        });
+      }),
+    );
   }
 
   protected configureEaCEmbeddings(

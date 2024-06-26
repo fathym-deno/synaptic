@@ -147,7 +147,8 @@ export class DenoKVRecordManager implements RecordManagerInterface {
 }
 
 export function chunkArray<T>(arr: T[], chunkSize = 10): T[][] {
-  return Array.from({ length: Math.ceil(arr.length / chunkSize) }, (_, i) =>
-    arr.slice(i * chunkSize, i * chunkSize + chunkSize)
+  return Array.from(
+    { length: Math.ceil(arr.length / chunkSize) },
+    (_, i) => arr.slice(i * chunkSize, i * chunkSize + chunkSize),
   );
 }

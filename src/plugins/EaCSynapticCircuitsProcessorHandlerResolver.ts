@@ -3,7 +3,7 @@ import { isEaCSynapticCircuitsProcessor } from "../eac/EaCSynapticCircuitsProces
 import { EverythingAsCodeSynaptic } from "../eac/EverythingAsCodeSynaptic.ts";
 import {
   delay,
-  jsonClone,
+  EaCRuntimeEaC,
   ProcessorHandlerResolver,
   Runnable,
   RunnableConfig,
@@ -12,6 +12,7 @@ import {
   zodToJsonSchema,
 } from "../src.deps.ts";
 import { RemoteCircuitDefinition } from "./FathymSynapticPlugin.ts";
+import { customStringify } from "./customStringify.ts";
 
 export type SynapticCircuitsExecuteRequest = {
   config: Partial<RunnableConfig> & {
@@ -24,10 +25,10 @@ export type SynapticCircuitsExecuteRequest = {
 };
 
 export const EaCSynapticCircuitsProcessorHandlerResolver:
-  ProcessorHandlerResolver = {
-    async Resolve(ioc, appProcCfg, rEaC) {
-      const eac = rEaC as EverythingAsCodeSynaptic;
-
+  ProcessorHandlerResolver<
+    EaCRuntimeEaC & EverythingAsCodeSynaptic
+  > = {
+    async Resolve(ioc, appProcCfg, eac) {
       const processor = appProcCfg.Application.Processor;
 
       if (!isEaCSynapticCircuitsProcessor(processor)) {
@@ -44,10 +45,14 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
 
           let addCircuit = false;
 
-          if (processor.Includes?.includes(key)) {
-            addCircuit = true;
-          } else if (processor.Excludes?.includes(key)) {
-            addCircuit = true;
+          if (processor.Includes) {
+            if (processor.Includes.includes(key)) {
+              addCircuit = true;
+            }
+          } else if (processor.Excludes) {
+            if (!processor.Excludes.includes(key)) {
+              addCircuit = true;
+            }
           } else {
             addCircuit = true;
           }
@@ -94,9 +99,9 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
               acc[lookup] = {
                 Name: circuit.Circuit.Details!.Name!,
                 Description: circuit.Circuit.Details!.Description!,
-                InputSchema: zodToJsonSchema(
-                  circuit.Circuit.Details!.InputSchema!,
-                ),
+                InputSchema: circuit.Circuit.Details!.InputSchema
+                  ? zodToJsonSchema(circuit.Circuit.Details!.InputSchema)
+                  : undefined,
               };
 
               return acc;
@@ -155,11 +160,7 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
                         controller.enqueue({
                           id: Date.now(),
                           event: "data",
-                          data: JSON.stringify(
-                            jsonClone({
-                              ...event,
-                            }),
-                          ),
+                          data: customStringify(event),
                         } as ServerSentEventMessage);
 
                         await delay(1);
@@ -191,7 +192,7 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
                     circuitsReq.input,
                     {
                       ...circuitsReq.config,
-                      version: circuitsReq.config.version || "v1",
+                      version: circuitsReq.config.version || "v2",
                     },
                   );
 
@@ -201,11 +202,7 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
                         controller.enqueue({
                           id: Date.now(),
                           event: "data",
-                          data: JSON.stringify(
-                            jsonClone({
-                              ...event,
-                            }),
-                          ),
+                          data: customStringify(event),
                         } as ServerSentEventMessage);
 
                         await delay(1);
@@ -244,11 +241,7 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
                         controller.enqueue({
                           id: Date.now(),
                           event: "data",
-                          data: JSON.stringify(
-                            jsonClone({
-                              ...event,
-                            }),
-                          ),
+                          data: customStringify(event),
                         } as ServerSentEventMessage);
 
                         await delay(1);
@@ -275,16 +268,9 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
                     circuitsReq.input,
                     circuitsReq.config,
                   );
-                  console.log(res);
-                  console.log(Object.keys(res));
 
                   return Response.json({
-                    output: {
-                      // ...jsonClone(res),
-                      ...jsonClone({
-                        ...res,
-                      }),
-                    },
+                    output: JSON.parse(customStringify(res)),
                   });
                 }
               } else {

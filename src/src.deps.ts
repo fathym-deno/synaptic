@@ -11,7 +11,7 @@ export { IoCContainer } from "https://deno.land/x/fathym_ioc@v0.0.10/mod.ts";
 export * from "https://deno.land/x/fathym_common@v0.0.184/mod.ts";
 // export * from '../../everything-as-code/mod.ts';
 export * from "https://deno.land/x/fathym_everything_as_code@v0.0.413/mod.ts";
-export * from "https://deno.land/x/fathym_eac_runtime@v0.0.252/mod.ts";
+export * from "https://deno.land/x/fathym_eac_runtime@v0.0.258/mod.ts";
 export {
   type AzureExtensionsOptions,
   AzureKeyCredential,
@@ -35,6 +35,7 @@ export {
   // createXmlAgent,
   Toolkit,
 } from "npm:langchain/agents";
+// export { AzureChatOpenAI } from 'npm:@langchain/openai';
 export {
   AzureChatOpenAI,
   AzureOpenAIEmbeddings,
