@@ -6,22 +6,16 @@
     "build": "deno task check",
     "deploy": "deno task build && deno task test && ftm git",
     // "preview": "deno run -A main.ts",
-    "test": "deno test -A --unstable --allow-env .env tests/tests.ts --coverage=cov"
+    "test": "deno test -A --allow-env .env tests/tests.ts --coverage=cov"
   },
   "lint": {
     "rules": {
-      "tags": [
-        "recommended"
-      ]
+      "tags": ["recommended"]
     },
-    "exclude": [
-      "_synaptic"
-    ]
+    "exclude": ["_synaptic"]
   },
   "fmt": {
-    "exclude": [
-      "_synaptic"
-    ]
+    "exclude": ["_synaptic"]
   },
   "imports": {
     "$dnt": "https://deno.land/x/dnt/mod.ts",
@@ -39,5 +33,6 @@
       "deno.ns",
       "deno.unstable"
     ]
-  }
+  },
+  "unstable": ["kv"]
 }
