@@ -2,7 +2,11 @@ import { EaCNeuron, isEaCNeuron } from "../EaCNeuron.ts";
 
 export type EaCLLMNeuron = {
   LLMLookup: string;
-} & EaCNeuron<"LLM">;
+
+  ToolsAsFunctions?: boolean;
+
+  ToolLookups?: string[];
+} & EaCNeuron<'LLM'>;
 
 export function isEaCLLMNeuron(details: unknown): details is EaCLLMNeuron {
   const x = details as EaCLLMNeuron;

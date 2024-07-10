@@ -1,8 +1,8 @@
-import { BaseMessage, BaseMessagePromptTemplateLike } from "../../src.deps.ts";
+import { BaseMessagePromptTemplateLike } from "../../src.deps.ts";
 import { EaCNeuron, isEaCNeuron } from "../EaCNeuron.ts";
 
 export type EaCChatPromptNeuron = {
-  Messages?: BaseMessage[];
+  Messages?: BaseMessagePromptTemplateLike[];
 
   NewMessages?: BaseMessagePromptTemplateLike[];
 

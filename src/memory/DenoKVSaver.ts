@@ -5,30 +5,34 @@ import {
   CheckpointTuple,
   RunnableConfig,
   SerializerProtocol,
-} from "../src.deps.ts";
+} from '../src.deps.ts';
 import {
   Buffer,
   toReadableStream,
-} from "https://deno.land/std@0.220.1/io/mod.ts";
+} from 'https://deno.land/std@0.220.1/io/mod.ts';
 
 export class DenoKVSaver extends BaseCheckpointSaver {
   constructor(
     protected denoKv: Deno.Kv,
     protected rootKey: Deno.KvKey,
     protected checkpointTtl?: number,
-    serde?: SerializerProtocol,
+    serde?: SerializerProtocol
   ) {
     super(serde);
   }
 
   public async getTuple(
-    config: RunnableConfig,
+    config: RunnableConfig
   ): Promise<CheckpointTuple | undefined> {
     const threadId = config.configurable?.thread_id;
-    const checkpointId = config.configurable?.checkpoint_id;
+    const checkpointId =
+      config.configurable?.checkpoint_id ??
+      config.configurable?.transferCheckpointId;
 
     if (checkpointId) {
       const checkpointData = await this.readCheckpoint(threadId, checkpointId);
+
+      delete config.configurable?.transferCheckpointId;
 
       if (checkpointData) {
         return {
@@ -40,16 +44,16 @@ export class DenoKVSaver extends BaseCheckpointSaver {
     } else {
       const latestCheckpoint = await this.denoKv.get<string>([
         ...this.rootKey,
-        "Thread",
+        'Thread',
         threadId,
-        "Checkpoint",
-        "Latest",
+        'Checkpoint',
+        'Latest',
       ]);
 
       if (latestCheckpoint.value) {
         config.configurable = {
           ...(config.configurable || {}),
-          checkpoint_id: latestCheckpoint.value,
+          transferCheckpointId: latestCheckpoint.value,
         };
 
         return await this.getTuple(config);
@@ -62,12 +66,12 @@ export class DenoKVSaver extends BaseCheckpointSaver {
   public async *list(
     config: RunnableConfig,
     limit?: number,
-    before?: RunnableConfig,
+    before?: RunnableConfig
   ): AsyncGenerator<CheckpointTuple> {
     const threadId = config.configurable?.thread_id;
 
     const checkpointsRes = await this.denoKv.list<boolean>({
-      prefix: [...this.rootKey, "Thread", threadId, "Checkpoint", "Mark"],
+      prefix: [...this.rootKey, 'Thread', threadId, 'Checkpoint', 'Mark'],
     });
 
     const checkpoints: [string, Checkpoint, CheckpointMetadata][] = [];
@@ -87,14 +91,12 @@ export class DenoKVSaver extends BaseCheckpointSaver {
     }
 
     // sort in desc order
-    for await (
-      const [id, cp, meta] of checkpoints
-        .filter((c) =>
-          before ? c[0] < before.configurable?.checkpoint_id : true
-        )
-        .sort((a, b) => b[0].localeCompare(a[0]))
-        .slice(0, limit)
-    ) {
+    for await (const [id, cp, meta] of checkpoints
+      .filter((c) =>
+        before ? c[0] < before.configurable?.checkpoint_id : true
+      )
+      .sort((a, b) => b[0].localeCompare(a[0]))
+      .slice(0, limit)) {
       yield {
         config: { configurable: { thead_id: threadId, checkpoint_id: id } },
         checkpoint: cp,
@@ -106,7 +108,7 @@ export class DenoKVSaver extends BaseCheckpointSaver {
   public async put(
     config: RunnableConfig,
     checkpoint: Checkpoint,
-    metadata: CheckpointMetadata,
+    metadata: CheckpointMetadata
   ): Promise<RunnableConfig> {
     const threadId = config.configurable?.thread_id;
 
@@ -123,21 +125,21 @@ export class DenoKVSaver extends BaseCheckpointSaver {
   protected async readCheckpoint(threadId: string, checkpointId: string) {
     const checkpointKey = [
       ...this.rootKey,
-      "Thread",
+      'Thread',
       threadId,
-      "Checkpoint",
+      'Checkpoint',
       checkpointId,
     ];
 
-    let checkpointBlob = new Blob([""]);
+    let checkpointBlob = new Blob(['']);
 
-    let metadataBlob = new Blob([""]);
+    let metadataBlob = new Blob(['']);
 
     await Promise.all(
       [
         async () => {
           const checkpointChunks = await this.denoKv.list<Uint8Array>({
-            prefix: [...checkpointKey, "CP", "Chunks"],
+            prefix: [...checkpointKey, 'CP', 'Chunks'],
           });
 
           for await (const cpChunk of checkpointChunks) {
@@ -146,14 +148,14 @@ export class DenoKVSaver extends BaseCheckpointSaver {
         },
         async () => {
           const metadataChunks = await this.denoKv.list<Uint8Array>({
-            prefix: [...checkpointKey, "Metadata", "Chunks"],
+            prefix: [...checkpointKey, 'Metadata', 'Chunks'],
           });
 
           for await (const mdChunk of metadataChunks) {
             metadataBlob = new Blob([metadataBlob, mdChunk.value]);
           }
         },
-      ].map((s) => s()),
+      ].map((s) => s())
     );
 
     const checkpoint = await checkpointBlob.text();
@@ -161,10 +163,8 @@ export class DenoKVSaver extends BaseCheckpointSaver {
     if (checkpoint) {
       const metadata = await metadataBlob.text();
 
-      console.log("Checkpoint Read: " + threadId);
-      console.log(checkpointKey.join("|"));
-      console.log(checkpoint);
-
+      // console.log('checkpoint');
+      // console.log(checkpoint);
       return {
         Checkpoint: (await this.serde.parse(checkpoint)) as Checkpoint,
         Metadata: (await this.serde.parse(metadata)) as CheckpointMetadata,
@@ -177,76 +177,72 @@ export class DenoKVSaver extends BaseCheckpointSaver {
   protected async writeCheckpoint(
     threadId: string,
     checkpoint: Checkpoint,
-    metadata: CheckpointMetadata,
+    metadata: CheckpointMetadata
   ) {
     const checkpointKey = [
       ...this.rootKey,
-      "Thread",
+      'Thread',
       threadId,
-      "Checkpoint",
+      'Checkpoint',
       checkpoint.id,
     ];
 
     const encoder = new TextEncoder();
 
     const checkpointBlob = toReadableStream(
-      new Buffer(encoder.encode(this.serde.stringify(checkpoint))),
+      new Buffer(encoder.encode(this.serde.stringify(checkpoint)))
     );
 
     const metadataBlob = toReadableStream(
-      new Buffer(encoder.encode(this.serde.stringify(metadata))),
+      new Buffer(encoder.encode(this.serde.stringify(metadata)))
     );
-
-    console.log("Checkpoint Write: " + threadId);
-    console.log(checkpointKey.join("|"));
-    console.log(checkpoint);
 
     await Promise.all(
       [
         async () => {
           const latest = await this.denoKv.get<string>([
             ...this.rootKey,
-            "Thread",
+            'Thread',
             threadId,
-            "Checkpoint",
-            "Latest",
+            'Checkpoint',
+            'Latest',
           ]);
 
           const newLatest = latest.value
             ? [checkpoint.id, latest.value].sort((a, b) =>
-              b.localeCompare(a)
-            )[0]
+                b.localeCompare(a)
+              )[0]
             : checkpoint.id;
 
           await this.denoKv.set(
-            [...this.rootKey, "Thread", threadId, "Checkpoint", "Latest"],
+            [...this.rootKey, 'Thread', threadId, 'Checkpoint', 'Latest'],
             newLatest,
             {
               expireIn: this.checkpointTtl,
-            },
+            }
           );
         },
         async () => {
           await this.denoKv.set(
             [
               ...this.rootKey,
-              "Thread",
+              'Thread',
               threadId,
-              "Checkpoint",
-              "Mark",
+              'Checkpoint',
+              'Mark',
               checkpoint.id,
             ],
             true,
             {
               expireIn: this.checkpointTtl,
-            },
+            }
           );
         },
         async () => {
           let cpChunkCount = 0;
 
           for await (const cpChunk of checkpointBlob) {
-            const chunkKey = [...checkpointKey, "CP", "Chunks", cpChunkCount];
+            const chunkKey = [...checkpointKey, 'CP', 'Chunks', cpChunkCount];
 
             await this.denoKv.set(chunkKey, cpChunk, {
               expireIn: this.checkpointTtl,
@@ -261,8 +257,8 @@ export class DenoKVSaver extends BaseCheckpointSaver {
           for await (const cpChunk of metadataBlob) {
             const chunkKey = [
               ...checkpointKey,
-              "Metadata",
-              "Chunks",
+              'Metadata',
+              'Chunks',
               mdChunkCount,
             ];
 
@@ -273,7 +269,7 @@ export class DenoKVSaver extends BaseCheckpointSaver {
             mdChunkCount++;
           }
         },
-      ].map((s) => s()),
+      ].map((s) => s())
     );
   }
 }

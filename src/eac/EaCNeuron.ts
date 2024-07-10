@@ -1,4 +1,4 @@
-import { EaCVertexDetails, Runnable } from "../src.deps.ts";
+import { EaCVertexDetails, Runnable, RunnableConfig } from '../src.deps.ts';
 
 // @ts-ignore: It is ok for the circular reference with it being a child prop with infinite nesting
 export type EaCNeuronLike = EaCNeuron | string | [string, EaCNeuronLike];
@@ -6,8 +6,34 @@ export type EaCNeuronLike = EaCNeuron | string | [string, EaCNeuronLike];
 export type EaCNeuron<TType = unknown> = {
   Bootstrap?: (
     runnable: Runnable,
-    neuron: EaCNeuron<TType>,
+    neuron: EaCNeuron<TType>
   ) => Runnable | Promise<Runnable>;
+
+  BootstrapInput?: <TIn, TOut>(
+    input: TIn,
+    neuron: EaCNeuron<TType>,
+    options?:
+      | ({
+          config?: RunnableConfig;
+        } & RunnableConfig)
+      | Record<string, any>
+      | (Record<string, any> & {
+          config: RunnableConfig;
+        } & RunnableConfig)
+  ) => TOut | Promise<TOut>;
+
+  BootstrapOutput?: <TIn, TOut>(
+    input: TIn,
+    neuron: EaCNeuron<TType>,
+    options?:
+      | ({
+          config?: RunnableConfig;
+        } & RunnableConfig)
+      | Record<string, any>
+      | (Record<string, any> & {
+          config: RunnableConfig;
+        } & RunnableConfig)
+  ) => TOut | Promise<TOut>;
 
   Neurons?: Record<string, EaCNeuronLike>;
 
@@ -18,7 +44,7 @@ export type EaCNeuron<TType = unknown> = {
 
 export function isEaCNeuron<TType = unknown>(
   type: TType,
-  details: unknown,
+  details: unknown
 ): details is EaCNeuron {
   const x = details as EaCNeuron;
 
