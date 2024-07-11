@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import 'npm:cheerio';
+import "npm:cheerio";
 import {
   AzureAISearchVectorStore,
   AzureChatOpenAI,
@@ -7,35 +7,25 @@ import {
   BaseCheckpointSaver,
   BaseDocumentLoader,
   BaseLanguageModel,
-  BaseListChatMessageHistory,
-  BaseMessage,
-  BaseMessagePromptTemplateLike,
-  BasePromptTemplate,
-  ChatPromptTemplate,
   CheerioWebBaseLoader,
   convertToOpenAIFunction,
   convertToOpenAITool,
-  createOpenAIFunctionsAgent,
-  createStuffDocumentsChain,
+  DFSFileHandlerResolver,
   DynamicStructuredTool,
   DynamicTool,
+  EaCLocalDistributedFileSystem,
   EaCRuntimeConfig,
   EaCRuntimePlugin,
   EaCRuntimePluginConfig,
   Embeddings,
-  FunctionMessage,
   HNSWLib,
+  importDFSTypescriptModule,
   index,
   IoCContainer,
-  jsonpath,
   jsonSchemaToZod,
-  LanguageModelLike,
   MemorySaver,
   MemoryVectorStore,
-  merge,
   MessageGraph,
-  PromptTemplate,
-  pull,
   RecordManagerInterface,
   RecursiveCharacterTextSplitter,
   RemoteRunnable,
@@ -43,120 +33,100 @@ import {
   RunnableConfig,
   RunnableLambda,
   RunnableLike,
-  RunnableMap,
-  RunnablePassthrough,
-  RunnableWithMessageHistory,
   SerpAPI,
   StateGraph,
   StateGraphArgs,
-  StringOutputParser,
   StructuredTool,
   StructuredToolInterface,
   TavilySearchResults,
   TextSplitter,
-  ToolExecutor,
-  ToolInvocationInterface,
   Toolkit,
-  ToolMessage,
-  ToolNode,
   VectorStore,
   WatsonxAI,
   z,
   ZodObject,
-} from '../src.deps.ts';
+} from "../src.deps.ts";
 import {
   EaCHNSWVectorStoreDetails,
   isEaCHNSWVectorStoreDetails,
-} from '../eac/EaCHNSWVectorStoreDetails.ts';
-import { isEaCMemoryVectorStoreDetails } from '../eac/EaCMemoryVectorStoreDetails.ts';
+} from "../eac/EaCHNSWVectorStoreDetails.ts";
+import { isEaCMemoryVectorStoreDetails } from "../eac/EaCMemoryVectorStoreDetails.ts";
 import {
   EaCAzureSearchAIVectorStoreDetails,
   isEaCAzureSearchAIVectorStoreDetails,
-} from '../eac/EaCAzureSearchAIVectorStoreDetails.ts';
+} from "../eac/EaCAzureSearchAIVectorStoreDetails.ts";
 import {
   EaCDenoKVIndexerDetails,
   isEaCDenoKVIndexerDetails,
-} from '../eac/EaCDenoKVIndexerDetails.ts';
-import { DenoKVRecordManager } from '../indexing/DenoKVRecordManager.ts';
+} from "../eac/EaCDenoKVIndexerDetails.ts";
+import { DenoKVRecordManager } from "../indexing/DenoKVRecordManager.ts";
 import {
   EaCCheerioWebDocumentLoaderDetails,
   isEaCCheerioWebDocumentLoaderDetails,
-} from '../eac/EaCCheerioWebDocumentLoaderDetails.ts';
-import { EverythingAsCodeSynaptic } from '../eac/EverythingAsCodeSynaptic.ts';
-import { DenoKVChatMessageHistory } from '../memory/DenoKVChatMessageHistory.ts';
-import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from '../eac/EaCNeuron.ts';
-import { isEaCLLMNeuron } from '../eac/neurons/EaCLLMNeuron.ts';
-import { isEaCPromptNeuron } from '../eac/neurons/EaCPromptNeuron.ts';
-import { isEaCChatPromptNeuron } from '../eac/neurons/EaCChatPromptNeuron.ts';
-import { isEaCChatHistoryNeuron } from '../eac/neurons/EaCChatHistoryNeuron.ts';
-import { isEaCCircuitDetails } from '../eac/EaCCircuitDetails.ts';
+} from "../eac/EaCCheerioWebDocumentLoaderDetails.ts";
+import { EverythingAsCodeSynaptic } from "../eac/EverythingAsCodeSynaptic.ts";
+import { DenoKVChatMessageHistory } from "../memory/DenoKVChatMessageHistory.ts";
+import { EaCNeuron, EaCNeuronLike } from "../eac/EaCNeuron.ts";
+import { isEaCCircuitDetails } from "../eac/EaCCircuitDetails.ts";
 import {
   EaCRecursiveCharacterTextSplitterDetails,
   isEaCRecursiveCharacterTextSplitterDetails,
-} from '../eac/EaCRecursiveCharacterTextSplitterDetails.ts';
-import { isEaCStuffDocumentsNeuron } from '../eac/neurons/EaCStuffDocumentsNeuron.ts';
-import { isEaCLinearCircuitDetails } from '../eac/EaCLinearCircuitDetails.ts';
+} from "../eac/EaCRecursiveCharacterTextSplitterDetails.ts";
+import { isEaCLinearCircuitDetails } from "../eac/EaCLinearCircuitDetails.ts";
 import {
   EaCGraphCircuitDetails,
   EaCGraphCircuitEdge,
   EaCGraphCircuitEdgeLike,
   isEaCGraphCircuitDetails,
-} from '../eac/EaCGraphCircuitDetails.ts';
-import { isEaCCircuitNeuron } from '../eac/neurons/EaCCircuitNeuron.ts';
-import { isEaCSERPToolDetails } from '../eac/tools/EaCSERPToolDetails.ts';
-import { isEaCToolNeuron } from '../eac/neurons/EaCToolNeuron.ts';
-import { isEaCStringOutputParserNeuron } from '../eac/neurons/EaCStringOutputParserNeuron.ts';
-import { isEaCTavilySearchResultsToolDetails } from '../eac/tools/EaCTavilySearchResultsToolDetails.ts';
-import { isEaCPassthroughNeuron } from '../eac/neurons/EaCPassthroughNeuron.ts';
-import { isEaCToolExecutorNeuron } from '../eac/neurons/EaCToolExecutorNeuron.ts';
-import { isEaCDynamicToolDetails } from '../eac/tools/EaCDynamicToolDetails.ts';
-import { isEaCToolNodeNeuron } from '../eac/neurons/EaCToolNodeNeuron.ts';
-import { isEaCMemorySaverPersistenceDetails } from '../eac/EaCMemorySaverPersistenceDetails.ts';
-import { isEaCDenoKVSaverPersistenceDetails } from '../eac/EaCDenoKVSaverPersistenceDetails.ts';
-import { DenoKVSaver } from '../memory/DenoKVSaver.ts';
-import { isEaCOpenAIFunctionsAgentNeuron } from '../eac/neurons/EaCOpenAIFunctionsAgentNeuron.ts';
-import { isEaCPullChatPromptNeuron } from '../eac/neurons/EaCPullChatPromptNeuron.ts';
-import { JSONPathRunnablePassthrough } from '../runnables/JSONPathRunnablePassthrough.ts';
-import { isEaCCircuitToolDetails } from '../eac/tools/EaCCircuitToolDetails.ts';
-import { EaCSynapticCircuitsProcessorHandlerResolver } from './EaCSynapticCircuitsProcessorHandlerResolver.ts';
-import { isEaCRemoteCircuitsToolDetails } from '../eac/tools/EaCRemoteCircuitsToolDetails.ts';
+} from "../eac/EaCGraphCircuitDetails.ts";
+import { isEaCSERPToolDetails } from "../eac/tools/EaCSERPToolDetails.ts";
+import { isEaCTavilySearchResultsToolDetails } from "../eac/tools/EaCTavilySearchResultsToolDetails.ts";
+import { isEaCDynamicToolDetails } from "../eac/tools/EaCDynamicToolDetails.ts";
+import { isEaCMemorySaverPersistenceDetails } from "../eac/EaCMemorySaverPersistenceDetails.ts";
+import { isEaCDenoKVSaverPersistenceDetails } from "../eac/EaCDenoKVSaverPersistenceDetails.ts";
+import { DenoKVSaver } from "../memory/DenoKVSaver.ts";
+import { isEaCCircuitToolDetails } from "../eac/tools/EaCCircuitToolDetails.ts";
+import { EaCSynapticCircuitsProcessorHandlerResolver } from "./EaCSynapticCircuitsProcessorHandlerResolver.ts";
+import { isEaCRemoteCircuitsToolDetails } from "../eac/tools/EaCRemoteCircuitsToolDetails.ts";
 import {
   EaCDenoKVChatHistoryDetails,
   isEaCDenoKVChatHistoryDetails,
-} from '../eac/EaCDenoKVChatHistoryDetails.ts';
+} from "../eac/EaCDenoKVChatHistoryDetails.ts";
 import {
   EaCAzureOpenAIEmbeddingsDetails,
   isEaCAzureOpenAIEmbeddingsDetails,
-} from '../eac/EaCAzureOpenAIEmbeddingsDetails.ts';
+} from "../eac/EaCAzureOpenAIEmbeddingsDetails.ts";
 import {
   EaCAzureOpenAILLMDetails,
   isEaCAzureOpenAILLMDetails,
-} from '../eac/EaCAzureOpenAILLMDetails.ts';
+} from "../eac/EaCAzureOpenAILLMDetails.ts";
 import {
   EaCWatsonXLLMDetails,
   isEaCWatsonXLLMDetails,
-} from '../eac/EaCWatsonXLLMDetails.ts';
+} from "../eac/EaCWatsonXLLMDetails.ts";
+import { SynapticNeuronResolver } from "../resolvers/SynapticNeuronResolver.ts";
+import { SynapticResolverConfiguration } from "../resolvers/SynapticResolverConfiguration.ts";
 
 export default class FathymSynapticPlugin implements EaCRuntimePlugin {
   public async AfterEaCResolved(
     eac: EverythingAsCodeSynaptic,
-    ioc: IoCContainer
+    ioc: IoCContainer,
   ): Promise<void> {
     await this.configureEaCSynaptic(eac, ioc);
   }
 
   public Setup(_config: EaCRuntimeConfig): Promise<EaCRuntimePluginConfig> {
     const pluginConfig: EaCRuntimePluginConfig = {
-      Name: 'FathymSynapticPlugin',
+      Name: "FathymSynapticPlugin",
       IoC: new IoCContainer(),
     };
 
     pluginConfig.IoC!.Register(
       () => EaCSynapticCircuitsProcessorHandlerResolver,
       {
-        Name: 'EaCSynapticCircuitsProcessor',
-        Type: pluginConfig.IoC!.Symbol('ProcessorHandlerResolver'),
-      }
+        Name: "EaCSynapticCircuitsProcessor",
+        Type: pluginConfig.IoC!.Symbol("ProcessorHandlerResolver"),
+      },
     );
 
     return Promise.resolve(pluginConfig);
@@ -164,7 +134,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
   protected configureEaCChatHistories(
     eac: EverythingAsCodeSynaptic,
-    ioc: IoCContainer
+    ioc: IoCContainer,
   ): void {
     const aiLookups = Object.keys(eac!.AIs || {});
 
@@ -183,7 +153,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             async () => {
               const kv = await ioc.Resolve(
                 Deno.Kv,
-                chDetails.DenoKVDatabaseLookup
+                chDetails.DenoKVDatabaseLookup,
               );
 
               return (sessionId: string) =>
@@ -195,8 +165,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             {
               Lazy: false,
               Name: `${aiLookup}|${chatHistoryLookup}`,
-              Type: ioc.Symbol('ChatHistory'),
-            }
+              Type: ioc.Symbol("ChatHistory"),
+            },
           );
         }
       });
@@ -205,316 +175,33 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
   protected async configureEaCCircuits(
     eac: EverythingAsCodeSynaptic,
-    ioc: IoCContainer
+    ioc: IoCContainer,
   ): Promise<void> {
-    const circuitLookups = Object.keys(eac.Circuits || {});
+    const {
+      $handlers: _$h,
+      $neurons: _$n,
+      $remotes,
+      ...circuits
+    } = eac.Circuits || {};
 
     const resolveNeuron = (neuron: EaCNeuronLike): Runnable => {
       return RunnableLambda.from(async () => {
-        let runnable: Runnable = new RunnablePassthrough();
+        const neuronResolver = await ioc.Resolve<
+          SynapticNeuronResolver<EaCNeuronLike>
+        >(ioc.Symbol("SynapticNeuronResolver"));
 
-        if (neuron) {
-          if (typeof neuron === 'string') {
-            const lookup = neuron;
-
-            neuron = eac.Circuits!.$neurons![lookup];
-
-            if (!neuron) {
-              throw new Deno.errors.NotFound(
-                `Unable to locate a neuron '${lookup}' in the $neurons bank.`
-              );
-            }
-          } else if (Array.isArray(neuron)) {
-            const [neoronLookup, neuronOverride] = neuron as [
-              string,
-              EaCNeuron
-            ];
-
-            neuron = eac.Circuits!.$neurons![neoronLookup];
-
-            neuron = merge(neuron, neuronOverride);
-          }
-
-          if (isEaCNeuron(undefined, neuron)) {
-            if (isEaCLLMNeuron(neuron)) {
-              const llm = await ioc.Resolve<BaseLanguageModel>(
-                ioc.Symbol(BaseLanguageModel.name),
-                neuron.LLMLookup
-              );
-
-              if (neuron.ToolLookups?.length) {
-                const tools = await resolveTools(neuron.ToolLookups, ioc);
-
-                runnable = (llm as AzureChatOpenAI).bind({
-                  functions: neuron.ToolsAsFunctions
-                    ? tools.map(convertToOpenAIFunction)
-                    : undefined,
-                  tools: neuron.ToolsAsFunctions
-                    ? undefined
-                    : tools.map(convertToOpenAITool),
-                });
-              } else {
-                runnable = llm;
-              }
-            } else if (isEaCPromptNeuron(neuron)) {
-              const prompt = PromptTemplate.fromTemplate(neuron.PromptTemplate);
-
-              runnable = prompt;
-            } else if (isEaCChatPromptNeuron(neuron)) {
-              const messages: BaseMessagePromptTemplateLike[] = [];
-
-              if (neuron.SystemMessage) {
-                messages.push(['system', neuron.SystemMessage]);
-              }
-
-              if (neuron.Messages) {
-                messages.push(...neuron.Messages);
-              }
-
-              if (neuron.NewMessages) {
-                messages.push(...neuron.NewMessages);
-              }
-
-              const prompt = ChatPromptTemplate.fromMessages(messages);
-
-              runnable = prompt;
-            } else if (isEaCPullChatPromptNeuron(neuron)) {
-              runnable = (await pull(
-                'hwchase17/openai-functions-agent'
-              )) as any;
-            } else if (isEaCCircuitNeuron(neuron)) {
-              const circuit = await ioc.Resolve<Runnable>(
-                ioc.Symbol('Circuit'),
-                neuron.CircuitLookup
-              );
-
-              runnable = circuit;
-            } else if (isEaCToolNeuron(neuron)) {
-              const tools = await resolveTools([neuron.ToolLookup], ioc);
-
-              runnable = tools[0];
-            } else if (isEaCToolExecutorNeuron(neuron)) {
-              const tools = await resolveTools(neuron.ToolLookups, ioc);
-
-              runnable = new ToolExecutor({ tools });
-
-              const msgsPath = neuron.MessagesPath;
-
-              if (msgsPath) {
-                const origRunnable = runnable;
-
-                runnable = RunnableLambda.from(async (state) => {
-                  const messages = jsonpath.query(
-                    state,
-                    msgsPath
-                  )[0] as BaseMessage[];
-
-                  const lastMessage = messages[messages.length - 1];
-
-                  if (!lastMessage) {
-                    throw new Error('No messages found.');
-                  }
-
-                  if (
-                    !lastMessage.additional_kwargs.function_call &&
-                    !lastMessage.additional_kwargs.tool_calls
-                  ) {
-                    throw new Error('No function call found in message.');
-                  }
-
-                  const actions: (ToolInvocationInterface & {
-                    callId?: string;
-                  })[] = [];
-
-                  if (lastMessage.additional_kwargs.function_call) {
-                    actions.push({
-                      tool: lastMessage.additional_kwargs.function_call.name,
-                      toolInput: JSON.parse(
-                        lastMessage.additional_kwargs.function_call.arguments
-                      ),
-                    });
-                  } else if (lastMessage.additional_kwargs.tool_calls) {
-                    actions.push(
-                      ...lastMessage.additional_kwargs.tool_calls.map(
-                        (toolCall) => {
-                          return {
-                            callId: toolCall.id,
-                            tool: toolCall.function.name,
-                            toolInput: JSON.parse(toolCall.function.arguments),
-                          };
-                        }
-                      )
-                    );
-                  }
-
-                  const msgs = await Promise.all(
-                    actions.map(async (action) => {
-                      const response = await origRunnable.invoke(action);
-
-                      if (lastMessage.additional_kwargs.tool_calls) {
-                        return new ToolMessage({
-                          tool_call_id: action.callId!,
-                          content: response,
-                          name: action.tool,
-                        });
-                      } else {
-                        return new FunctionMessage({
-                          content: response,
-                          name: action.tool,
-                        });
-                      }
-                    })
-                  );
-
-                  return msgs;
-                });
-              }
-            } else if (isEaCToolNodeNeuron(neuron)) {
-              const tools = await resolveTools(neuron.ToolLookups, ioc);
-
-              runnable = new ToolNode(tools);
-            } else if (isEaCStringOutputParserNeuron(neuron)) {
-              runnable = new StringOutputParser();
-            } else if (isEaCPassthroughNeuron(neuron)) {
-              if (neuron.Field) {
-                runnable = new JSONPathRunnablePassthrough(neuron.Field);
-              }
-            }
-
-            if (neuron.Neurons) {
-              if (isEaCChatHistoryNeuron(neuron)) {
-                const getMessageHistory = await ioc.Resolve<
-                  (sessionId: string) => BaseListChatMessageHistory
-                >(ioc.Symbol('ChatHistory'), neuron.ChatHistoryLookup);
-
-                const rootMessages = neuron.Messages;
-
-                const childRunnable = await resolveNeurons(neuron.Neurons);
-
-                if (childRunnable) {
-                  runnable = new RunnableWithMessageHistory({
-                    runnable: childRunnable,
-                    getMessageHistory: async (sessionId: string) => {
-                      const chatHistory = getMessageHistory(sessionId);
-
-                      const messages = await chatHistory.getMessages();
-
-                      if (!messages.length) {
-                        await chatHistory.addMessages(rootMessages || []);
-                      }
-
-                      return chatHistory;
-                    },
-                    inputMessagesKey: neuron.InputKey,
-                    historyMessagesKey: neuron.HistoryKey,
-                  });
-                }
-              } else if (isEaCStuffDocumentsNeuron(neuron)) {
-                runnable = (await createStuffDocumentsChain({
-                  llm: (await resolveNeuron(
-                    neuron.Neurons.LLM
-                  )) as LanguageModelLike as any,
-                  prompt: (await resolveNeuron(
-                    neuron.Neurons.Prompt
-                  )) as BasePromptTemplate as any,
-                })) as any;
-              } else if (isEaCOpenAIFunctionsAgentNeuron(neuron)) {
-                const tools = await resolveTools(neuron.ToolLookups, ioc);
-
-                runnable = (await createOpenAIFunctionsAgent({
-                  llm: (await resolveNeuron(
-                    neuron.Neurons.LLM
-                  )) as LanguageModelLike as any,
-                  prompt: (await resolveNeuron(
-                    neuron.Neurons.Prompt
-                  )) as BasePromptTemplate as any,
-                  tools: tools as any,
-                })) as any;
-              } else {
-                const childRunnable = await resolveNeurons(neuron.Neurons);
-
-                if (childRunnable) {
-                  runnable = runnable.pipe(childRunnable);
-                }
-              }
-            }
-
-            const synapses = await resolveNeurons(neuron.Synapses);
-
-            if (synapses) {
-              runnable = runnable ? runnable.pipe(synapses) : runnable;
-            }
-
-            if (neuron.BootstrapInput) {
-              runnable = RunnableLambda.from(async (s, cfg) => {
-                return await (neuron as EaCNeuron).BootstrapInput!(
-                  s,
-                  neuron as EaCNeuron,
-                  cfg
-                );
-              }).pipe(runnable);
-            }
-
-            if (neuron.Bootstrap) {
-              runnable = await neuron.Bootstrap(runnable, neuron);
-            }
-
-            if (neuron.BootstrapOutput) {
-              runnable = runnable.pipe(
-                RunnableLambda.from(async (s, cfg) => {
-                  return await (neuron as EaCNeuron).BootstrapOutput!(
-                    s,
-                    neuron as EaCNeuron,
-                    cfg
-                  );
-                })
-              );
-            }
-          }
-        }
+        const runnable = await neuronResolver.Resolve(neuron, ioc, eac);
 
         return runnable;
       });
     };
 
-    const resolveNeurons = async (
-      neurons?: Record<string, EaCNeuronLike>
-    ): Promise<Runnable | undefined> => {
-      let runnable: Runnable | undefined = undefined;
-
-      const neuronLookups = Object.keys(neurons || {});
-
-      if (neurons && neuronLookups.length > 0) {
-        if (neuronLookups.length === 1 && '' in neurons) {
-          const neuron = neurons[''];
-
-          runnable = await resolveNeuron(neuron);
-        } else {
-          type fromParams = Parameters<typeof RunnableMap.from>;
-
-          type input = Parameters<typeof RunnableMap.from>;
-
-          const runnables: fromParams[0] = {};
-
-          for (const neuronLookup of neuronLookups) {
-            const neuron = neurons[neuronLookup];
-
-            runnables[neuronLookup] = await resolveNeuron(neuron);
-          }
-
-          runnable = RunnableMap.from(runnables);
-        }
-      }
-
-      return runnable;
-    };
-
-    if (eac.Circuits?.$remotes) {
-      const remoteLookups = Object.keys(eac.Circuits?.$remotes);
+    if ($remotes) {
+      const remoteLookups = Object.keys($remotes);
 
       const remoteCircuitDefs = await Promise.all(
         remoteLookups.map(async (remoteLookup) => {
-          const remoteCircuitUrl = eac.Circuits!.$remotes![remoteLookup];
+          const remoteCircuitUrl = $remotes[remoteLookup];
 
           const circuitDefsResp = await fetch(remoteCircuitUrl);
 
@@ -523,13 +210,13 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
           return [remoteLookup, circuitDefs] as [
             string,
-            Record<string, RemoteCircuitDefinition>
+            Record<string, RemoteCircuitDefinition>,
           ];
-        })
+        }),
       );
 
       remoteCircuitDefs.forEach(([remoteLookup, circuitDefs]) => {
-        const remoteCircuitUrl = eac.Circuits!.$remotes![remoteLookup];
+        const remoteCircuitUrl = $remotes[remoteLookup];
 
         Object.keys(circuitDefs).forEach((circuitLookup) => {
           ioc.Register(
@@ -541,153 +228,164 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             {
               Lazy: false,
               Name: `${remoteLookup}:${circuitLookup}`,
-              Type: ioc.Symbol('Circuit'),
-            }
+              Type: ioc.Symbol("Circuit"),
+            },
           );
+
+          // TODO(mcgear): Add a Tool around the circuit
+          // TODO(mcgear): Add a Neuron around the tool
+          // TODO(mcgear): Add a Neuron around the circuit
         });
+
+        // TODO(mcgear): Add a Toolkit around the circuits
+        // TODO(mcgear): Add a Neuron around the toolkit
       });
     }
 
+    const circuitLookups = Object.keys(circuits || {});
+
     await Promise.all(
       circuitLookups.map(async (circuitLookup) => {
-        const eacCircuit = eac.Circuits![circuitLookup];
+        const eacCircuit = circuits![circuitLookup];
 
-        let circuit: Runnable | undefined;
+        let circuitNeuron: EaCNeuron = {
+          Type: undefined,
+          Name: eacCircuit.Details!.Name,
+          Description: eacCircuit.Details!.Description,
+          Bootstrap: eacCircuit.Details!.Bootstrap,
+          BootstrapInput: eacCircuit.Details!.BootstrapInput,
+          BootstrapOutput: eacCircuit.Details!.BootstrapOutput,
+          Synapses: eacCircuit.Details!.Synapses,
+        };
 
         if (isEaCGraphCircuitDetails(eacCircuit.Details)) {
-          const details = eacCircuit.Details as EaCGraphCircuitDetails;
+          circuitNeuron = {
+            ...circuitNeuron,
+            Neurons: {
+              "": {
+                async Bootstrap() {
+                  const details = eacCircuit.Details as EaCGraphCircuitDetails;
 
-          let graph = details.State
-            ? new StateGraph({
-                channels: details.State as StateGraphArgs<unknown>['channels'],
-              })
-            : new MessageGraph();
+                  let graph = details.State
+                    ? new StateGraph({
+                      channels: details.State as StateGraphArgs<
+                        unknown
+                      >["channels"],
+                    })
+                    : new MessageGraph();
 
-          const neuronLookups = Object.keys(details.Neurons ?? {});
+                  const neuronLookups = Object.keys(details.Neurons ?? {});
 
-          const nodes = await Promise.all(
-            neuronLookups.map(async (neuronLookup) => {
-              const runnable = await resolveNeurons({
-                '': details.Neurons![neuronLookup],
-              });
+                  const nodes = await Promise.all(
+                    neuronLookups.map(async (neuronLookup) => {
+                      const runnable = await resolveNeuron(
+                        details.Neurons![neuronLookup],
+                      );
 
-              return [neuronLookup, runnable!] as [string, RunnableLike];
-            })
-          );
+                      return [neuronLookup, runnable!] as [
+                        string,
+                        RunnableLike,
+                      ];
+                    }),
+                  );
 
-          nodes.forEach(([neuronLookup, runnable]) => {
-            graph = graph.addNode(neuronLookup, runnable as any) as any;
-          });
-
-          const edgeNodeLookups = Object.keys(details.Edges ?? {});
-
-          edgeNodeLookups.forEach((edgeNodeLookup) => {
-            const edgeNode: EaCGraphCircuitEdgeLike =
-              details.Edges![edgeNodeLookup];
-
-            const edgeConfigs: EaCGraphCircuitEdge[] = [];
-
-            if (typeof edgeNode === 'string') {
-              edgeConfigs.push({
-                Node: edgeNode,
-              });
-            } else if (!Array.isArray(edgeNode)) {
-              edgeConfigs.push(edgeNode as EaCGraphCircuitEdge);
-            } else {
-              const workingNodes = edgeNode as (string | EaCGraphCircuitEdge)[];
-
-              workingNodes.forEach((node) => {
-                if (typeof node === 'string') {
-                  edgeConfigs.push({
-                    Node: node,
+                  nodes.forEach(([neuronLookup, runnable]) => {
+                    graph = graph.addNode(neuronLookup, runnable as any) as any;
                   });
-                } else if (!Array.isArray(node)) {
-                  edgeConfigs.push(node as EaCGraphCircuitEdge);
-                }
-              });
-            }
 
-            edgeConfigs.forEach((config) => {
-              if (typeof config.Node === 'string') {
-                graph.addEdge(edgeNodeLookup as any, config.Node as any);
-              } else {
-                graph.addConditionalEdges(
-                  edgeNodeLookup as any,
-                  config.Condition as any,
-                  config.Node as any
-                );
-              }
-            });
-          });
+                  const edgeNodeLookups = Object.keys(details.Edges ?? {});
 
-          let checkpointer: BaseCheckpointSaver | undefined;
+                  edgeNodeLookups.forEach((edgeNodeLookup) => {
+                    const edgeNode: EaCGraphCircuitEdgeLike =
+                      details.Edges![edgeNodeLookup];
 
-          if (details.PersistenceLookup) {
-            checkpointer = await ioc.Resolve<BaseCheckpointSaver>(
-              ioc.Symbol('Persistence'),
-              details.PersistenceLookup
-            );
-          }
+                    const edgeConfigs: EaCGraphCircuitEdge[] = [];
 
-          circuit = graph.compile({
-            checkpointer,
-            interruptAfter: details.Interrupts?.After as any,
-            interruptBefore: details.Interrupts?.Before as any,
-          });
+                    if (typeof edgeNode === "string") {
+                      edgeConfigs.push({
+                        Node: edgeNode,
+                      });
+                    } else if (!Array.isArray(edgeNode)) {
+                      edgeConfigs.push(edgeNode as EaCGraphCircuitEdge);
+                    } else {
+                      const workingNodes = edgeNode as (
+                        | string
+                        | EaCGraphCircuitEdge
+                      )[];
+
+                      workingNodes.forEach((node) => {
+                        if (typeof node === "string") {
+                          edgeConfigs.push({
+                            Node: node,
+                          });
+                        } else if (!Array.isArray(node)) {
+                          edgeConfigs.push(node as EaCGraphCircuitEdge);
+                        }
+                      });
+                    }
+
+                    edgeConfigs.forEach((config) => {
+                      if (typeof config.Node === "string") {
+                        graph.addEdge(
+                          edgeNodeLookup as any,
+                          config.Node as any,
+                        );
+                      } else {
+                        graph.addConditionalEdges(
+                          edgeNodeLookup as any,
+                          config.Condition as any,
+                          config.Node as any,
+                        );
+                      }
+                    });
+                  });
+
+                  let checkpointer: BaseCheckpointSaver | undefined;
+
+                  if (details.PersistenceLookup) {
+                    checkpointer = await ioc.Resolve<BaseCheckpointSaver>(
+                      ioc.Symbol("Persistence"),
+                      details.PersistenceLookup,
+                    );
+                  }
+
+                  return graph.compile({
+                    checkpointer,
+                    interruptAfter: details.Interrupts?.After as any,
+                    interruptBefore: details.Interrupts?.Before as any,
+                  }) as unknown as Runnable;
+                },
+              } as Partial<EaCNeuron>,
+            },
+          };
         } else if (
           isEaCLinearCircuitDetails(eacCircuit.Details) ||
           isEaCCircuitDetails(undefined, eacCircuit.Details)
         ) {
-          circuit = await resolveNeurons(eacCircuit.Details!.Neurons);
+          circuitNeuron = {
+            ...circuitNeuron,
+            Neurons: eacCircuit.Details!.Neurons,
+          };
+        }
 
-          const synapses = await resolveNeurons(eacCircuit.Details!.Synapses);
+        if (circuitNeuron) {
+          const circuit = await resolveNeuron(circuitNeuron);
 
-          if (synapses) {
-            circuit = circuit ? circuit.pipe(synapses) : synapses;
+          if (circuit) {
+            ioc.Register(() => circuit, {
+              Lazy: false,
+              Name: circuitLookup,
+              Type: ioc.Symbol("Circuit"),
+            });
           }
         }
-
-        if (eacCircuit?.Details?.BootstrapInput) {
-          circuit = RunnableLambda.from(async (s, cfg) => {
-            return await eacCircuit.Details!.BootstrapInput!(
-              s,
-              eacCircuit.Details!,
-              cfg
-            );
-          }).pipe(circuit!);
-        }
-
-        if (eacCircuit?.Details?.Bootstrap) {
-          circuit = await eacCircuit.Details.Bootstrap(
-            circuit!,
-            eacCircuit.Details
-          );
-        }
-
-        if (eacCircuit?.Details?.BootstrapOutput) {
-          circuit = circuit!.pipe(
-            RunnableLambda.from(async (s, cfg) => {
-              return await eacCircuit.Details!.BootstrapOutput!(
-                s,
-                eacCircuit.Details!,
-                cfg
-              );
-            })
-          );
-        }
-
-        ioc.Register(() => circuit, {
-          Lazy: false,
-          Name: circuitLookup,
-          Type: ioc.Symbol('Circuit'),
-        });
-      })
+      }),
     );
   }
 
   protected configureEaCEmbeddings(
     eac: EverythingAsCodeSynaptic,
-    ioc: IoCContainer
+    ioc: IoCContainer,
   ): void {
     const aiLookups = Object.keys(eac!.AIs || {});
 
@@ -700,8 +398,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
         const embeddings = ai.Embeddings![embeddingsLookup];
 
         if (isEaCAzureOpenAIEmbeddingsDetails(embeddings.Details)) {
-          const embeddingsDetails =
-            embeddings.Details as EaCAzureOpenAIEmbeddingsDetails;
+          const embeddingsDetails = embeddings
+            .Details as EaCAzureOpenAIEmbeddingsDetails;
 
           ioc.Register(
             AzureOpenAIEmbeddings,
@@ -716,7 +414,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               Lazy: false,
               Name: `${aiLookup}|${embeddingsLookup}`,
               Type: ioc.Symbol(Embeddings.name),
-            }
+            },
           );
         }
       });
@@ -725,7 +423,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
   protected configureEaCIndexers(
     eac: EverythingAsCodeSynaptic,
-    ioc: IoCContainer
+    ioc: IoCContainer,
   ): void {
     const aiLookups = Object.keys(eac!.AIs || {});
 
@@ -749,8 +447,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             {
               Lazy: false,
               Name: `${aiLookup}|${indexerLookup}`,
-              Type: ioc.Symbol('RecordManager'),
-            }
+              Type: ioc.Symbol("RecordManager"),
+            },
           );
         }
       });
@@ -759,7 +457,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
   protected configureEaCLLMs(
     eac: EverythingAsCodeSynaptic,
-    ioc: IoCContainer
+    ioc: IoCContainer,
   ): void {
     const aiLookups = Object.keys(eac!.AIs || {});
 
@@ -810,7 +508,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               Lazy: false,
               Name: `${aiLookup}|${llmLookup}`,
               Type: ioc.Symbol(BaseLanguageModel.name),
-            }
+            },
           );
         } else if (isEaCWatsonXLLMDetails(llm.Details)) {
           const llmDetails = llm.Details as EaCWatsonXLLMDetails;
@@ -829,7 +527,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               Lazy: false,
               Name: `${aiLookup}|${llmLookup}`,
               Type: ioc.Symbol(BaseLanguageModel.name),
-            }
+            },
           );
         }
       });
@@ -838,7 +536,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
   protected configureEaCLoaders(
     eac: EverythingAsCodeSynaptic,
-    ioc: IoCContainer
+    ioc: IoCContainer,
   ): void {
     const aiLookups = Object.keys(eac!.AIs || {});
 
@@ -856,7 +554,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
           ioc.Register(() => new CheerioWebBaseLoader(details.URL), {
             Lazy: false,
             Name: `${aiLookup}|${loaderLookup}`,
-            Type: ioc.Symbol('DocumentLoader'),
+            Type: ioc.Symbol("DocumentLoader"),
           });
         }
       });
@@ -865,7 +563,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
   protected configureEaCPersistence(
     eac: EverythingAsCodeSynaptic,
-    ioc: IoCContainer
+    ioc: IoCContainer,
   ): void {
     const aiLookups = Object.keys(eac!.AIs || {});
 
@@ -883,7 +581,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
           ioc.Register(() => new MemorySaver(), {
             Lazy: false,
             Name: `${aiLookup}|${persistenceLookup}`,
-            Type: ioc.Symbol('Persistence'),
+            Type: ioc.Symbol("Persistence"),
           });
         } else if (isEaCDenoKVSaverPersistenceDetails(details)) {
           ioc.Register(
@@ -893,14 +591,14 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               return new DenoKVSaver(
                 kv,
                 details.RootKey,
-                details.CheckpointTTL
+                details.CheckpointTTL,
               );
             },
             {
               Lazy: false,
               Name: `${aiLookup}|${persistenceLookup}`,
-              Type: ioc.Symbol('Persistence'),
-            }
+              Type: ioc.Symbol("Persistence"),
+            },
           );
         }
       });
@@ -909,7 +607,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
   protected async configureEaCRetrievers(
     eac: EverythingAsCodeSynaptic,
-    ioc: IoCContainer
+    ioc: IoCContainer,
   ): Promise<void> {
     const retrieverLookups = Object.keys(eac.Retrievers || {});
 
@@ -919,36 +617,36 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
       const loaderCalls = retriever.Details!.LoaderLookups.map(
         async (loaderLookup) => {
           const loader = await ioc.Resolve<BaseDocumentLoader>(
-            ioc.Symbol('DocumentLoader'),
-            loaderLookup
+            ioc.Symbol("DocumentLoader"),
+            loaderLookup,
           );
 
           const docs = await loader.load();
 
           return docs;
-        }
+        },
       );
 
       const loadedDocs = await Promise.all(loaderCalls);
 
       const splitter = await ioc.Resolve<TextSplitter>(
-        ioc.Symbol('TextSplitter'),
-        retriever.Details!.TextSplitterLookup
+        ioc.Symbol("TextSplitter"),
+        retriever.Details!.TextSplitterLookup,
       );
 
       const splitDocs = await splitter.splitDocuments(
-        loadedDocs.flatMap((ld) => ld)
+        loadedDocs.flatMap((ld) => ld),
       );
 
       const vectorStore = await ioc.Resolve<VectorStore>(
         ioc.Symbol(VectorStore.name),
-        retriever.Details!.VectorStoreLookup
+        retriever.Details!.VectorStoreLookup,
       );
 
       if (retriever.Details!.IndexerLookup) {
         const recordManager = await ioc.Resolve<RecordManagerInterface>(
-          ioc.Symbol('RecordManager'),
-          retriever.Details!.IndexerLookup
+          ioc.Symbol("RecordManager"),
+          retriever.Details!.IndexerLookup,
         );
 
         try {
@@ -957,8 +655,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             recordManager,
             vectorStore,
             options: {
-              cleanup: 'incremental',
-              sourceIdKey: 'source',
+              cleanup: "incremental",
+              sourceIdKey: "source",
             },
           });
 
@@ -978,7 +676,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
   protected configureEaCTextSplitters(
     eac: EverythingAsCodeSynaptic,
-    ioc: IoCContainer
+    ioc: IoCContainer,
   ): void {
     const aiLookups = Object.keys(eac!.AIs || {});
 
@@ -991,8 +689,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
         const txtSplitter = ai.TextSplitters![textSplitterLookup];
 
         if (isEaCRecursiveCharacterTextSplitterDetails(txtSplitter.Details)) {
-          const details =
-            txtSplitter.Details as EaCRecursiveCharacterTextSplitterDetails;
+          const details = txtSplitter
+            .Details as EaCRecursiveCharacterTextSplitterDetails;
 
           ioc.Register(
             () =>
@@ -1004,8 +702,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             {
               Lazy: false,
               Name: `${aiLookup}|${textSplitterLookup}`,
-              Type: ioc.Symbol('TextSplitter'),
-            }
+              Type: ioc.Symbol("TextSplitter"),
+            },
           );
         }
       });
@@ -1014,7 +712,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
   protected configureEaCTools(
     eac: EverythingAsCodeSynaptic,
-    ioc: IoCContainer
+    ioc: IoCContainer,
   ): void {
     const aiLookups = Object.keys(eac!.AIs || {});
 
@@ -1036,8 +734,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             {
               Lazy: false,
               Name: `${aiLookup}|${toolLookup}`,
-              Type: ioc.Symbol('Tool'),
-            }
+              Type: ioc.Symbol("Tool"),
+            },
           );
         } else if (isEaCTavilySearchResultsToolDetails(details)) {
           ioc.Register(
@@ -1049,30 +747,30 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             {
               Lazy: false,
               Name: `${aiLookup}|${toolLookup}`,
-              Type: ioc.Symbol('Tool'),
-            }
+              Type: ioc.Symbol("Tool"),
+            },
           );
         } else if (isEaCDynamicToolDetails(details)) {
           ioc.Register(
             () => {
               return details.Schema
                 ? new DynamicStructuredTool({
-                    name: details.Name,
-                    description: details.Description,
-                    schema: details.Schema as z.ZodObject<any>,
-                    func: details.Action,
-                  })
+                  name: details.Name,
+                  description: details.Description,
+                  schema: details.Schema as z.ZodObject<any>,
+                  func: details.Action,
+                })
                 : new DynamicTool({
-                    name: details.Name,
-                    description: details.Description,
-                    func: details.Action,
-                  });
+                  name: details.Name,
+                  description: details.Description,
+                  func: details.Action,
+                });
             },
             {
               Lazy: false,
               Name: `${aiLookup}|${toolLookup}`,
-              Type: ioc.Symbol('Tool'),
-            }
+              Type: ioc.Symbol("Tool"),
+            },
           );
         } else if (isEaCCircuitToolDetails(details)) {
           ioc.Register(
@@ -1083,40 +781,40 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
               return inputSchema
                 ? new DynamicStructuredTool({
-                    name: eacCircuit!.Details!.Name!,
-                    description: eacCircuit!.Details!.Description!,
-                    schema: inputSchema as ZodObject<any>,
-                    func: async (
-                      input: z.infer<typeof inputSchema>,
-                      _runMgr,
-                      config
-                    ) => {
-                      const circuit = await ioc.Resolve<Runnable>(
-                        ioc.Symbol('Circuit'),
-                        details.CircuitLookup
-                      );
+                  name: eacCircuit!.Details!.Name!,
+                  description: eacCircuit!.Details!.Description!,
+                  schema: inputSchema as ZodObject<any>,
+                  func: async (
+                    input: z.infer<typeof inputSchema>,
+                    _runMgr,
+                    config,
+                  ) => {
+                    const circuit = await ioc.Resolve<Runnable>(
+                      ioc.Symbol("Circuit"),
+                      details.CircuitLookup,
+                    );
 
-                      return await circuit.invoke(input, config);
-                    },
-                  })
+                    return await circuit.invoke(input, config);
+                  },
+                })
                 : new DynamicTool({
-                    name: eacCircuit!.Details!.Name!,
-                    description: eacCircuit!.Details!.Description!,
-                    func: async (input: any, _runMgr, config) => {
-                      const circuit = await ioc.Resolve<Runnable>(
-                        ioc.Symbol('Circuit'),
-                        details.CircuitLookup
-                      );
+                  name: eacCircuit!.Details!.Name!,
+                  description: eacCircuit!.Details!.Description!,
+                  func: async (input: any, _runMgr, config) => {
+                    const circuit = await ioc.Resolve<Runnable>(
+                      ioc.Symbol("Circuit"),
+                      details.CircuitLookup,
+                    );
 
-                      return await circuit.invoke(input, config);
-                    },
-                  });
+                    return await circuit.invoke(input, config);
+                  },
+                });
             },
             {
               Lazy: false,
               Name: `${aiLookup}|${toolLookup}`,
-              Type: ioc.Symbol('Tool'),
-            }
+              Type: ioc.Symbol("Tool"),
+            },
           );
         } else if (isEaCRemoteCircuitsToolDetails(details)) {
           ioc.Register(
@@ -1130,8 +828,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             {
               Lazy: false,
               Name: `${aiLookup}|${toolLookup}`,
-              Type: ioc.Symbol('Tool'),
-            }
+              Type: ioc.Symbol("Tool"),
+            },
           );
         }
       });
@@ -1140,7 +838,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
   protected async configureEaCVectorStores(
     eac: EverythingAsCodeSynaptic,
-    ioc: IoCContainer
+    ioc: IoCContainer,
   ): Promise<void> {
     const aiLookups = Object.keys(eac!.AIs || {});
 
@@ -1155,12 +853,12 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
           const embeddings = await ioc.Resolve<Embeddings>(
             ioc.Symbol(Embeddings.name),
-            `${aiLookup}|${vectorStore.Details!.EmbeddingsLookup}`
+            `${aiLookup}|${vectorStore.Details!.EmbeddingsLookup}`,
           );
 
           if (isEaCAzureSearchAIVectorStoreDetails(vectorStore.Details)) {
-            const vectorStoreDetails =
-              vectorStore.Details as EaCAzureSearchAIVectorStoreDetails;
+            const vectorStoreDetails = vectorStore
+              .Details as EaCAzureSearchAIVectorStoreDetails;
 
             ioc.Register(
               () => {
@@ -1176,11 +874,11 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                 Lazy: false,
                 Name: `${aiLookup}|${vectorStoreLookup}`,
                 Type: ioc.Symbol(VectorStore.name),
-              }
+              },
             );
           } else if (isEaCHNSWVectorStoreDetails(vectorStore.Details)) {
-            const vectorStoreDetails =
-              vectorStore.Details as EaCHNSWVectorStoreDetails;
+            const vectorStoreDetails = vectorStore
+              .Details as EaCHNSWVectorStoreDetails;
 
             ioc.Register(
               () =>
@@ -1191,7 +889,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                 Lazy: false,
                 Name: `${aiLookup}|${vectorStoreLookup}`,
                 Type: ioc.Symbol(VectorStore.name),
-              }
+              },
             );
           } else if (isEaCMemoryVectorStoreDetails(vectorStore.Details)) {
             ioc.Register(() => new MemoryVectorStore(embeddings), {
@@ -1200,7 +898,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               Type: ioc.Symbol(VectorStore.name),
             });
           }
-        }
+        },
       );
 
       await Promise.all(vectorStoreCalls);
@@ -1211,7 +909,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
   protected async configureEaCSynaptic(
     eac: EverythingAsCodeSynaptic,
-    ioc: IoCContainer
+    ioc: IoCContainer,
   ): Promise<void> {
     this.configureEaCTools(eac, ioc);
 
@@ -1233,23 +931,127 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
     this.configureEaCPersistence(eac, ioc);
 
+    await this.configureEaCSynapticHandlers(eac, ioc);
+
     await this.configureEaCCircuits(eac, ioc);
+  }
+
+  protected async configureEaCSynapticHandlers(
+    eac: EverythingAsCodeSynaptic,
+    ioc: IoCContainer,
+  ): Promise<void> {
+    if (eac.Circuits) {
+      const handlerDFSLookups = eac.Circuits.$handlers || [];
+
+      if (!eac.Circuits?.$handlers?.length) {
+        handlerDFSLookups.push("$handlers");
+      }
+
+      const dfsFilePaths = (
+        await Promise.all(
+          handlerDFSLookups?.map(async (dfsLookup) => {
+            const dfsHandlerResolver = await ioc.Resolve<
+              DFSFileHandlerResolver
+            >(
+              ioc.Symbol("DFSFileHandler"),
+            );
+
+            const dfs = dfsLookup === "$handlers"
+              ? ({
+                Type: "Local",
+                FileRoot: "./src/resolvers/",
+                Extensions: ["resolver.ts"],
+              } as EaCLocalDistributedFileSystem)
+              : eac.DFS![dfsLookup];
+
+            const dfsHandler = await dfsHandlerResolver.Resolve(ioc, dfs);
+
+            return {
+              dfs,
+              fileHandler: dfsHandler,
+              paths: await dfsHandler?.LoadAllPaths(Date.now()),
+            };
+            // TODO(mcgear): List all files from dfs
+          }),
+        )
+      )
+        .filter((s) => !!s?.fileHandler)
+        .map((s) => {
+          return {
+            dfs: s.dfs,
+            fileHandler: s.fileHandler!,
+            paths: s.paths,
+          };
+        });
+
+      await Promise.all(
+        dfsFilePaths.map(async ({ dfs, fileHandler, paths }) => {
+          const fileModules = (
+            await Promise.all(
+              paths?.map(async (path) => {
+                const module = await importDFSTypescriptModule(
+                  undefined,
+                  fileHandler,
+                  path,
+                  dfs,
+                  "ts",
+                );
+
+                return module;
+              }) || [],
+            )
+          )
+            .filter((m) => !!m?.module?.SynapticResolverConfig)
+            .map((m) => m!);
+
+          fileModules.forEach((module) => {
+            const config: SynapticResolverConfiguration =
+              module.module.SynapticResolverConfig;
+
+            if (config.Type === "neuron") {
+              const resolver: SynapticNeuronResolver<EaCNeuron> =
+                module.module.default;
+
+              ioc.Register(() => resolver, {
+                Name: config.NeuronType,
+                Type: ioc.Symbol("SynapticNeuronResolver"),
+              });
+            } else if (config.Type === "circuit") {
+              const config: SynapticResolverConfiguration =
+                module.module.SynapticResolverConfig;
+
+              if (config.Type === "neuron") {
+                const resolver: SynapticNeuronResolver<EaCNeuron> =
+                  module.module.default;
+
+                ioc.Register(() => resolver, {
+                  Name: config.NeuronType,
+                  Type: ioc.Symbol("SynapticNeuronResolver"),
+                });
+              }
+            }
+          });
+
+          return;
+        }),
+      );
+    }
   }
 }
 
 export async function resolveTools<
-  TTool = StructuredTool<ZodObject<any, any, any, any, { [x: string]: any }>>
+  TTool = StructuredTool<ZodObject<any, any, any, any, { [x: string]: any }>>,
 >(toolLookups: string[], ioc: IoCContainer): Promise<TTool[]> {
   const tools = await Promise.all(
     toolLookups.map(async (toolLookup): Promise<TTool[]> => {
-      const tool = await ioc.Resolve<any>(ioc.Symbol('Tool'), toolLookup);
+      const tool = await ioc.Resolve<any>(ioc.Symbol("Tool"), toolLookup);
 
-      if ('getTools' in tool) {
+      if ("getTools" in tool) {
         return tool.getTools();
       } else {
         return [tool];
       }
-    })
+    }),
   );
 
   return tools.flatMap((t) => t);
@@ -1264,18 +1066,18 @@ export type RemoteCircuitDefinition = {
 };
 
 export class RemoteCircuitsToolkit extends Toolkit {
-  tools: Toolkit['tools'];
+  tools: Toolkit["tools"];
 
   constructor(
     protected circuitsUrl: string,
-    protected circuits: Record<string, RemoteCircuitDefinition>
+    protected circuits: Record<string, RemoteCircuitDefinition>,
   ) {
     super();
 
     this.tools = [];
   }
 
-  public getTools(): ReturnType<Toolkit['getTools']> {
+  public getTools(): ReturnType<Toolkit["getTools"]> {
     return Object.keys(this.circuits).map((circuitLookup) => {
       const circuitDef = this.circuits[circuitLookup];
 
@@ -1289,24 +1091,24 @@ export class RemoteCircuitsToolkit extends Toolkit {
 
       const tool = inputSchema
         ? new DynamicStructuredTool({
-            name: circuitDef.Name!,
-            description: circuitDef.Description!,
-            schema: inputSchema,
-            func: async (
-              input: z.infer<typeof inputSchema>,
-              _runMgr,
-              config
-            ) => {
-              return await circuit.invoke(input, config);
-            },
-          })
+          name: circuitDef.Name!,
+          description: circuitDef.Description!,
+          schema: inputSchema,
+          func: async (
+            input: z.infer<typeof inputSchema>,
+            _runMgr,
+            config,
+          ) => {
+            return await circuit.invoke(input, config);
+          },
+        })
         : new DynamicTool({
-            name: circuitDef.Name!,
-            description: circuitDef.Description!,
-            func: async (input: any, _runMgr, config) => {
-              return await circuit.invoke(input, config);
-            },
-          });
+          name: circuitDef.Name!,
+          description: circuitDef.Description!,
+          func: async (input: any, _runMgr, config) => {
+            return await circuit.invoke(input, config);
+          },
+        });
 
       return tool as StructuredToolInterface;
     }) as any;

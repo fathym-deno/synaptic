@@ -3,14 +3,14 @@ import {
   CallbackManagerForToolRun,
   RunnableConfig,
   z,
-} from '../../src.deps.ts';
-import { EaCToolDetails, isEaCToolDetails } from '../EaCToolDetails.ts';
+} from "../../src.deps.ts";
+import { EaCToolDetails, isEaCToolDetails } from "../EaCToolDetails.ts";
 
 export type EaCDynamicToolDetails<T extends z.ZodType<any> = z.ZodType<any>> = {
   Action: (
     input: z.infer<T>,
     runManager?: CallbackManagerForToolRun,
-    config?: RunnableConfig
+    config?: RunnableConfig,
   ) => Promise<string>;
 
   Description: string;
@@ -18,18 +18,18 @@ export type EaCDynamicToolDetails<T extends z.ZodType<any> = z.ZodType<any>> = {
   Name: string;
 
   Schema: T;
-} & EaCToolDetails<'Dynamic'>;
+} & EaCToolDetails<"Dynamic">;
 
 export function isEaCDynamicToolDetails(
-  details: unknown
+  details: unknown,
 ): details is EaCDynamicToolDetails {
   const x = details as EaCDynamicToolDetails;
 
   return (
-    isEaCToolDetails('Dynamic', x) &&
+    isEaCToolDetails("Dynamic", x) &&
     x.Description !== undefined &&
-    typeof x.Description === 'string' &&
+    typeof x.Description === "string" &&
     x.Name !== undefined &&
-    typeof x.Name === 'string'
+    typeof x.Name === "string"
   );
 }

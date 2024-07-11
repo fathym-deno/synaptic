@@ -1,1 +1,1 @@
-import './neurons/.tests.ts';
+import "./neurons/.tests.ts";

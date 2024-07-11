@@ -6,7 +6,7 @@ export type EaCLLMNeuron = {
   ToolsAsFunctions?: boolean;
 
   ToolLookups?: string[];
-} & EaCNeuron<'LLM'>;
+} & EaCNeuron<"LLM">;
 
 export function isEaCLLMNeuron(details: unknown): details is EaCLLMNeuron {
   const x = details as EaCLLMNeuron;

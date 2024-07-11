@@ -1,11 +1,9 @@
 import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from "../EaCNeuron.ts";
 
 export type EaCOpenAIFunctionsAgentNeuron = {
-  Neurons: {
-    LLM: EaCNeuronLike;
+  LLM: EaCNeuronLike;
 
-    Prompt: EaCNeuronLike;
-  };
+  Prompt: EaCNeuronLike;
 
   ToolLookups: string[];
 } & EaCNeuron<"OpenAIFunctionsAgent">;
@@ -17,8 +15,7 @@ export function isEaCOpenAIFunctionsAgentNeuron(
 
   return (
     isEaCNeuron("OpenAIFunctionsAgent", x) &&
-    x.Neurons !== undefined &&
-    x.Neurons.LLM !== undefined &&
-    x.Neurons.Prompt !== undefined
+    x.LLM !== undefined &&
+    x.Prompt !== undefined
   );
 }

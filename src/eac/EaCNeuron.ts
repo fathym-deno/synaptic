@@ -1,12 +1,17 @@
-import { EaCVertexDetails, Runnable, RunnableConfig } from '../src.deps.ts';
+// deno-lint-ignore-file no-explicit-any
+import { EaCVertexDetails, Runnable, RunnableConfig } from "../src.deps.ts";
 
 // @ts-ignore: It is ok for the circular reference with it being a child prop with infinite nesting
-export type EaCNeuronLike = EaCNeuron | string | [string, EaCNeuronLike];
+export type EaCNeuronLike =
+  | EaCNeuron
+  | Partial<EaCNeuron>
+  | string
+  | [string, EaCNeuronLike];
 
 export type EaCNeuron<TType = unknown> = {
   Bootstrap?: (
     runnable: Runnable,
-    neuron: EaCNeuron<TType>
+    neuron: EaCNeuron<TType>,
   ) => Runnable | Promise<Runnable>;
 
   BootstrapInput?: <TIn, TOut>(
@@ -14,12 +19,12 @@ export type EaCNeuron<TType = unknown> = {
     neuron: EaCNeuron<TType>,
     options?:
       | ({
-          config?: RunnableConfig;
-        } & RunnableConfig)
+        config?: RunnableConfig;
+      } & RunnableConfig)
       | Record<string, any>
       | (Record<string, any> & {
-          config: RunnableConfig;
-        } & RunnableConfig)
+        config: RunnableConfig;
+      } & RunnableConfig),
   ) => TOut | Promise<TOut>;
 
   BootstrapOutput?: <TIn, TOut>(
@@ -27,12 +32,12 @@ export type EaCNeuron<TType = unknown> = {
     neuron: EaCNeuron<TType>,
     options?:
       | ({
-          config?: RunnableConfig;
-        } & RunnableConfig)
+        config?: RunnableConfig;
+      } & RunnableConfig)
       | Record<string, any>
       | (Record<string, any> & {
-          config: RunnableConfig;
-        } & RunnableConfig)
+        config: RunnableConfig;
+      } & RunnableConfig),
   ) => TOut | Promise<TOut>;
 
   Neurons?: Record<string, EaCNeuronLike>;
@@ -44,7 +49,7 @@ export type EaCNeuron<TType = unknown> = {
 
 export function isEaCNeuron<TType = unknown>(
   type: TType,
-  details: unknown
+  details: unknown,
 ): details is EaCNeuron {
   const x = details as EaCNeuron;
 

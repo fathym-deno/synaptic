@@ -1,1 +1,1 @@
-import './tool-neuron.tests.ts';
+import "./tool-neuron.tests.ts";
