@@ -20,7 +20,7 @@ import { SynapticNeuronResolver } from "../SynapticNeuronResolver.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "circuit",
-  Name: "Linear",
+  Name: "Graph",
 };
 
 export default {
