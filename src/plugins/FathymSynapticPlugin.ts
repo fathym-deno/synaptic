@@ -4,7 +4,6 @@ import {
   AzureAISearchVectorStore,
   AzureChatOpenAI,
   AzureOpenAIEmbeddings,
-  BaseCheckpointSaver,
   BaseDocumentLoader,
   BaseLanguageModel,
   CheerioWebBaseLoader,
@@ -25,17 +24,13 @@ import {
   jsonSchemaToZod,
   MemorySaver,
   MemoryVectorStore,
-  MessageGraph,
   RecordManagerInterface,
   RecursiveCharacterTextSplitter,
   RemoteRunnable,
   Runnable,
   RunnableConfig,
   RunnableLambda,
-  RunnableLike,
   SerpAPI,
-  StateGraph,
-  StateGraphArgs,
   StructuredTool,
   StructuredToolInterface,
   TavilySearchResults,
@@ -67,18 +62,10 @@ import {
 import { EverythingAsCodeSynaptic } from "../eac/EverythingAsCodeSynaptic.ts";
 import { DenoKVChatMessageHistory } from "../memory/DenoKVChatMessageHistory.ts";
 import { EaCNeuron, EaCNeuronLike } from "../eac/EaCNeuron.ts";
-import { isEaCCircuitDetails } from "../eac/EaCCircuitDetails.ts";
 import {
   EaCRecursiveCharacterTextSplitterDetails,
   isEaCRecursiveCharacterTextSplitterDetails,
 } from "../eac/EaCRecursiveCharacterTextSplitterDetails.ts";
-import { isEaCLinearCircuitDetails } from "../eac/EaCLinearCircuitDetails.ts";
-import {
-  EaCGraphCircuitDetails,
-  EaCGraphCircuitEdge,
-  EaCGraphCircuitEdgeLike,
-  isEaCGraphCircuitDetails,
-} from "../eac/EaCGraphCircuitDetails.ts";
 import { isEaCSERPToolDetails } from "../eac/tools/EaCSERPToolDetails.ts";
 import { isEaCTavilySearchResultsToolDetails } from "../eac/tools/EaCTavilySearchResultsToolDetails.ts";
 import { isEaCDynamicToolDetails } from "../eac/tools/EaCDynamicToolDetails.ts";
@@ -106,6 +93,7 @@ import {
 } from "../eac/EaCWatsonXLLMDetails.ts";
 import { SynapticNeuronResolver } from "../resolvers/SynapticNeuronResolver.ts";
 import { SynapticResolverConfiguration } from "../resolvers/SynapticResolverConfiguration.ts";
+import { SynapticCircuitResolver } from "../resolvers/SynapticCircuitResolver.ts";
 
 export default class FathymSynapticPlugin implements EaCRuntimePlugin {
   public async AfterEaCResolved(
@@ -246,127 +234,17 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
     await Promise.all(
       circuitLookups.map(async (circuitLookup) => {
-        const eacCircuit = circuits![circuitLookup];
+        const eacCircuit = circuits![circuitLookup]!;
 
-        let circuitNeuron: EaCNeuron = {
-          Type: undefined,
-          Name: eacCircuit.Details!.Name,
-          Description: eacCircuit.Details!.Description,
-          Bootstrap: eacCircuit.Details!.Bootstrap,
-          BootstrapInput: eacCircuit.Details!.BootstrapInput,
-          BootstrapOutput: eacCircuit.Details!.BootstrapOutput,
-          Synapses: eacCircuit.Details!.Synapses,
-        };
+        const circuitResolver = await ioc.Resolve<SynapticCircuitResolver>(
+          ioc.Symbol("SynapticCircuitResolver"),
+        );
 
-        if (isEaCGraphCircuitDetails(eacCircuit.Details)) {
-          circuitNeuron = {
-            ...circuitNeuron,
-            Neurons: {
-              "": {
-                async Bootstrap() {
-                  const details = eacCircuit.Details as EaCGraphCircuitDetails;
-
-                  let graph = details.State
-                    ? new StateGraph({
-                      channels: details.State as StateGraphArgs<
-                        unknown
-                      >["channels"],
-                    })
-                    : new MessageGraph();
-
-                  const neuronLookups = Object.keys(details.Neurons ?? {});
-
-                  const nodes = await Promise.all(
-                    neuronLookups.map(async (neuronLookup) => {
-                      const runnable = await resolveNeuron(
-                        details.Neurons![neuronLookup],
-                      );
-
-                      return [neuronLookup, runnable!] as [
-                        string,
-                        RunnableLike,
-                      ];
-                    }),
-                  );
-
-                  nodes.forEach(([neuronLookup, runnable]) => {
-                    graph = graph.addNode(neuronLookup, runnable as any) as any;
-                  });
-
-                  const edgeNodeLookups = Object.keys(details.Edges ?? {});
-
-                  edgeNodeLookups.forEach((edgeNodeLookup) => {
-                    const edgeNode: EaCGraphCircuitEdgeLike =
-                      details.Edges![edgeNodeLookup];
-
-                    const edgeConfigs: EaCGraphCircuitEdge[] = [];
-
-                    if (typeof edgeNode === "string") {
-                      edgeConfigs.push({
-                        Node: edgeNode,
-                      });
-                    } else if (!Array.isArray(edgeNode)) {
-                      edgeConfigs.push(edgeNode as EaCGraphCircuitEdge);
-                    } else {
-                      const workingNodes = edgeNode as (
-                        | string
-                        | EaCGraphCircuitEdge
-                      )[];
-
-                      workingNodes.forEach((node) => {
-                        if (typeof node === "string") {
-                          edgeConfigs.push({
-                            Node: node,
-                          });
-                        } else if (!Array.isArray(node)) {
-                          edgeConfigs.push(node as EaCGraphCircuitEdge);
-                        }
-                      });
-                    }
-
-                    edgeConfigs.forEach((config) => {
-                      if (typeof config.Node === "string") {
-                        graph.addEdge(
-                          edgeNodeLookup as any,
-                          config.Node as any,
-                        );
-                      } else {
-                        graph.addConditionalEdges(
-                          edgeNodeLookup as any,
-                          config.Condition as any,
-                          config.Node as any,
-                        );
-                      }
-                    });
-                  });
-
-                  let checkpointer: BaseCheckpointSaver | undefined;
-
-                  if (details.PersistenceLookup) {
-                    checkpointer = await ioc.Resolve<BaseCheckpointSaver>(
-                      ioc.Symbol("Persistence"),
-                      details.PersistenceLookup,
-                    );
-                  }
-
-                  return graph.compile({
-                    checkpointer,
-                    interruptAfter: details.Interrupts?.After as any,
-                    interruptBefore: details.Interrupts?.Before as any,
-                  }) as unknown as Runnable;
-                },
-              } as Partial<EaCNeuron>,
-            },
-          };
-        } else if (
-          isEaCLinearCircuitDetails(eacCircuit.Details) ||
-          isEaCCircuitDetails(undefined, eacCircuit.Details)
-        ) {
-          circuitNeuron = {
-            ...circuitNeuron,
-            Neurons: eacCircuit.Details!.Neurons,
-          };
-        }
+        const circuitNeuron: EaCNeuron = await circuitResolver.Resolve(
+          eacCircuit,
+          ioc,
+          eac,
+        );
 
         if (circuitNeuron) {
           const circuit = await resolveNeuron(circuitNeuron);
@@ -1013,22 +891,16 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                 module.module.default;
 
               ioc.Register(() => resolver, {
-                Name: config.NeuronType,
+                Name: config.Name,
                 Type: ioc.Symbol("SynapticNeuronResolver"),
               });
             } else if (config.Type === "circuit") {
-              const config: SynapticResolverConfiguration =
-                module.module.SynapticResolverConfig;
+              const resolver: SynapticCircuitResolver = module.module.default;
 
-              if (config.Type === "neuron") {
-                const resolver: SynapticNeuronResolver<EaCNeuron> =
-                  module.module.default;
-
-                ioc.Register(() => resolver, {
-                  Name: config.NeuronType,
-                  Type: ioc.Symbol("SynapticNeuronResolver"),
-                });
-              }
+              ioc.Register(() => resolver, {
+                Name: config.Name,
+                Type: ioc.Symbol("SynapticCircuitResolver"),
+              });
             }
           });
 

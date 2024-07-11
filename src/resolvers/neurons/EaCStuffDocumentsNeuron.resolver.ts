@@ -6,7 +6,7 @@ import { EaCNeuronLike } from "../../eac/EaCNeuron.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",
-  NeuronType: "StuffDocuments",
+  Name: "StuffDocuments",
 };
 
 export default {

@@ -9,7 +9,7 @@ import { EaCNeuronLike } from "../../eac/EaCNeuron.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",
-  NeuronType: "ChatHistory",
+  Name: "ChatHistory",
 };
 
 export default {

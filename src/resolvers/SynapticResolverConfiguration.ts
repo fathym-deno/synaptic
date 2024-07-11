@@ -1,5 +1,5 @@
 export type SynapticResolverConfiguration = {
-  NeuronType?: "$neurons" | string;
+  Name?: "$neurons" | string;
 
   Type: "circuit" | "neuron";
 };

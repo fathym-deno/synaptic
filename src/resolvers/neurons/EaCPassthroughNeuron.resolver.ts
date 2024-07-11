@@ -6,7 +6,7 @@ import { RunnablePassthrough } from "../../src.deps.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",
-  NeuronType: "Passthrough",
+  Name: "Passthrough",
 };
 
 export default {

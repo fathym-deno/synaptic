@@ -7,7 +7,7 @@ import { resolveTools } from "../../plugins/FathymSynapticPlugin.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",
-  NeuronType: "OpenAIFunctionsAgent",
+  Name: "OpenAIFunctionsAgent",
 };
 
 export default {

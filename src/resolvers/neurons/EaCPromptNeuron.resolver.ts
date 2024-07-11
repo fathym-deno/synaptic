@@ -5,7 +5,7 @@ import { EaCPromptNeuron } from "../../eac/neurons/EaCPromptNeuron.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",
-  NeuronType: "Prompt",
+  Name: "Prompt",
 };
 
 export default {

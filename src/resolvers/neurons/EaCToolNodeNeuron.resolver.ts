@@ -6,7 +6,7 @@ import { Runnable, ToolNode } from "../../src.deps.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",
-  NeuronType: "ToolNode",
+  Name: "ToolNode",
 };
 
 export default {

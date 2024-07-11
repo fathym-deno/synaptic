@@ -5,7 +5,7 @@ import { resolveTools } from "../../plugins/FathymSynapticPlugin.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",
-  NeuronType: "Tool",
+  Name: "Tool",
 };
 
 export default {

@@ -15,7 +15,7 @@ import {
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",
-  NeuronType: "ToolExecutor",
+  Name: "ToolExecutor",
 };
 
 export default {

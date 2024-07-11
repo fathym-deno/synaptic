@@ -5,7 +5,7 @@ import { pull } from "../../src.deps.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",
-  NeuronType: "PullChatPrompt",
+  Name: "PullChatPrompt",
 };
 
 export default {

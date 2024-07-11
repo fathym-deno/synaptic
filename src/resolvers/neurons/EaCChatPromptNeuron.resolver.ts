@@ -8,7 +8,7 @@ import {
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",
-  NeuronType: "ChatPrompt",
+  Name: "ChatPrompt",
 };
 
 export default {

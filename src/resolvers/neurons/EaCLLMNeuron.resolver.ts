@@ -12,7 +12,7 @@ import { resolveTools } from "../../plugins/FathymSynapticPlugin.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",
-  NeuronType: "LLM",
+  Name: "LLM",
 };
 
 export default {

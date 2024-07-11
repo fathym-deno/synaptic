@@ -5,7 +5,7 @@ import { StringOutputParser } from "../../src.deps.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",
-  NeuronType: "StringOutputParser",
+  Name: "StringOutputParser",
 };
 
 export default {

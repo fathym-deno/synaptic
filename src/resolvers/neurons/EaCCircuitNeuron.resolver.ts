@@ -5,7 +5,7 @@ import { Runnable } from "../../src.deps.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",
-  NeuronType: "Circuit",
+  Name: "Circuit",
 };
 
 export default {
