@@ -32,6 +32,12 @@ export async function buildTestIoC(
   eac: EverythingAsCodeSynaptic & EverythingAsCodeDatabases,
   plugins: EaCRuntimePlugin[] = [new FathymEaCServicesPlugin()],
   useDefault = true,
+  useDefaultPlugins = true,
 ) {
-  return await buildEaCTestIoC(useDefault ? testEaC : {}, eac, plugins);
+  return await buildEaCTestIoC(
+    useDefault ? testEaC : {},
+    eac,
+    plugins,
+    useDefaultPlugins,
+  );
 }
