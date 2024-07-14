@@ -12,7 +12,7 @@ export * from "https://deno.land/x/fathym_common@v0.0.185/mod.ts";
 // export * from '../../everything-as-code/mod.ts';
 export * from "https://deno.land/x/fathym_everything_as_code@v0.0.414/mod.ts";
 // export * from "../../eac-runtime/mod.ts";
-export * from "https://deno.land/x/fathym_eac_runtime@v0.0.259/mod.ts";
+export * from "https://deno.land/x/fathym_eac_runtime@v0.0.264/mod.ts";
 
 export { z, ZodObject, type ZodRawShape, type ZodType } from "npm:zod";
 export { zodToJsonSchema } from "npm:zod-to-json-schema";
