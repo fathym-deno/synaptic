@@ -36,7 +36,7 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
         );
       }
 
-      const skipCircuits = ["$neurons", "$remotes"];
+      const skipCircuits = ["$handlers", "$neurons", "$remotes"];
 
       const eacCircuits = Object.keys(eac.Circuits || {}).reduce((acc, key) => {
         if (!skipCircuits.includes(key)) {

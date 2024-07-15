@@ -105,7 +105,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
   public Setup(_config: EaCRuntimeConfig): Promise<EaCRuntimePluginConfig> {
     const pluginConfig: EaCRuntimePluginConfig = {
-      Name: "FathymSynapticPlugin",
+      Name: FathymSynapticPlugin.name,
       IoC: new IoCContainer(),
     };
 
