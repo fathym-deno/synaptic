@@ -1,20 +1,20 @@
-import { EaCLinearCircuitDetails } from "../../../src/eac/EaCLinearCircuitDetails.ts";
-import { EaCNeuron } from "../../../src/eac/EaCNeuron.ts";
-import { EverythingAsCodeSynaptic } from "../../../src/eac/EverythingAsCodeSynaptic.ts";
-import { EaCToolNeuron } from "../../../src/eac/neurons/EaCToolNeuron.ts";
-import { EaCDynamicToolDetails } from "../../../src/eac/tools/EaCDynamicToolDetails.ts";
-import FathymSynapticPlugin from "../../../src/plugins/FathymSynapticPlugin.ts";
-import { buildTestIoC } from "../../test-eac-setup.ts";
+import { EaCLinearCircuitDetails } from '../../../src/eac/EaCLinearCircuitDetails.ts';
+import { EaCNeuron } from '../../../src/eac/EaCNeuron.ts';
+import { EverythingAsCodeSynaptic } from '../../../src/eac/EverythingAsCodeSynaptic.ts';
+import { EaCToolNeuron } from '../../../src/eac/neurons/EaCToolNeuron.ts';
+import { EaCDynamicToolDetails } from '../../../src/eac/tools/EaCDynamicToolDetails.ts';
+import FathymSynapticPlugin from '../../../src/plugins/FathymSynapticPlugin.ts';
+import { buildTestIoC } from '../../test-eac-setup.ts';
 import {
   assert,
   assertEquals,
   Runnable,
   RunnableLambda,
   z,
-} from "../../tests.deps.ts";
+} from '../../tests.deps.ts';
 
-Deno.test("EaCToolNeuron Tests", async (t) => {
-  const tstMsg = "This is a test tool";
+Deno.test('EaCToolNeuron Tests', async (t) => {
+  const tstMsg = 'This is a test tool';
 
   const eac = {
     AIs: {
@@ -22,9 +22,9 @@ Deno.test("EaCToolNeuron Tests", async (t) => {
         Tools: {
           test: {
             Details: {
-              Type: "Dynamic",
-              Name: "test",
-              Description: "A test",
+              Type: 'Dynamic',
+              Name: 'test',
+              Description: 'A test',
               Schema: z.object({}),
               Action: async () => {
                 return await tstMsg;
@@ -36,60 +36,60 @@ Deno.test("EaCToolNeuron Tests", async (t) => {
     },
     Circuits: {
       $neurons: {
-        "test-tool": {
-          Type: "Tool",
-          ToolLookup: "test|test",
+        'test-tool': {
+          Type: 'Tool',
+          ToolLookup: 'test|test',
         } as EaCToolNeuron,
       },
       basic: {
         Details: {
-          Type: "Linear",
+          Type: 'Linear',
           Neurons: {
-            "": "test-tool",
+            '': 'test-tool',
           },
         } as EaCLinearCircuitDetails,
       },
-      "basic-bootstrap-circuit": {
+      'basic-bootstrap-circuit': {
         Details: {
-          Type: "Linear",
+          Type: 'Linear',
           Neurons: {
-            "": "test-tool",
+            '': 'test-tool',
           },
           Bootstrap: (r) =>
             r.pipe(
               RunnableLambda.from((res: string) => {
                 return `Circuit Bootstrap: ${res}`;
-              }),
+              })
             ),
         } as EaCLinearCircuitDetails,
       },
-      "basic-bootstrap-neuron": {
+      'basic-bootstrap-neuron': {
         Details: {
-          Type: "Linear",
+          Type: 'Linear',
           Neurons: {
-            "": [
-              "test-tool",
+            '': [
+              'test-tool',
               {
                 Bootstrap: (r) =>
                   r.pipe(
                     RunnableLambda.from((res: string) => {
                       return `Neuron Bootstrap: ${res}`;
-                    }),
+                    })
                   ),
               } as Partial<EaCNeuron>,
             ],
           },
         } as EaCLinearCircuitDetails,
       },
-      "basic-sub-neuron": {
+      'basic-sub-neuron': {
         Details: {
-          Type: "Linear",
+          Type: 'Linear',
           Neurons: {
-            "": [
-              "test-tool",
+            '': [
+              'test-tool',
               {
                 Neurons: {
-                  "": {
+                  '': {
                     Bootstrap: () =>
                       RunnableLambda.from((res: string) => {
                         return `Neuron Sub: ${res}`;
@@ -104,10 +104,14 @@ Deno.test("EaCToolNeuron Tests", async (t) => {
     },
   } as EverythingAsCodeSynaptic;
 
-  const { ioc } = await buildTestIoC(eac, [new FathymSynapticPlugin()], false);
+  const { ioc } = await buildTestIoC(
+    eac,
+    [new FathymSynapticPlugin(true)],
+    false
+  );
 
-  await t.step("Basic Invoke", async () => {
-    const circuit = await ioc.Resolve<Runnable>(ioc.Symbol("Circuit"), "basic");
+  await t.step('Basic Invoke', async () => {
+    const circuit = await ioc.Resolve<Runnable>(ioc.Symbol('Circuit'), 'basic');
 
     const result = await circuit.invoke({});
 
@@ -115,10 +119,10 @@ Deno.test("EaCToolNeuron Tests", async (t) => {
     assertEquals(result, tstMsg);
   });
 
-  await t.step("Basic Invoke W/ Bootstrap Circuit", async () => {
+  await t.step('Basic Invoke W/ Bootstrap Circuit', async () => {
     const circuit = await ioc.Resolve<Runnable>(
-      ioc.Symbol("Circuit"),
-      "basic-bootstrap-circuit",
+      ioc.Symbol('Circuit'),
+      'basic-bootstrap-circuit'
     );
 
     const result = await circuit.invoke({});
@@ -127,10 +131,10 @@ Deno.test("EaCToolNeuron Tests", async (t) => {
     assertEquals(result, `Circuit Bootstrap: ${tstMsg}`);
   });
 
-  await t.step("Basic Invoke W/ Bootstrap Neuron", async () => {
+  await t.step('Basic Invoke W/ Bootstrap Neuron', async () => {
     const circuit = await ioc.Resolve<Runnable>(
-      ioc.Symbol("Circuit"),
-      "basic-bootstrap-neuron",
+      ioc.Symbol('Circuit'),
+      'basic-bootstrap-neuron'
     );
 
     const result = await circuit.invoke({});
@@ -139,10 +143,10 @@ Deno.test("EaCToolNeuron Tests", async (t) => {
     assertEquals(result, `Neuron Bootstrap: ${tstMsg}`);
   });
 
-  await t.step("Basic Invoke W/ Sub Neuron", async () => {
+  await t.step('Basic Invoke W/ Sub Neuron', async () => {
     const circuit = await ioc.Resolve<Runnable>(
-      ioc.Symbol("Circuit"),
-      "basic-sub-neuron",
+      ioc.Symbol('Circuit'),
+      'basic-sub-neuron'
     );
 
     const result = await circuit.invoke({});
