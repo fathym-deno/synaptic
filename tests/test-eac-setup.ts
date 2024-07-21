@@ -1,15 +1,15 @@
 // TODO(ttrichar): MOVE TO @fathym/eac/runtim ref after EaCRuntimePluginDef export bug is fixed
-import { EverythingAsCodeSynaptic } from '../src/eac/EverythingAsCodeSynaptic.ts';
-import FathymSynapticPlugin from '../src/plugins/FathymSynapticPlugin.ts';
-import { buildEaCTestIoC } from '../src/testing/utils.ts';
-import { eacAIsRoot, eacDatabases } from './eacs.ts';
+import { EverythingAsCodeSynaptic } from "../src/eac/EverythingAsCodeSynaptic.ts";
+import FathymSynapticPlugin from "../src/plugins/FathymSynapticPlugin.ts";
+import { buildEaCTestIoC } from "../src/testing/utils.ts";
+import { eacAIsRoot, eacDatabases } from "./eacs.ts";
 import {
   EaCRuntimePlugin,
   EverythingAsCodeDatabases,
   FathymEaCServicesPlugin,
-} from './tests.deps.ts';
+} from "./tests.deps.ts";
 
-export const AI_LOOKUP = 'thinky';
+export const AI_LOOKUP = "thinky";
 
 const testEaC = {
   AIs: {
@@ -36,12 +36,12 @@ export async function buildTestIoC(
     new FathymSynapticPlugin(true),
   ],
   useDefault = true,
-  useDefaultPlugins = true
+  useDefaultPlugins = true,
 ) {
   return await buildEaCTestIoC(
     useDefault ? testEaC : {},
     eac,
     plugins,
-    useDefaultPlugins
+    useDefaultPlugins,
   );
 }

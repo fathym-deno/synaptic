@@ -108,7 +108,7 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
           );
         } else {
           const pathMatch = new URLPattern({
-            pathname: "/:circuitLookup/:action",
+            pathname: "/:circuitLookup{/:action}?",
           });
 
           if (
@@ -127,15 +127,15 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
             }
 
             if (matchedCircuitLookup && matchedCircuitLookup in circuits) {
-              const action = (result?.pathname.groups["action"] as
-                | "invoke"
-                | "stream"
-                | "stream_log"
-                | "stream_events") || "invoke";
-
               const circuit = circuits[matchedCircuitLookup];
 
               if (req.method.toUpperCase() === "POST") {
+                const action = (result?.pathname.groups["action"] as
+                  | "invoke"
+                  | "stream"
+                  | "stream_log"
+                  | "stream_events") || "invoke";
+
                 const circuitsReq: SynapticCircuitsExecuteRequest = await req
                   .json();
 
