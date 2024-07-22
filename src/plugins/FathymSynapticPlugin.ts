@@ -447,26 +447,24 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
           ioc.Register(
             () => {
-              return RunnableLambda.from(async () => {
-                const loadedDocs = (
-                  await Promise.all(
-                    details.LoaderLookups.map(async (loaderLookup) => {
-                      const loader = await ioc.Resolve<BaseDocumentLoader>(
-                        ioc.Symbol('DocumentLoader'),
-                        loaderLookup
-                      );
+              return {
+                async load() {
+                  const loadedDocs = (
+                    await Promise.all(
+                      details.LoaderLookups.map(async (loaderLookup) => {
+                        const loader = await ioc.Resolve<BaseDocumentLoader>(
+                          ioc.Symbol('DocumentLoader'),
+                          loaderLookup
+                        );
 
-                      return await loader.load();
-                    })
-                  )
-                ).flatMap((l) => l);
+                        return await loader.load();
+                      })
+                    )
+                  ).flatMap((l) => l);
 
-                return {
-                  load() {
-                    return loadedDocs;
-                  },
-                };
-              });
+                  return loadedDocs;
+                },
+              };
             },
             {
               Lazy: false,
