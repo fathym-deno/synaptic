@@ -5,7 +5,7 @@ import {
 
 export type EaCCompoundDocumentLoaderDetails = {
   LoaderLookups: string[];
-} & EaCDocumentLoaderDetails<'CheerioWeb'>;
+} & EaCDocumentLoaderDetails<'CompoundDocument'>;
 
 export function isEaCCompoundDocumentLoaderDetails(
   details: unknown
@@ -13,7 +13,7 @@ export function isEaCCompoundDocumentLoaderDetails(
   const x = details as EaCCompoundDocumentLoaderDetails;
 
   return (
-    isEaCDocumentLoaderDetails('CheerioWeb', x) &&
+    isEaCDocumentLoaderDetails('CompoundDocument', x) &&
     x.LoaderLookups !== undefined &&
     Array.isArray(x.LoaderLookups) &&
     !!x.LoaderLookups?.length
