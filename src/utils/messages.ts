@@ -6,6 +6,13 @@ import {
   HumanMessageChunk,
 } from "../src.deps.ts";
 
+export function lastHumanMessages(messages?: BaseMessage[]) {
+  return lastMessagesOfType(messages ?? [], [
+    HumanMessage.name,
+    HumanMessageChunk.name,
+  ]);
+}
+
 export function lastAiNotHumanMessages(messages?: BaseMessage[]) {
   return lastMessagesOfType(
     messages ?? [],
