@@ -88,7 +88,7 @@ export const eacAIsRoot = {
     fathym: {
       Details: {
         Type: 'CheerioWeb',
-        URLs: ['https://www.fathym.com'],
+        URL: 'https://www.fathym.com',
       } as EaCCheerioWebDocumentLoaderDetails,
     },
   },
