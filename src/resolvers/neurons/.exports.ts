@@ -101,7 +101,7 @@ export { EaCToolNodeNeuronResolver, EaCToolNodeNeuronResolverConfig };
 import EaCVectorStoreNeuronResolver, {
   SynapticResolverConfig as EaCVectorStoreNeuronResolverConfig,
 } from './EaCVectorStoreNeuron.resolver.ts';
-export { EaCToolNodeNeuronResolver, EaCVectorStoreNeuronResolverConfig };
+export { EaCVectorStoreNeuronResolver, EaCVectorStoreNeuronResolverConfig };
 
 import EaCVectorStoreRetrieverNeuronResolver, {
   SynapticResolverConfig as EaCVectorStoreRetrieverNeuronResolverConfig,
