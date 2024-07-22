@@ -461,7 +461,11 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                   )
                 ).flatMap((l) => l);
 
-                return loadedDocs;
+                return {
+                  load() {
+                    return loadedDocs;
+                  },
+                };
               });
             },
             {
