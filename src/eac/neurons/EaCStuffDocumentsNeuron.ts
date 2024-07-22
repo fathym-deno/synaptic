@@ -1,10 +1,16 @@
 import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from "../EaCNeuron.ts";
 
 export type EaCStuffDocumentsNeuron = {
+  DocumentPrompt?: EaCNeuronLike;
+
+  DocumentSeparator?: string;
+
   LLM: EaCNeuronLike;
 
+  OutputParser?: EaCNeuronLike;
+
   Prompt: EaCNeuronLike;
-} & EaCNeuron<"StuffDocuments">;
+} & EaCNeuron<'StuffDocuments'>;
 
 export function isEaCStuffDocumentsNeuron(
   details: unknown,

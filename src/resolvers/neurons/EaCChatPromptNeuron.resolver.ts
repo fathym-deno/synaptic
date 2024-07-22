@@ -27,6 +27,8 @@ export default {
       messages.push(...neuron.NewMessages);
     }
 
-    return ChatPromptTemplate.fromMessages(messages);
+    const template = ChatPromptTemplate.fromMessages(messages);
+
+    return template;
   },
 } as SynapticNeuronResolver<EaCChatPromptNeuron>;

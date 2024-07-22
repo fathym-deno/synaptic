@@ -5,7 +5,9 @@ export type EaCRetrieverDetails = {
 
   IndexerLookup?: string;
 
-  TextSplitterLookup: string;
+  LoaderTextSplitterLookups: Record<string, string>;
+
+  RefreshOnStart?: boolean;
 
   VectorStoreLookup: string;
 } & EaCVertexDetails;

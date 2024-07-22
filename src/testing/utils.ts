@@ -1,4 +1,4 @@
-import FathymSynapticPlugin from "../plugins/FathymSynapticPlugin.ts";
+import FathymSynapticPlugin from '../plugins/FathymSynapticPlugin.ts';
 import {
   EaCRuntimeConfig,
   EaCRuntimePlugin,
@@ -9,12 +9,12 @@ import {
   FathymEaCServicesPlugin,
   IoCContainer,
   merge,
-} from "../src.deps.ts";
+} from '../src.deps.ts';
 
 export async function configureEaCIoC(
   ioc: IoCContainer,
   eac: EverythingAsCode,
-  plugins: EaCRuntimePlugin[],
+  plugins: EaCRuntimePlugin[]
 ) {
   eac = merge(eac, await configurePlugins(ioc, eac, plugins));
 
@@ -26,7 +26,7 @@ export async function configureEaCIoC(
 export async function configurePlugins(
   ioc: IoCContainer,
   eac: EverythingAsCode,
-  plugins: EaCRuntimePluginDef[],
+  plugins: EaCRuntimePluginDef[]
 ) {
   for (let pluginDef of plugins || []) {
     const _pluginKey = pluginDef as EaCRuntimePluginDef;
@@ -59,7 +59,7 @@ export async function configurePlugins(
 
       eac = merge(
         eac,
-        await configurePlugins(ioc, eac, pluginConfig.Plugins || []),
+        await configurePlugins(ioc, eac, pluginConfig.Plugins || [])
       );
     }
   }
@@ -70,7 +70,7 @@ export async function configurePlugins(
 export async function finalizePlugins(
   ioc: IoCContainer,
   eac: EverythingAsCode,
-  plugins: EaCRuntimePlugin[],
+  plugins: EaCRuntimePlugin[]
 ) {
   const pluginConfigs = (
     await Promise.all(
@@ -82,7 +82,7 @@ export async function finalizePlugins(
         await plugin.Build?.(eac, ioc, pluginCfg);
 
         return [plugin, pluginCfg] as [typeof plugin, typeof pluginCfg];
-      }),
+      })
     )
   ).reduce((acc, [plugin, pluginCfg]) => {
     acc.set(plugin, pluginCfg);
@@ -100,35 +100,59 @@ export async function finalizePlugins(
       await finalizePlugins(
         ioc,
         eac,
-        (pluginCfg.Plugins as EaCRuntimePlugin[]) || [],
-      ),
+        (pluginCfg.Plugins as EaCRuntimePlugin[]) || []
+      )
     );
   }
 
   return eac;
 }
 
-const iocSetup = (defaultEaC: EverythingAsCode, plugins: EaCRuntimePlugin[]) =>
-  new Promise<{
+const iocSetupMap = new Map<
+  EverythingAsCode,
+  Promise<{
     eac: EverythingAsCode;
     ioc: IoCContainer;
-  }>((resolve) => {
-    const ioc = new IoCContainer();
+  }>
+>();
+
+const iocSetup = (
+  defaultEaC: EverythingAsCode,
+  plugins: EaCRuntimePlugin[]
+) => {
+  if (defaultEaC && iocSetupMap.has(defaultEaC)) {
+    return iocSetupMap.get(defaultEaC)!;
+  } else {
+    const is = new Promise<{
+      eac: EverythingAsCode;
+      ioc: IoCContainer;
+    }>((resolve) => {
+      const ioc = new IoCContainer();
+
+      if (defaultEaC) {
+        configureEaCIoC(ioc, defaultEaC, plugins).then((eac) =>
+          resolve({ eac, ioc })
+        );
+      } else {
+        resolve({ eac: {}, ioc });
+      }
+    });
 
     if (defaultEaC) {
-      configureEaCIoC(ioc, defaultEaC, plugins).then((eac) =>
-        resolve({ eac, ioc })
-      );
+      iocSetupMap.set(defaultEaC, is);
+
+      return iocSetupMap.get(defaultEaC)!;
     } else {
-      resolve({ eac: {}, ioc });
+      return is;
     }
-  });
+  }
+};
 
 export async function buildEaCTestIoC(
   testEaC: EverythingAsCode,
   eac: EverythingAsCode,
   plugins: EaCRuntimePlugin[],
-  useDefaultPlugins: boolean,
+  useDefaultPlugins: boolean
 ) {
   if (!plugins?.length) {
     plugins = [];
@@ -167,7 +191,7 @@ export async function buildEaCTestIoC(
       const kvs = await Promise.all(
         databaseLookups.map(async (dbLookup) => {
           return await testIoC.Resolve(Deno.Kv, dbLookup);
-        }),
+        })
       );
 
       kvs.forEach((kv) => {
