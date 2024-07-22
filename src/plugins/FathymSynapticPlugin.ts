@@ -780,6 +780,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                 return new AzureAISearchVectorStore(embeddings, {
                   endpoint: vectorStoreDetails.Endpoint,
                   key: vectorStoreDetails.APIKey,
+                  indexName: vectorStoreDetails.IndexName,
                   search: {
                     type: vectorStoreDetails.QueryType,
                   },

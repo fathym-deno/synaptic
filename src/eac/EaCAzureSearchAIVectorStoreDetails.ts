@@ -9,8 +9,10 @@ export type EaCAzureSearchAIVectorStoreDetails = {
 
   Endpoint: string;
 
+  IndexName?: string;
+
   QueryType: AzureAISearchQueryType;
-} & EaCVectorStoreDetails<"AzureSearchAI">;
+} & EaCVectorStoreDetails<'AzureSearchAI'>;
 
 export function isEaCAzureSearchAIVectorStoreDetails(
   details: unknown,
