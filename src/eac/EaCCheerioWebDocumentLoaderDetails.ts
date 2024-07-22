@@ -1,16 +1,20 @@
 import {
   EaCDocumentLoaderDetails,
   isEaCDocumentLoaderDetails,
-} from "./EaCDocumentLoaderDetails.ts";
+} from './EaCDocumentLoaderDetails.ts';
 
 export type EaCCheerioWebDocumentLoaderDetails = {
   URL: string;
-} & EaCDocumentLoaderDetails<"CheerioWeb">;
+} & EaCDocumentLoaderDetails<'CheerioWeb'>;
 
 export function isEaCCheerioWebDocumentLoaderDetails(
-  details: unknown,
+  details: unknown
 ): details is EaCCheerioWebDocumentLoaderDetails {
-  const vsDetails = details as EaCCheerioWebDocumentLoaderDetails;
+  const x = details as EaCCheerioWebDocumentLoaderDetails;
 
-  return isEaCDocumentLoaderDetails("CheerioWeb", vsDetails);
+  return (
+    isEaCDocumentLoaderDetails('CheerioWeb', x) &&
+    x.URL !== undefined &&
+    typeof x.URL === 'string'
+  );
 }
