@@ -28,7 +28,6 @@ import { EaCLinearCircuitDetails } from '../../src/eac/EaCLinearCircuitDetails.t
 import { EaCNeuron } from '../../src/eac/EaCNeuron.ts';
 import { EverythingAsCodeSynaptic } from '../../src/eac/EverythingAsCodeSynaptic.ts';
 import { EaCStuffDocumentsNeuron } from '../../src/eac/neurons/EaCStuffDocumentsNeuron.ts';
-import { EaCVectorStoreRetrieverNeuron } from '../../src/eac/neurons/EaCVectorStoreRetrieverNeuron.ts';
 import { EaCRetrieverNeuron } from '../../src/eac/neurons/EaCRetrieverNeuron.ts';
 import { EaCDocumentsAsStringNeuron } from '../../src/eac/neurons/EaCDocumentsAsStringNeuron.ts';
 

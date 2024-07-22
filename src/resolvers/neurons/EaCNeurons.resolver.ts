@@ -1,11 +1,6 @@
 import { SynapticNeuronResolver } from '../SynapticNeuronResolver.ts';
 import { SynapticResolverConfiguration } from '../SynapticResolverConfiguration.ts';
-import {
-  Runnable,
-  RunnableLambda,
-  RunnableMap,
-  RunnablePassthrough,
-} from '../../src.deps.ts';
+import { Runnable, RunnableLambda, RunnableMap } from '../../src.deps.ts';
 import { EaCNeuronLike } from '../../eac/EaCNeuron.ts';
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
