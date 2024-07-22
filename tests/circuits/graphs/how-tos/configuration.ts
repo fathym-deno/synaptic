@@ -10,14 +10,14 @@ import {
   Runnable,
   RunnableLambda,
   START,
-} from '../../../tests.deps.ts';
-import { buildTestIoC } from '../../../test-eac-setup.ts';
-import { EaCPassthroughNeuron } from '../../../../src/eac/neurons/EaCPassthroughNeuron.ts';
-import { EaCLLMNeuron } from '../../../../src/eac/neurons/EaCLLMNeuron.ts';
-import { EaCChatPromptNeuron } from '../../../../src/eac/neurons/EaCChatPromptNeuron.ts';
-import { EaCNeuron } from '../../../../src/eac/EaCNeuron.ts';
-import { EaCGraphCircuitDetails } from '../../../../src/eac/EaCGraphCircuitDetails.ts';
-import { EverythingAsCodeSynaptic } from '../../../../src/eac/EverythingAsCodeSynaptic.ts';
+} from "../../../tests.deps.ts";
+import { buildTestIoC } from "../../../test-eac-setup.ts";
+import { EaCPassthroughNeuron } from "../../../../src/eac/neurons/EaCPassthroughNeuron.ts";
+import { EaCLLMNeuron } from "../../../../src/eac/neurons/EaCLLMNeuron.ts";
+import { EaCChatPromptNeuron } from "../../../../src/eac/neurons/EaCChatPromptNeuron.ts";
+import { EaCNeuron } from "../../../../src/eac/EaCNeuron.ts";
+import { EaCGraphCircuitDetails } from "../../../../src/eac/EaCGraphCircuitDetails.ts";
+import { EverythingAsCodeSynaptic } from "../../../../src/eac/EverythingAsCodeSynaptic.ts";
 
 // https://github.com/langchain-ai/langgraphjs/blob/main/examples/how-tos/configuration.ipynb
 
@@ -26,19 +26,19 @@ type ScoredValue = {
   score: number;
 };
 
-Deno.test('Graph Configuration Circuits', async (t) => {
-  const aiLookup = 'thinky';
+Deno.test("Graph Configuration Circuits", async (t) => {
+  const aiLookup = "thinky";
 
   const userDB = {
     user1: {
-      name: 'John Doe',
-      email: 'jod@langchain.ai',
-      phone: '+1234567890',
+      name: "John Doe",
+      email: "jod@langchain.ai",
+      phone: "+1234567890",
     },
     user2: {
-      name: 'Jane Doe',
-      email: 'jad@langchain.ai',
-      phone: '+0987654321',
+      name: "Jane Doe",
+      email: "jad@langchain.ai",
+      phone: "+0987654321",
     },
   };
 
@@ -46,16 +46,16 @@ Deno.test('Graph Configuration Circuits', async (t) => {
     Circuits: {
       $neurons: {
         $pass: {
-          Type: 'Passthrough',
+          Type: "Passthrough",
         } as EaCPassthroughNeuron,
-        'thinky-llm': {
-          Type: 'LLM',
+        "thinky-llm": {
+          Type: "LLM",
           LLMLookup: `${aiLookup}|thinky`,
         } as EaCLLMNeuron,
       },
       config: {
         Details: {
-          Type: 'Graph',
+          Type: "Graph",
           Priority: 100,
           State: {
             messages: {
@@ -64,27 +64,27 @@ Deno.test('Graph Configuration Circuits', async (t) => {
             },
             userInfo: {
               value: (x?: string, y?: string) => {
-                return y ? y : x ? x : 'N/A';
+                return y ? y : x ? x : "N/A";
               },
-              default: () => 'N/A',
+              default: () => "N/A",
             },
           },
           Neurons: {
             agent: {
-              Type: 'ChatPrompt',
+              Type: "ChatPrompt",
               SystemMessage:
-                'You are a helpful assistant.\n\n## User Info:\n{userInfo}',
+                "You are a helpful assistant.\n\n## User Info:\n{userInfo}",
               Messages: [
-                new MessagesPlaceholder('messages'),
+                new MessagesPlaceholder("messages"),
               ] as BaseMessagePromptTemplateLike[],
               Neurons: {
-                '': 'thinky-llm',
+                "": "thinky-llm",
               },
               Bootstrap: (r) => {
                 return RunnableLambda.from(
                   async (
                     state: { messages: BaseMessage[]; userInfo: string },
-                    config
+                    config,
                   ) => {
                     const { messages, userInfo } = state;
 
@@ -93,15 +93,15 @@ Deno.test('Graph Configuration Circuits', async (t) => {
                         messages,
                         userInfo,
                       },
-                      config
+                      config,
                     );
 
                     return { messages: [response] };
-                  }
+                  },
                 );
               },
             } as EaCChatPromptNeuron,
-            'fetch-user-info': {
+            "fetch-user-info": {
               Bootstrap: () => {
                 return RunnableLambda.from((_, config) => {
                   const userId = config?.configurable?.user;
@@ -111,19 +111,20 @@ Deno.test('Graph Configuration Circuits', async (t) => {
 
                     if (user) {
                       return {
-                        userInfo: `Name: ${user.name}\nEmail: ${user.email}\nPhone: ${user.phone}`,
+                        userInfo:
+                          `Name: ${user.name}\nEmail: ${user.email}\nPhone: ${user.phone}`,
                       };
                     }
                   }
 
-                  return { userInfo: 'N/A' };
+                  return { userInfo: "N/A" };
                 });
               },
             } as Partial<EaCNeuron>,
           },
           Edges: {
-            [START]: 'fetch-user-info',
-            ['fetch-user-info']: 'agent',
+            [START]: "fetch-user-info",
+            ["fetch-user-info"]: "agent",
             agent: END,
           },
         } as EaCGraphCircuitDetails,
@@ -133,23 +134,23 @@ Deno.test('Graph Configuration Circuits', async (t) => {
 
   const { ioc, kvCleanup } = await buildTestIoC(eac);
 
-  await t.step('Configuration Circuit', async () => {
+  await t.step("Configuration Circuit", async () => {
     const circuit = await ioc.Resolve<Runnable>(
-      ioc.Symbol('Circuit'),
-      'config'
+      ioc.Symbol("Circuit"),
+      "config",
     );
 
-    let user = 'user1';
+    let user = "user1";
 
     let chunk = await circuit.invoke(
       {
-        messages: [new HumanMessage('Could you remind me of my email??')],
+        messages: [new HumanMessage("Could you remind me of my email??")],
       },
       {
         configurable: {
           user,
         },
-      }
+      },
     );
 
     assert(chunk.messages.slice(-1)[0].content, JSON.stringify(chunk));
@@ -158,20 +159,20 @@ Deno.test('Graph Configuration Circuits', async (t) => {
 
     assertStringIncludes(
       chunk.messages.slice(-1)[0].content,
-      userDB[user as keyof typeof userDB].email
+      userDB[user as keyof typeof userDB].email,
     );
 
-    user = 'user2';
+    user = "user2";
 
     chunk = await circuit.invoke(
       {
-        messages: [new HumanMessage('Could you remind me of my email??')],
+        messages: [new HumanMessage("Could you remind me of my email??")],
       },
       {
         configurable: {
           user,
         },
-      }
+      },
     );
 
     assert(chunk.messages.slice(-1)[0].content, JSON.stringify(chunk));
@@ -180,7 +181,7 @@ Deno.test('Graph Configuration Circuits', async (t) => {
 
     assertStringIncludes(
       chunk.messages.slice(-1)[0].content,
-      userDB[user as keyof typeof userDB].email
+      userDB[user as keyof typeof userDB].email,
     );
   });
 

@@ -1,4 +1,4 @@
-import { AIMessageChunk } from 'npm:@langchain/core/messages';
+import { AIMessageChunk } from "npm:@langchain/core/messages";
 import {
   AIMessage,
   assert,
@@ -11,51 +11,51 @@ import {
   RunnableLambda,
   START,
   z,
-} from '../../../tests.deps.ts';
-import { AI_LOOKUP, buildTestIoC } from '../../../test-eac-setup.ts';
-import { EaCAzureOpenAILLMDetails } from '../../../../src/eac/EaCAzureOpenAILLMDetails.ts';
-import { EaCDynamicToolDetails } from '../../../../src/eac/tools/EaCDynamicToolDetails.ts';
-import { EaCPassthroughNeuron } from '../../../../src/eac/neurons/EaCPassthroughNeuron.ts';
-import { EaCLLMNeuron } from '../../../../src/eac/neurons/EaCLLMNeuron.ts';
-import { EaCToolExecutorNeuron } from '../../../../src/eac/neurons/EaCToolExecutorNeuron.ts';
-import { EaCNeuron } from '../../../../src/eac/EaCNeuron.ts';
-import { EaCGraphCircuitDetails } from '../../../../src/eac/EaCGraphCircuitDetails.ts';
-import { EverythingAsCodeSynaptic } from '../../../../src/eac/EverythingAsCodeSynaptic.ts';
+} from "../../../tests.deps.ts";
+import { AI_LOOKUP, buildTestIoC } from "../../../test-eac-setup.ts";
+import { EaCAzureOpenAILLMDetails } from "../../../../src/eac/EaCAzureOpenAILLMDetails.ts";
+import { EaCDynamicToolDetails } from "../../../../src/eac/tools/EaCDynamicToolDetails.ts";
+import { EaCPassthroughNeuron } from "../../../../src/eac/neurons/EaCPassthroughNeuron.ts";
+import { EaCLLMNeuron } from "../../../../src/eac/neurons/EaCLLMNeuron.ts";
+import { EaCToolExecutorNeuron } from "../../../../src/eac/neurons/EaCToolExecutorNeuron.ts";
+import { EaCNeuron } from "../../../../src/eac/EaCNeuron.ts";
+import { EaCGraphCircuitDetails } from "../../../../src/eac/EaCGraphCircuitDetails.ts";
+import { EverythingAsCodeSynaptic } from "../../../../src/eac/EverythingAsCodeSynaptic.ts";
 
 // https://github.com/langchain-ai/langgraphjs/blob/main/examples/how-tos/stream-tokens.ipynb
 
-Deno.test('Graph Stream Tokens Circuits', async (t) => {
+Deno.test("Graph Stream Tokens Circuits", async (t) => {
   const eac = {
     AIs: {
       [AI_LOOKUP]: {
         LLMs: {
-          'thinky-test': {
+          "thinky-test": {
             Details: {
-              Type: 'AzureOpenAI',
-              Name: 'Azure OpenAI LLM',
-              Description: 'The LLM for interacting with Azure OpenAI.',
-              APIKey: Deno.env.get('AZURE_OPENAI_KEY')!,
-              Endpoint: Deno.env.get('AZURE_OPENAI_ENDPOINT')!,
-              DeploymentName: 'gpt-4o',
-              ModelName: 'gpt-4o',
+              Type: "AzureOpenAI",
+              Name: "Azure OpenAI LLM",
+              Description: "The LLM for interacting with Azure OpenAI.",
+              APIKey: Deno.env.get("AZURE_OPENAI_KEY")!,
+              Endpoint: Deno.env.get("AZURE_OPENAI_ENDPOINT")!,
+              DeploymentName: "gpt-4o",
+              ModelName: "gpt-4o",
               Streaming: true,
               Verbose: false,
-              ToolLookups: ['thinky|test'],
+              ToolLookups: ["thinky|test"],
             } as EaCAzureOpenAILLMDetails,
           },
         },
         Tools: {
           test: {
             Details: {
-              Type: 'Dynamic',
-              Name: 'search',
+              Type: "Dynamic",
+              Name: "search",
               Description:
-                'Use to surf the web, fetch current information, check the weather, and retrieve other information.',
+                "Use to surf the web, fetch current information, check the weather, and retrieve other information.",
               Schema: z.object({
-                query: z.string().describe('The query to use in your search.'),
+                query: z.string().describe("The query to use in your search."),
               }),
               Action: ({}: { query: string }) => {
-                return Promise.resolve('Cold, with a low of 3℃');
+                return Promise.resolve("Cold, with a low of 3℃");
               },
             } as EaCDynamicToolDetails,
           },
@@ -65,16 +65,16 @@ Deno.test('Graph Stream Tokens Circuits', async (t) => {
     Circuits: {
       $neurons: {
         $pass: {
-          Type: 'Passthrough',
+          Type: "Passthrough",
         } as EaCPassthroughNeuron,
-        'thinky-llm': {
-          Type: 'LLM',
+        "thinky-llm": {
+          Type: "LLM",
           LLMLookup: `${AI_LOOKUP}|thinky-test`,
         } as EaCLLMNeuron,
-        'thinky-tools': {
-          Type: 'ToolExecutor',
-          ToolLookups: ['thinky|test'],
-          MessagesPath: '$.messages',
+        "thinky-tools": {
+          Type: "ToolExecutor",
+          ToolLookups: ["thinky|test"],
+          MessagesPath: "$.messages",
           Bootstrap: (r) => {
             return RunnableLambda.from(
               async (state: { messages: Array<BaseMessage> }) => {
@@ -83,14 +83,14 @@ Deno.test('Graph Stream Tokens Circuits', async (t) => {
                 return {
                   messages: response,
                 };
-              }
+              },
             );
           },
         } as EaCToolExecutorNeuron,
       },
       stream: {
         Details: {
-          Type: 'Graph',
+          Type: "Graph",
           Priority: 100,
           State: {
             messages: {
@@ -100,7 +100,7 @@ Deno.test('Graph Stream Tokens Circuits', async (t) => {
           },
           Neurons: {
             agent: [
-              'thinky-llm',
+              "thinky-llm",
               {
                 Bootstrap: (r) => {
                   return RunnableLambda.from(
@@ -110,19 +110,19 @@ Deno.test('Graph Stream Tokens Circuits', async (t) => {
                       const response = await r.invoke(messages, config);
 
                       return { messages: [response] };
-                    }
+                    },
                   );
                 },
               } as Partial<EaCNeuron>,
             ],
-            tools: 'thinky-tools',
+            tools: "thinky-tools",
           },
           Edges: {
-            [START]: 'agent',
+            [START]: "agent",
             agent: {
               Node: {
                 [END]: END,
-                tools: 'tools',
+                tools: "tools",
               },
               Condition: (state: { messages: BaseMessage[] }) => {
                 const { messages } = state;
@@ -133,10 +133,10 @@ Deno.test('Graph Stream Tokens Circuits', async (t) => {
                   return END;
                 }
 
-                return 'tools';
+                return "tools";
               },
             },
-            tools: 'agent',
+            tools: "agent",
           },
         } as EaCGraphCircuitDetails,
       },
@@ -145,10 +145,10 @@ Deno.test('Graph Stream Tokens Circuits', async (t) => {
 
   const { ioc, kvCleanup } = await buildTestIoC(eac);
 
-  await t.step('Chat Stream Circuit', async () => {
+  await t.step("Chat Stream Circuit", async () => {
     const circuit = await ioc.Resolve<Runnable>(
-      ioc.Symbol('Circuit'),
-      'stream'
+      ioc.Symbol("Circuit"),
+      "stream",
     );
 
     const chunks = await circuit.streamEvents(
@@ -157,15 +157,15 @@ Deno.test('Graph Stream Tokens Circuits', async (t) => {
       },
       {
         // streamMode: 'values',
-        version: 'v1',
-      }
+        version: "v1",
+      },
     );
 
     let content = false;
     let tool = false;
 
     for await (const event of chunks) {
-      if (event.event === 'on_llm_stream') {
+      if (event.event === "on_llm_stream") {
         const chunk = event.data?.chunk;
 
         const msg = chunk.message as AIMessageChunk;
@@ -184,10 +184,10 @@ Deno.test('Graph Stream Tokens Circuits', async (t) => {
     assertFalse(tool);
   });
 
-  await t.step('Tool Stream Circuit', async () => {
+  await t.step("Tool Stream Circuit", async () => {
     const circuit = await ioc.Resolve<Runnable>(
-      ioc.Symbol('Circuit'),
-      'stream'
+      ioc.Symbol("Circuit"),
+      "stream",
     );
 
     const chunks = await circuit.streamEvents(
@@ -196,15 +196,15 @@ Deno.test('Graph Stream Tokens Circuits', async (t) => {
       },
       {
         // streamMode: 'values',
-        version: 'v1',
-      }
+        version: "v1",
+      },
     );
 
     let content = false;
     let tool = false;
 
     for await (const event of chunks) {
-      if (event.event === 'on_llm_stream') {
+      if (event.event === "on_llm_stream") {
         const chunk = event.data?.chunk;
 
         const msg = chunk.message as AIMessageChunk;

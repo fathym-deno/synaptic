@@ -9,67 +9,67 @@ import {
   RunnableLambda,
   START,
   z,
-} from '../../../tests.deps.ts';
-import { AI_LOOKUP, buildTestIoC } from '../../../test-eac-setup.ts';
-import { EaCAzureOpenAILLMDetails } from '../../../../src/eac/EaCAzureOpenAILLMDetails.ts';
-import { EaCDynamicToolDetails } from '../../../../src/eac/tools/EaCDynamicToolDetails.ts';
-import { EaCPassthroughNeuron } from '../../../../src/eac/neurons/EaCPassthroughNeuron.ts';
-import { EaCLLMNeuron } from '../../../../src/eac/neurons/EaCLLMNeuron.ts';
-import { EaCToolExecutorNeuron } from '../../../../src/eac/neurons/EaCToolExecutorNeuron.ts';
-import { EaCNeuron } from '../../../../src/eac/EaCNeuron.ts';
-import { EaCGraphCircuitDetails } from '../../../../src/eac/EaCGraphCircuitDetails.ts';
-import { EverythingAsCodeSynaptic } from '../../../../src/eac/EverythingAsCodeSynaptic.ts';
+} from "../../../tests.deps.ts";
+import { AI_LOOKUP, buildTestIoC } from "../../../test-eac-setup.ts";
+import { EaCAzureOpenAILLMDetails } from "../../../../src/eac/EaCAzureOpenAILLMDetails.ts";
+import { EaCDynamicToolDetails } from "../../../../src/eac/tools/EaCDynamicToolDetails.ts";
+import { EaCPassthroughNeuron } from "../../../../src/eac/neurons/EaCPassthroughNeuron.ts";
+import { EaCLLMNeuron } from "../../../../src/eac/neurons/EaCLLMNeuron.ts";
+import { EaCToolExecutorNeuron } from "../../../../src/eac/neurons/EaCToolExecutorNeuron.ts";
+import { EaCNeuron } from "../../../../src/eac/EaCNeuron.ts";
+import { EaCGraphCircuitDetails } from "../../../../src/eac/EaCGraphCircuitDetails.ts";
+import { EverythingAsCodeSynaptic } from "../../../../src/eac/EverythingAsCodeSynaptic.ts";
 
 // https://github.com/langchain-ai/langgraphjs/blob/main/examples/how-tos/respond-in-format.ipynb
 
-Deno.test('Graph Respond in Format Circuits', async (t) => {
+Deno.test("Graph Respond in Format Circuits", async (t) => {
   const eac = {
     AIs: {
       [AI_LOOKUP]: {
         LLMs: {
-          'thinky-test': {
+          "thinky-test": {
             Details: {
-              Type: 'AzureOpenAI',
-              Name: 'Azure OpenAI LLM',
-              Description: 'The LLM for interacting with Azure OpenAI.',
-              APIKey: Deno.env.get('AZURE_OPENAI_KEY')!,
-              Endpoint: Deno.env.get('AZURE_OPENAI_ENDPOINT')!,
-              DeploymentName: 'gpt-4o',
-              ModelName: 'gpt-4o',
+              Type: "AzureOpenAI",
+              Name: "Azure OpenAI LLM",
+              Description: "The LLM for interacting with Azure OpenAI.",
+              APIKey: Deno.env.get("AZURE_OPENAI_KEY")!,
+              Endpoint: Deno.env.get("AZURE_OPENAI_ENDPOINT")!,
+              DeploymentName: "gpt-4o",
+              ModelName: "gpt-4o",
               Streaming: true,
               Verbose: false,
-              ToolLookups: ['thinky|test', 'thinky|response'],
+              ToolLookups: ["thinky|test", "thinky|response"],
             } as EaCAzureOpenAILLMDetails,
           },
         },
         Tools: {
           response: {
             Details: {
-              Type: 'Dynamic',
-              Name: 'Response',
-              Description: 'Respond to the user using this tool.',
+              Type: "Dynamic",
+              Name: "Response",
+              Description: "Respond to the user using this tool.",
               Schema: z.object({
-                temperature: z.number().describe('the temperature'),
+                temperature: z.number().describe("the temperature"),
                 other_notes: z
                   .string()
-                  .describe('any other notes about the weather'),
+                  .describe("any other notes about the weather"),
               }),
               Action: () => {
-                return Promise.resolve('This tool should not be called.');
+                return Promise.resolve("This tool should not be called.");
               },
             } as EaCDynamicToolDetails,
           },
           test: {
             Details: {
-              Type: 'Dynamic',
-              Name: 'search',
-              Description: 'Call to surf the web.',
+              Type: "Dynamic",
+              Name: "search",
+              Description: "Call to surf the web.",
               Schema: z.object({
-                query: z.string().describe('The query to use in your search.'),
+                query: z.string().describe("The query to use in your search."),
               }),
               Action: ({}: { query: string }) => {
                 return Promise.resolve(
-                  'The answer to your question lies within.'
+                  "The answer to your question lies within.",
                 );
               },
             } as EaCDynamicToolDetails,
@@ -80,16 +80,16 @@ Deno.test('Graph Respond in Format Circuits', async (t) => {
     Circuits: {
       $neurons: {
         $pass: {
-          Type: 'Passthrough',
+          Type: "Passthrough",
         } as EaCPassthroughNeuron,
-        'thinky-llm': {
-          Type: 'LLM',
+        "thinky-llm": {
+          Type: "LLM",
           LLMLookup: `${AI_LOOKUP}|thinky-test`,
         } as EaCLLMNeuron,
-        'thinky-tools': {
-          Type: 'ToolExecutor',
-          ToolLookups: ['thinky|test'],
-          MessagesPath: '$.messages',
+        "thinky-tools": {
+          Type: "ToolExecutor",
+          ToolLookups: ["thinky|test"],
+          MessagesPath: "$.messages",
           Bootstrap: (r) => {
             return RunnableLambda.from(
               async (state: { messages: Array<BaseMessage> }) => {
@@ -98,14 +98,14 @@ Deno.test('Graph Respond in Format Circuits', async (t) => {
                 return {
                   messages: response,
                 };
-              }
+              },
             );
           },
         } as EaCToolExecutorNeuron,
       },
       rif: {
         Details: {
-          Type: 'Graph',
+          Type: "Graph",
           Priority: 100,
           State: {
             messages: {
@@ -115,7 +115,7 @@ Deno.test('Graph Respond in Format Circuits', async (t) => {
           },
           Neurons: {
             agent: [
-              'thinky-llm',
+              "thinky-llm",
               {
                 Bootstrap: (r) => {
                   return RunnableLambda.from(
@@ -125,19 +125,19 @@ Deno.test('Graph Respond in Format Circuits', async (t) => {
                       const response = await r.invoke(messages, config);
 
                       return { messages: [response] };
-                    }
+                    },
                   );
                 },
               } as Partial<EaCNeuron>,
             ],
-            tools: 'thinky-tools',
+            tools: "thinky-tools",
           },
           Edges: {
-            [START]: 'agent',
+            [START]: "agent",
             agent: {
               Node: {
                 [END]: END,
-                tools: 'tools',
+                tools: "tools",
               },
               Condition: (state: { messages: BaseMessage[] }) => {
                 const { messages } = state;
@@ -150,15 +150,15 @@ Deno.test('Graph Respond in Format Circuits', async (t) => {
 
                 if (
                   lastMessage.additional_kwargs.tool_calls[0].function.name ===
-                  'Response'
+                    "Response"
                 ) {
                   return END;
                 }
 
-                return 'tools';
+                return "tools";
               },
             },
-            tools: 'agent',
+            tools: "agent",
           },
         } as EaCGraphCircuitDetails,
       },
@@ -167,8 +167,8 @@ Deno.test('Graph Respond in Format Circuits', async (t) => {
 
   const { ioc, kvCleanup } = await buildTestIoC(eac);
 
-  await t.step('Respond in Format Circuit', async () => {
-    const circuit = await ioc.Resolve<Runnable>(ioc.Symbol('Circuit'), 'rif');
+  await t.step("Respond in Format Circuit", async () => {
+    const circuit = await ioc.Resolve<Runnable>(ioc.Symbol("Circuit"), "rif");
 
     const chunk = await circuit.invoke({
       messages: [new HumanMessage(`what is the weather in sf?`)],
@@ -176,12 +176,12 @@ Deno.test('Graph Respond in Format Circuits', async (t) => {
 
     assert(
       chunk.messages.slice(-1)[0].additional_kwargs?.tool_calls?.[0],
-      JSON.stringify(chunk)
+      JSON.stringify(chunk),
     );
 
     console.log(
       chunk.messages.slice(-1)[0].additional_kwargs?.tool_calls?.[0].function
-        .arguments
+        .arguments,
     );
   });
 

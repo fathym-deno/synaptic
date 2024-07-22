@@ -10,50 +10,50 @@ import {
   RunnableLambda,
   START,
   z,
-} from '../../../tests.deps.ts';
-import { AI_LOOKUP, buildTestIoC } from '../../../test-eac-setup.ts';
-import { EaCAzureOpenAILLMDetails } from '../../../../src/eac/EaCAzureOpenAILLMDetails.ts';
-import { EaCDynamicToolDetails } from '../../../../src/eac/tools/EaCDynamicToolDetails.ts';
-import { EaCPassthroughNeuron } from '../../../../src/eac/neurons/EaCPassthroughNeuron.ts';
-import { EaCLLMNeuron } from '../../../../src/eac/neurons/EaCLLMNeuron.ts';
-import { EaCNeuron } from '../../../../src/eac/EaCNeuron.ts';
-import { EaCToolExecutorNeuron } from '../../../../src/eac/neurons/EaCToolExecutorNeuron.ts';
-import { EaCGraphCircuitDetails } from '../../../../src/eac/EaCGraphCircuitDetails.ts';
+} from "../../../tests.deps.ts";
+import { AI_LOOKUP, buildTestIoC } from "../../../test-eac-setup.ts";
+import { EaCAzureOpenAILLMDetails } from "../../../../src/eac/EaCAzureOpenAILLMDetails.ts";
+import { EaCDynamicToolDetails } from "../../../../src/eac/tools/EaCDynamicToolDetails.ts";
+import { EaCPassthroughNeuron } from "../../../../src/eac/neurons/EaCPassthroughNeuron.ts";
+import { EaCLLMNeuron } from "../../../../src/eac/neurons/EaCLLMNeuron.ts";
+import { EaCNeuron } from "../../../../src/eac/EaCNeuron.ts";
+import { EaCToolExecutorNeuron } from "../../../../src/eac/neurons/EaCToolExecutorNeuron.ts";
+import { EaCGraphCircuitDetails } from "../../../../src/eac/EaCGraphCircuitDetails.ts";
 
 // https://github.com/langchain-ai/langgraphjs/blob/main/examples/how-tos/persistence.ipynb
 
-Deno.test('Persistence Circuits', async (t) => {
+Deno.test("Persistence Circuits", async (t) => {
   const eac = {
     AIs: {
       [AI_LOOKUP]: {
         LLMs: {
-          'thinky-test': {
+          "thinky-test": {
             Details: {
-              Type: 'AzureOpenAI',
-              Name: 'Azure OpenAI LLM',
-              Description: 'The LLM for interacting with Azure OpenAI.',
-              APIKey: Deno.env.get('AZURE_OPENAI_KEY')!,
-              Endpoint: Deno.env.get('AZURE_OPENAI_ENDPOINT')!,
-              DeploymentName: 'gpt-4o',
-              ModelName: 'gpt-4o',
+              Type: "AzureOpenAI",
+              Name: "Azure OpenAI LLM",
+              Description: "The LLM for interacting with Azure OpenAI.",
+              APIKey: Deno.env.get("AZURE_OPENAI_KEY")!,
+              Endpoint: Deno.env.get("AZURE_OPENAI_ENDPOINT")!,
+              DeploymentName: "gpt-4o",
+              ModelName: "gpt-4o",
               Streaming: true,
               Verbose: false,
-              ToolLookups: ['thinky|test'],
+              ToolLookups: ["thinky|test"],
             } as EaCAzureOpenAILLMDetails,
           },
         },
         Tools: {
           test: {
             Details: {
-              Type: 'Dynamic',
-              Name: 'search',
+              Type: "Dynamic",
+              Name: "search",
               Description:
-                'Use to surf the web, fetch current information, check the weather, and retrieve other information.',
+                "Use to surf the web, fetch current information, check the weather, and retrieve other information.",
               Schema: z.object({
-                query: z.string().describe('The query to use in your search.'),
+                query: z.string().describe("The query to use in your search."),
               }),
               Action: ({}: { query: string }) => {
-                return Promise.resolve('Cold, with a low of 13 ℃');
+                return Promise.resolve("Cold, with a low of 13 ℃");
               },
             } as EaCDynamicToolDetails,
           },
@@ -64,16 +64,16 @@ Deno.test('Persistence Circuits', async (t) => {
       // $handlers: ['esm:fathym-synaptic-resolvers'],
       $neurons: {
         $pass: {
-          Type: 'Passthrough',
+          Type: "Passthrough",
         } as EaCPassthroughNeuron,
-        'thinky-llm': {
-          Type: 'LLM',
+        "thinky-llm": {
+          Type: "LLM",
           LLMLookup: `${AI_LOOKUP}|thinky-test`,
         } as EaCLLMNeuron,
-        'thinky-agent': {
+        "thinky-agent": {
           Neurons: {
-            '': [
-              'thinky-llm',
+            "": [
+              "thinky-llm",
               {
                 Bootstrap: (r) => {
                   return RunnableLambda.from(
@@ -83,35 +83,35 @@ Deno.test('Persistence Circuits', async (t) => {
                       const response = await r.invoke(messages, config);
 
                       return { messages: [response] };
-                    }
+                    },
                   );
                 },
               } as Partial<EaCNeuron>,
             ],
           },
         } as Partial<EaCNeuron>,
-        'thinky-tools': {
-          Type: 'ToolExecutor',
-          ToolLookups: ['thinky|test'],
-          MessagesPath: '$.messages',
+        "thinky-tools": {
+          Type: "ToolExecutor",
+          ToolLookups: ["thinky|test"],
+          MessagesPath: "$.messages",
           Bootstrap: (r) => {
             return RunnableLambda.from(
               async (state: { messages: Array<BaseMessage> }) => {
                 const response = await r.invoke(state);
 
-                console.log('Called tool...');
+                console.log("Called tool...");
 
                 return {
                   messages: response,
                 };
-              }
+              },
             );
           },
         } as EaCToolExecutorNeuron,
       },
-      'no-persist': {
+      "no-persist": {
         Details: {
-          Type: 'Graph',
+          Type: "Graph",
           Priority: 100,
           State: {
             messages: {
@@ -120,15 +120,15 @@ Deno.test('Persistence Circuits', async (t) => {
             },
           },
           Neurons: {
-            agent: 'thinky-agent',
-            tools: 'thinky-tools',
+            agent: "thinky-agent",
+            tools: "thinky-tools",
           },
           Edges: {
-            [START]: 'agent',
+            [START]: "agent",
             agent: {
               Node: {
                 [END]: END,
-                tools: 'tools',
+                tools: "tools",
               },
               Condition: (state: { messages: BaseMessage[] }) => {
                 const { messages } = state;
@@ -139,16 +139,16 @@ Deno.test('Persistence Circuits', async (t) => {
                   return END;
                 }
 
-                return 'tools';
+                return "tools";
               },
             },
-            tools: 'agent',
+            tools: "agent",
           },
         } as EaCGraphCircuitDetails,
       },
-      'persist-memory': {
+      "persist-memory": {
         Details: {
-          Type: 'Graph',
+          Type: "Graph",
           Priority: 100,
           PersistenceLookup: `${AI_LOOKUP}|memory`,
           State: {
@@ -158,15 +158,15 @@ Deno.test('Persistence Circuits', async (t) => {
             },
           },
           Neurons: {
-            agent: 'thinky-agent',
-            tools: 'thinky-tools',
+            agent: "thinky-agent",
+            tools: "thinky-tools",
           },
           Edges: {
-            [START]: 'agent',
+            [START]: "agent",
             agent: {
               Node: {
                 [END]: END,
-                tools: 'tools',
+                tools: "tools",
               },
               Condition: (state: { messages: BaseMessage[] }) => {
                 const { messages } = state;
@@ -177,16 +177,16 @@ Deno.test('Persistence Circuits', async (t) => {
                   return END;
                 }
 
-                return 'tools';
+                return "tools";
               },
             },
-            tools: 'agent',
+            tools: "agent",
           },
         } as EaCGraphCircuitDetails,
       },
-      'persist-denokv': {
+      "persist-denokv": {
         Details: {
-          Type: 'Graph',
+          Type: "Graph",
           Priority: 100,
           PersistenceLookup: `${AI_LOOKUP}|denokv`,
           State: {
@@ -196,15 +196,15 @@ Deno.test('Persistence Circuits', async (t) => {
             },
           },
           Neurons: {
-            agent: 'thinky-agent',
-            tools: 'thinky-tools',
+            agent: "thinky-agent",
+            tools: "thinky-tools",
           },
           Edges: {
-            [START]: 'agent',
+            [START]: "agent",
             agent: {
               Node: {
                 [END]: END,
-                tools: 'tools',
+                tools: "tools",
               },
               Condition: (state: { messages: BaseMessage[] }) => {
                 const { messages } = state;
@@ -215,10 +215,10 @@ Deno.test('Persistence Circuits', async (t) => {
                   return END;
                 }
 
-                return 'tools';
+                return "tools";
               },
             },
-            tools: 'agent',
+            tools: "agent",
           },
         } as EaCGraphCircuitDetails,
       },
@@ -305,10 +305,10 @@ Deno.test('Persistence Circuits', async (t) => {
   //   assertStringIncludes(chunk.messages.slice(-1)[0].content, 'Mike');
   // });
 
-  await t.step('Persist DenoKV Circuit', async () => {
+  await t.step("Persist DenoKV Circuit", async () => {
     const circuit = await ioc.Resolve<Runnable>(
-      ioc.Symbol('Circuit'),
-      'persist-denokv'
+      ioc.Symbol("Circuit"),
+      "persist-denokv",
     );
 
     let chunk = await circuit.invoke(
@@ -317,9 +317,9 @@ Deno.test('Persistence Circuits', async (t) => {
       },
       {
         configurable: {
-          thread_id: 'test',
+          thread_id: "test",
         },
-      }
+      },
     );
 
     assert(chunk.messages.slice(-1)[0].content, JSON.stringify(chunk));
@@ -332,22 +332,22 @@ Deno.test('Persistence Circuits', async (t) => {
       },
       {
         configurable: {
-          thread_id: 'test',
+          thread_id: "test",
         },
-      }
+      },
     );
 
     assert(chunk.messages.slice(-1)[0].content, JSON.stringify(chunk));
 
     console.log(chunk.messages.slice(-1)[0].content);
 
-    assertStringIncludes(chunk.messages.slice(-1)[0].content, 'Mike');
+    assertStringIncludes(chunk.messages.slice(-1)[0].content, "Mike");
   });
 
-  await t.step('Persist DenoKV ReCheck Circuit', async () => {
+  await t.step("Persist DenoKV ReCheck Circuit", async () => {
     const circuit = await ioc.Resolve<Runnable>(
-      ioc.Symbol('Circuit'),
-      'persist-denokv'
+      ioc.Symbol("Circuit"),
+      "persist-denokv",
     );
 
     const chunk = await circuit.invoke(
@@ -356,16 +356,16 @@ Deno.test('Persistence Circuits', async (t) => {
       },
       {
         configurable: {
-          thread_id: 'test',
+          thread_id: "test",
         },
-      }
+      },
     );
 
     assert(chunk.messages.slice(-1)[0].content, JSON.stringify(chunk));
 
     console.log(chunk.messages.slice(-1)[0].content);
 
-    assertStringIncludes(chunk.messages.slice(-1)[0].content, 'Mike');
+    assertStringIncludes(chunk.messages.slice(-1)[0].content, "Mike");
   });
 
   await kvCleanup();

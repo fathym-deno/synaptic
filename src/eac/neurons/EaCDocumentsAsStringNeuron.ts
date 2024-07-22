@@ -1,11 +1,11 @@
-import { EaCNeuron, isEaCNeuron } from '../EaCNeuron.ts';
+import { EaCNeuron, isEaCNeuron } from "../EaCNeuron.ts";
 
-export type EaCDocumentsAsStringNeuron = EaCNeuron<'DocumentsAsString'>;
+export type EaCDocumentsAsStringNeuron = EaCNeuron<"DocumentsAsString">;
 
 export function isEaCDocumentsAsStringNeuron(
-  details: unknown
+  details: unknown,
 ): details is EaCDocumentsAsStringNeuron {
   const x = details as EaCDocumentsAsStringNeuron;
 
-  return isEaCNeuron('DocumentsAsString', x);
+  return isEaCNeuron("DocumentsAsString", x);
 }

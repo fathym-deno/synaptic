@@ -6,12 +6,12 @@ import {
   Runnable,
   RunnableLambda,
   START,
-} from '../../../tests.deps.ts';
-import { buildTestIoC } from '../../../test-eac-setup.ts';
-import { EaCPassthroughNeuron } from '../../../../src/eac/neurons/EaCPassthroughNeuron.ts';
-import { EaCNeuron } from '../../../../src/eac/EaCNeuron.ts';
-import { EaCGraphCircuitDetails } from '../../../../src/eac/EaCGraphCircuitDetails.ts';
-import { EverythingAsCodeSynaptic } from '../../../../src/eac/EverythingAsCodeSynaptic.ts';
+} from "../../../tests.deps.ts";
+import { buildTestIoC } from "../../../test-eac-setup.ts";
+import { EaCPassthroughNeuron } from "../../../../src/eac/neurons/EaCPassthroughNeuron.ts";
+import { EaCNeuron } from "../../../../src/eac/EaCNeuron.ts";
+import { EaCGraphCircuitDetails } from "../../../../src/eac/EaCGraphCircuitDetails.ts";
+import { EverythingAsCodeSynaptic } from "../../../../src/eac/EverythingAsCodeSynaptic.ts";
 
 // https://github.com/langchain-ai/langgraphjs/blob/main/examples/how-tos/branching.ipynb
 
@@ -20,7 +20,7 @@ type ScoredValue = {
   score: number;
 };
 
-Deno.test('Graph Branching Circuits', async (t) => {
+Deno.test("Graph Branching Circuits", async (t) => {
   const loadSimpleBootstrap = (value: string) => {
     return () => {
       return RunnableLambda.from((state: { aggregate: string[] }) => {
@@ -45,12 +45,12 @@ Deno.test('Graph Branching Circuits', async (t) => {
     Circuits: {
       $neurons: {
         $pass: {
-          Type: 'Passthrough',
+          Type: "Passthrough",
         } as EaCPassthroughNeuron,
       },
-      'fan-out-fan-in': {
+      "fan-out-fan-in": {
         Details: {
-          Type: 'Graph',
+          Type: "Graph",
           Priority: 100,
           State: {
             aggregate: {
@@ -60,30 +60,30 @@ Deno.test('Graph Branching Circuits', async (t) => {
           },
           Neurons: {
             a: {
-              Bootstrap: loadSimpleBootstrap('A'),
+              Bootstrap: loadSimpleBootstrap("A"),
             } as Partial<EaCNeuron>,
             b: {
-              Bootstrap: loadSimpleBootstrap('B'),
+              Bootstrap: loadSimpleBootstrap("B"),
             } as Partial<EaCNeuron>,
             c: {
-              Bootstrap: loadSimpleBootstrap('C'),
+              Bootstrap: loadSimpleBootstrap("C"),
             } as Partial<EaCNeuron>,
             d: {
-              Bootstrap: loadSimpleBootstrap('D'),
+              Bootstrap: loadSimpleBootstrap("D"),
             } as Partial<EaCNeuron>,
           },
           Edges: {
-            [START]: 'a',
-            a: ['b', 'c'],
-            b: 'd',
-            c: 'd',
+            [START]: "a",
+            a: ["b", "c"],
+            b: "d",
+            c: "d",
             d: END,
           },
         } as EaCGraphCircuitDetails,
       },
       conditional: {
         Details: {
-          Type: 'Graph',
+          Type: "Graph",
           Priority: 100,
           State: {
             aggregate: {
@@ -92,52 +92,52 @@ Deno.test('Graph Branching Circuits', async (t) => {
             },
             which: {
               value: (x: string, y: string) => (y ? y : x),
-              default: () => 'bc',
+              default: () => "bc",
             },
           },
           Neurons: {
             a: {
-              Bootstrap: loadSimpleBootstrap('A'),
+              Bootstrap: loadSimpleBootstrap("A"),
             } as Partial<EaCNeuron>,
             b: {
-              Bootstrap: loadSimpleBootstrap('B'),
+              Bootstrap: loadSimpleBootstrap("B"),
             } as Partial<EaCNeuron>,
             c: {
-              Bootstrap: loadSimpleBootstrap('C'),
+              Bootstrap: loadSimpleBootstrap("C"),
             } as Partial<EaCNeuron>,
             d: {
-              Bootstrap: loadSimpleBootstrap('D'),
+              Bootstrap: loadSimpleBootstrap("D"),
             } as Partial<EaCNeuron>,
             e: {
-              Bootstrap: loadSimpleBootstrap('E'),
+              Bootstrap: loadSimpleBootstrap("E"),
             } as Partial<EaCNeuron>,
           },
           Edges: {
-            [START]: 'a',
+            [START]: "a",
             a: {
               Node: {
-                b: 'b',
-                c: 'c',
-                d: 'd',
+                b: "b",
+                c: "c",
+                d: "d",
               },
               Condition: (state: { which: string }) => {
-                if (state.which === 'cd') {
-                  return ['c', 'd'];
+                if (state.which === "cd") {
+                  return ["c", "d"];
                 }
 
-                return ['b', 'c'];
+                return ["b", "c"];
               },
             },
-            b: 'e',
-            c: 'e',
-            d: 'e',
+            b: "e",
+            c: "e",
+            d: "e",
             e: END,
           },
         } as EaCGraphCircuitDetails,
       },
-      'stable-sorting': {
+      "stable-sorting": {
         Details: {
-          Type: 'Graph',
+          Type: "Graph",
           Priority: 100,
           State: {
             aggregate: {
@@ -146,7 +146,7 @@ Deno.test('Graph Branching Circuits', async (t) => {
             },
             which: {
               value: (x: string, y: string) => (y ? y : x),
-              default: () => '',
+              default: () => "",
             },
             fanoutValues: {
               value: (left?: ScoredValue[], right?: ScoredValue[]) => {
@@ -164,16 +164,16 @@ Deno.test('Graph Branching Circuits', async (t) => {
           },
           Neurons: {
             a: {
-              Bootstrap: loadSimpleBootstrap('A'),
+              Bootstrap: loadSimpleBootstrap("A"),
             } as Partial<EaCNeuron>,
             b: {
-              Bootstrap: loadScoredBootstrap('B', 0.1),
+              Bootstrap: loadScoredBootstrap("B", 0.1),
             } as Partial<EaCNeuron>,
             c: {
-              Bootstrap: loadScoredBootstrap('C', 0.9),
+              Bootstrap: loadScoredBootstrap("C", 0.9),
             } as Partial<EaCNeuron>,
             d: {
-              Bootstrap: loadScoredBootstrap('D', 0.3),
+              Bootstrap: loadScoredBootstrap("D", 0.3),
             } as Partial<EaCNeuron>,
             e: {
               Bootstrap: () => {
@@ -187,30 +187,30 @@ Deno.test('Graph Branching Circuits', async (t) => {
                         .concat(["I'm E"]),
                       fanoutValues: [],
                     };
-                  }
+                  },
                 );
               },
             } as Partial<EaCNeuron>,
           },
           Edges: {
-            [START]: 'a',
+            [START]: "a",
             a: {
               Node: {
-                b: 'b',
-                c: 'c',
-                d: 'd',
+                b: "b",
+                c: "c",
+                d: "d",
               },
               Condition: (state: { which: string }) => {
-                if (state.which === 'cd') {
-                  return ['c', 'd'];
+                if (state.which === "cd") {
+                  return ["c", "d"];
                 }
 
-                return ['b', 'c'];
+                return ["b", "c"];
               },
             },
-            b: 'e',
-            c: 'e',
-            d: 'e',
+            b: "e",
+            c: "e",
+            d: "e",
             e: END,
           },
         } as EaCGraphCircuitDetails,
@@ -220,10 +220,10 @@ Deno.test('Graph Branching Circuits', async (t) => {
 
   const { ioc, kvCleanup } = await buildTestIoC(eac);
 
-  await t.step('Fan Out Fan In Circuit', async () => {
+  await t.step("Fan Out Fan In Circuit", async () => {
     const circuit = await ioc.Resolve<Runnable>(
-      ioc.Symbol('Circuit'),
-      'fan-out-fan-in'
+      ioc.Symbol("Circuit"),
+      "fan-out-fan-in",
     );
 
     const chunk = await circuit.invoke({ aggregate: [] });
@@ -235,13 +235,13 @@ Deno.test('Graph Branching Circuits', async (t) => {
     assertEquals(chunk.aggregate[3], `I'm D`);
   });
 
-  await t.step('Conditional Circuit', async () => {
+  await t.step("Conditional Circuit", async () => {
     const circuit = await ioc.Resolve<Runnable>(
-      ioc.Symbol('Circuit'),
-      'conditional'
+      ioc.Symbol("Circuit"),
+      "conditional",
     );
 
-    let chunk = await circuit.invoke({ aggregate: [], which: 'bc' });
+    let chunk = await circuit.invoke({ aggregate: [], which: "bc" });
 
     console.log(chunk);
 
@@ -250,7 +250,7 @@ Deno.test('Graph Branching Circuits', async (t) => {
     assertEquals(chunk.aggregate[2], `I'm C`);
     assertEquals(chunk.aggregate[3], `I'm E`);
 
-    chunk = await circuit.invoke({ aggregate: [], which: 'cd' });
+    chunk = await circuit.invoke({ aggregate: [], which: "cd" });
 
     console.log(chunk);
 
@@ -260,13 +260,13 @@ Deno.test('Graph Branching Circuits', async (t) => {
     assertEquals(chunk.aggregate[3], `I'm E`);
   });
 
-  await t.step('Stable Sorting Circuit', async () => {
+  await t.step("Stable Sorting Circuit", async () => {
     const circuit = await ioc.Resolve<Runnable>(
-      ioc.Symbol('Circuit'),
-      'stable-sorting'
+      ioc.Symbol("Circuit"),
+      "stable-sorting",
     );
 
-    let chunk = await circuit.invoke({ aggregate: [], which: 'bc' });
+    let chunk = await circuit.invoke({ aggregate: [], which: "bc" });
 
     console.log(chunk);
 
@@ -275,7 +275,7 @@ Deno.test('Graph Branching Circuits', async (t) => {
     assertEquals(chunk.aggregate[2], `I'm B`);
     assertEquals(chunk.aggregate[3], `I'm E`);
 
-    chunk = await circuit.invoke({ aggregate: [], which: 'cd' });
+    chunk = await circuit.invoke({ aggregate: [], which: "cd" });
 
     console.log(chunk);
 

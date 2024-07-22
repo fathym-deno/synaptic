@@ -1,8 +1,8 @@
-import { SupportedTextSplitterLanguage } from '../src.deps.ts';
+import { SupportedTextSplitterLanguage } from "../src.deps.ts";
 import {
   EaCTextSplitterDetails,
   isEaCTextSplitterDetails,
-} from './EaCTextSplitterDetails.ts';
+} from "./EaCTextSplitterDetails.ts";
 
 export type EaCRecursiveCharacterTextSplitterDetails = {
   ChunkOverlap?: number;
@@ -12,12 +12,12 @@ export type EaCRecursiveCharacterTextSplitterDetails = {
   FromLanguage?: SupportedTextSplitterLanguage;
 
   Separators?: string[];
-} & EaCTextSplitterDetails<'RecursiveCharacter'>;
+} & EaCTextSplitterDetails<"RecursiveCharacter">;
 
 export function isEaCRecursiveCharacterTextSplitterDetails(
-  details: unknown
+  details: unknown,
 ): details is EaCRecursiveCharacterTextSplitterDetails {
   const vsDetails = details as EaCRecursiveCharacterTextSplitterDetails;
 
-  return isEaCTextSplitterDetails('RecursiveCharacter', vsDetails);
+  return isEaCTextSplitterDetails("RecursiveCharacter", vsDetails);
 }

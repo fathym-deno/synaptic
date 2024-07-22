@@ -1,23 +1,23 @@
-import { assert, EverythingAsCodeDatabases, Runnable } from '../tests.deps.ts';
-import { buildTestIoC } from '../test-eac-setup.ts';
-import { EaCCircuitNeuron } from '../../src/eac/neurons/EaCCircuitNeuron.ts';
-import { EverythingAsCodeSynaptic } from '../../src/eac/EverythingAsCodeSynaptic.ts';
+import { assert, EverythingAsCodeDatabases, Runnable } from "../tests.deps.ts";
+import { buildTestIoC } from "../test-eac-setup.ts";
+import { EaCCircuitNeuron } from "../../src/eac/neurons/EaCCircuitNeuron.ts";
+import { EverythingAsCodeSynaptic } from "../../src/eac/EverythingAsCodeSynaptic.ts";
 
-Deno.test('Circuits', async (t) => {
+Deno.test("Circuits", async (t) => {
   const eac = {
     Circuits: {
       $neurons: {},
       $remotes: {
-        thinky: 'http://localhost:6132/circuits/',
+        thinky: "http://localhost:6132/circuits/",
       },
-      'remote-chat': {
+      "remote-chat": {
         Details: {
-          Type: 'Linear',
+          Type: "Linear",
           Priority: 100,
           Neurons: {
-            '': {
-              Type: 'Circuit',
-              CircuitLookup: 'thinky:thinky',
+            "": {
+              Type: "Circuit",
+              CircuitLookup: "thinky:thinky",
             } as EaCCircuitNeuron,
           },
         },
@@ -27,19 +27,19 @@ Deno.test('Circuits', async (t) => {
 
   const { ioc, kvCleanup } = await buildTestIoC(eac);
 
-  const sessionId = 'test';
+  const sessionId = "test";
 
-  await t.step('Remote Chat Circuit - Invoke', async () => {
+  await t.step("Remote Chat Circuit - Invoke", async () => {
     const circuit = await ioc.Resolve<Runnable>(
-      ioc.Symbol('Circuit'),
-      'remote-chat'
+      ioc.Symbol("Circuit"),
+      "remote-chat",
     );
 
     const chunk = await circuit.invoke(
       {
-        input: 'What is the weather in sf?',
+        input: "What is the weather in sf?",
       },
-      { configurable: { sessionId } }
+      { configurable: { sessionId } },
     );
 
     assert(chunk.content, JSON.stringify(chunk));

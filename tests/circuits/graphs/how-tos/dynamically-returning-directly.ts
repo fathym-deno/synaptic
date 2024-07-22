@@ -10,20 +10,20 @@ import {
   RunnableLambda,
   START,
   z,
-} from '../../../tests.deps.ts';
-import { AI_LOOKUP, buildTestIoC } from '../../../test-eac-setup.ts';
-import { EaCAzureOpenAILLMDetails } from '../../../../src/eac/EaCAzureOpenAILLMDetails.ts';
-import { EaCDynamicToolDetails } from '../../../../src/eac/tools/EaCDynamicToolDetails.ts';
-import { EaCPassthroughNeuron } from '../../../../src/eac/neurons/EaCPassthroughNeuron.ts';
-import { EaCLLMNeuron } from '../../../../src/eac/neurons/EaCLLMNeuron.ts';
-import { EaCToolExecutorNeuron } from '../../../../src/eac/neurons/EaCToolExecutorNeuron.ts';
-import { EaCNeuron } from '../../../../src/eac/EaCNeuron.ts';
-import { EaCGraphCircuitDetails } from '../../../../src/eac/EaCGraphCircuitDetails.ts';
-import { EverythingAsCodeSynaptic } from '../../../../src/eac/EverythingAsCodeSynaptic.ts';
+} from "../../../tests.deps.ts";
+import { AI_LOOKUP, buildTestIoC } from "../../../test-eac-setup.ts";
+import { EaCAzureOpenAILLMDetails } from "../../../../src/eac/EaCAzureOpenAILLMDetails.ts";
+import { EaCDynamicToolDetails } from "../../../../src/eac/tools/EaCDynamicToolDetails.ts";
+import { EaCPassthroughNeuron } from "../../../../src/eac/neurons/EaCPassthroughNeuron.ts";
+import { EaCLLMNeuron } from "../../../../src/eac/neurons/EaCLLMNeuron.ts";
+import { EaCToolExecutorNeuron } from "../../../../src/eac/neurons/EaCToolExecutorNeuron.ts";
+import { EaCNeuron } from "../../../../src/eac/EaCNeuron.ts";
+import { EaCGraphCircuitDetails } from "../../../../src/eac/EaCGraphCircuitDetails.ts";
+import { EverythingAsCodeSynaptic } from "../../../../src/eac/EverythingAsCodeSynaptic.ts";
 
 // https://github.com/langchain-ai/langgraphjs/blob/main/examples/how-tos/dynamically-returning-directly.ipynb
 
-Deno.test('Graph Dynamically Returning Directly Circuits', async (t) => {
+Deno.test("Graph Dynamically Returning Directly Circuits", async (t) => {
   const itsSunnyText =
     "It's sunny in San Francisco, but you better look out if you're a Gemini 😈.";
 
@@ -31,33 +31,33 @@ Deno.test('Graph Dynamically Returning Directly Circuits', async (t) => {
     AIs: {
       [AI_LOOKUP]: {
         LLMs: {
-          'thinky-test': {
+          "thinky-test": {
             Details: {
-              Type: 'AzureOpenAI',
-              Name: 'Azure OpenAI LLM',
-              Description: 'The LLM for interacting with Azure OpenAI.',
-              APIKey: Deno.env.get('AZURE_OPENAI_KEY')!,
-              Endpoint: Deno.env.get('AZURE_OPENAI_ENDPOINT')!,
-              DeploymentName: 'gpt-4o',
-              ModelName: 'gpt-4o',
+              Type: "AzureOpenAI",
+              Name: "Azure OpenAI LLM",
+              Description: "The LLM for interacting with Azure OpenAI.",
+              APIKey: Deno.env.get("AZURE_OPENAI_KEY")!,
+              Endpoint: Deno.env.get("AZURE_OPENAI_ENDPOINT")!,
+              DeploymentName: "gpt-4o",
+              ModelName: "gpt-4o",
               Streaming: true,
               Verbose: false,
-              ToolLookups: ['thinky|test'],
+              ToolLookups: ["thinky|test"],
             } as EaCAzureOpenAILLMDetails,
           },
         },
         Tools: {
           test: {
             Details: {
-              Type: 'Dynamic',
-              Name: 'search',
-              Description: 'Call to surf the web.',
+              Type: "Dynamic",
+              Name: "search",
+              Description: "Call to surf the web.",
               Schema: z.object({
-                query: z.string().describe('query to look up online'),
+                query: z.string().describe("query to look up online"),
                 return_direct: z
                   .boolean()
                   .describe(
-                    'Whether or not the result of this should be returned directly to the user without you seeing what it is'
+                    "Whether or not the result of this should be returned directly to the user without you seeing what it is",
                   )
                   .default(false),
               }),
@@ -72,16 +72,16 @@ Deno.test('Graph Dynamically Returning Directly Circuits', async (t) => {
     Circuits: {
       $neurons: {
         $pass: {
-          Type: 'Passthrough',
+          Type: "Passthrough",
         } as EaCPassthroughNeuron,
-        'thinky-llm': {
-          Type: 'LLM',
+        "thinky-llm": {
+          Type: "LLM",
           LLMLookup: `${AI_LOOKUP}|thinky-test`,
         } as EaCLLMNeuron,
-        'thinky-tools': {
-          Type: 'ToolExecutor',
-          ToolLookups: ['thinky|test'],
-          MessagesPath: '$.messages',
+        "thinky-tools": {
+          Type: "ToolExecutor",
+          ToolLookups: ["thinky|test"],
+          MessagesPath: "$.messages",
           Bootstrap: (r) => {
             return RunnableLambda.from(
               async (state: { messages: Array<BaseMessage> }) => {
@@ -90,14 +90,14 @@ Deno.test('Graph Dynamically Returning Directly Circuits', async (t) => {
                 return {
                   messages: response,
                 };
-              }
+              },
             );
           },
         } as EaCToolExecutorNeuron,
       },
       drd: {
         Details: {
-          Type: 'Graph',
+          Type: "Graph",
           Priority: 100,
           State: {
             messages: {
@@ -107,7 +107,7 @@ Deno.test('Graph Dynamically Returning Directly Circuits', async (t) => {
           },
           Neurons: {
             agent: [
-              'thinky-llm',
+              "thinky-llm",
               {
                 Bootstrap: (r) => {
                   return RunnableLambda.from(
@@ -117,23 +117,23 @@ Deno.test('Graph Dynamically Returning Directly Circuits', async (t) => {
                       const response = await r.invoke(messages, config);
 
                       return { messages: [response] };
-                    }
+                    },
                   );
                 },
               } as Partial<EaCNeuron>,
             ],
-            final: 'thinky-tools',
-            tools: 'thinky-tools',
+            final: "thinky-tools",
+            tools: "thinky-tools",
           },
           Edges: {
-            [START]: 'agent',
+            [START]: "agent",
             // agent: 'tools',
             // tools: END,
             agent: {
               Node: {
                 [END]: END,
-                final: 'final',
-                tools: 'tools',
+                final: "final",
+                tools: "tools",
               },
               Condition: (state: { messages: BaseMessage[] }) => {
                 const { messages } = state;
@@ -145,14 +145,14 @@ Deno.test('Graph Dynamically Returning Directly Circuits', async (t) => {
                 } else {
                   const args = JSON.parse(
                     lastMessage.additional_kwargs.tool_calls[0].function
-                      .arguments
+                      .arguments,
                   );
 
-                  return args?.return_direct ? 'final' : 'tools';
+                  return args?.return_direct ? "final" : "tools";
                 }
               },
             },
-            tools: 'agent',
+            tools: "agent",
             final: END,
           },
         } as EaCGraphCircuitDetails,
@@ -162,11 +162,11 @@ Deno.test('Graph Dynamically Returning Directly Circuits', async (t) => {
 
   const { ioc, kvCleanup } = await buildTestIoC(eac);
 
-  await t.step('Dynamically Returning Directly Circuit', async () => {
-    const circuit = await ioc.Resolve<Runnable>(ioc.Symbol('Circuit'), 'drd');
+  await t.step("Dynamically Returning Directly Circuit", async () => {
+    const circuit = await ioc.Resolve<Runnable>(ioc.Symbol("Circuit"), "drd");
 
     let chunk = await circuit.invoke({
-      messages: [new HumanMessage('what is the weather in sf?')],
+      messages: [new HumanMessage("what is the weather in sf?")],
     });
 
     assert(chunk.messages.slice(-1)[0].content, JSON.stringify(chunk));
@@ -176,7 +176,7 @@ Deno.test('Graph Dynamically Returning Directly Circuits', async (t) => {
     chunk = await circuit.invoke({
       messages: [
         new HumanMessage(
-          'what is the weather in sf? return this result directly by setting return_direct = True"'
+          'what is the weather in sf? return this result directly by setting return_direct = True"',
         ),
       ],
     });

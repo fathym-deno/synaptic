@@ -1,11 +1,11 @@
-import { SynapticNeuronResolver } from '../SynapticNeuronResolver.ts';
-import { SynapticResolverConfiguration } from '../SynapticResolverConfiguration.ts';
-import { EaCPullChatPromptNeuron } from '../../eac/neurons/EaCPullChatPromptNeuron.ts';
-import { Runnable, pull } from '../../src.deps.ts';
+import { SynapticNeuronResolver } from "../SynapticNeuronResolver.ts";
+import { SynapticResolverConfiguration } from "../SynapticResolverConfiguration.ts";
+import { EaCPullChatPromptNeuron } from "../../eac/neurons/EaCPullChatPromptNeuron.ts";
+import { pull, Runnable } from "../../src.deps.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
-  Type: 'neuron',
-  Name: 'PullChatPrompt',
+  Type: "neuron",
+  Name: "PullChatPrompt",
 };
 
 export default {

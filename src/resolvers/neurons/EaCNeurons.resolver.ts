@@ -1,11 +1,11 @@
-import { SynapticNeuronResolver } from '../SynapticNeuronResolver.ts';
-import { SynapticResolverConfiguration } from '../SynapticResolverConfiguration.ts';
-import { Runnable, RunnableLambda, RunnableMap } from '../../src.deps.ts';
-import { EaCNeuronLike } from '../../eac/EaCNeuron.ts';
+import { SynapticNeuronResolver } from "../SynapticNeuronResolver.ts";
+import { SynapticResolverConfiguration } from "../SynapticResolverConfiguration.ts";
+import { Runnable, RunnableLambda, RunnableMap } from "../../src.deps.ts";
+import { EaCNeuronLike } from "../../eac/EaCNeuron.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
-  Type: 'neuron',
-  Name: '$neurons',
+  Type: "neuron",
+  Name: "$neurons",
 };
 
 export default {
@@ -17,10 +17,10 @@ export default {
     if (neurons && neuronLookups.length > 0) {
       const neuronResolver = await ioc.Resolve<
         SynapticNeuronResolver<EaCNeuronLike>
-      >(ioc.Symbol('SynapticNeuronResolver'));
+      >(ioc.Symbol("SynapticNeuronResolver"));
 
-      if (neuronLookups.length === 1 && '' in neurons) {
-        const neuron = neurons[''];
+      if (neuronLookups.length === 1 && "" in neurons) {
+        const neuron = neurons[""];
 
         runnable = await neuronResolver.Resolve(neuron, ioc, eac);
       } else {
@@ -35,7 +35,7 @@ export default {
 
           runnables[neuronLookup] =
             (await neuronResolver.Resolve(neuron, ioc, eac)) ??
-            RunnableLambda.from(() => undefined);
+              RunnableLambda.from(() => undefined);
         }
 
         runnable = RunnableMap.from(runnables);

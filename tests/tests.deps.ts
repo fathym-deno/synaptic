@@ -1,6 +1,6 @@
 import "https://deno.land/std@0.220.1/dotenv/load.ts";
 import * as _azureSearch from "npm:@azure/search-documents";
-import * as _htmlToText from 'npm:html-to-text';
+import * as _htmlToText from "npm:html-to-text";
 import * as _parse from "npm:pdf-parse";
 
 export * from "https://deno.land/std@0.220.1/assert/mod.ts";

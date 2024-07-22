@@ -10,7 +10,7 @@ export type EaCStuffDocumentsNeuron = {
   OutputParser?: EaCNeuronLike;
 
   Prompt: EaCNeuronLike;
-} & EaCNeuron<'StuffDocuments'>;
+} & EaCNeuron<"StuffDocuments">;
 
 export function isEaCStuffDocumentsNeuron(
   details: unknown,

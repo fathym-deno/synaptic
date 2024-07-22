@@ -9,51 +9,51 @@ import {
   RunnableLambda,
   START,
   z,
-} from '../../../tests.deps.ts';
-import { AI_LOOKUP, buildTestIoC } from '../../../test-eac-setup.ts';
-import { EaCAzureOpenAILLMDetails } from '../../../../src/eac/EaCAzureOpenAILLMDetails.ts';
-import { EaCDynamicToolDetails } from '../../../../src/eac/tools/EaCDynamicToolDetails.ts';
-import { EaCPassthroughNeuron } from '../../../../src/eac/neurons/EaCPassthroughNeuron.ts';
-import { EaCLLMNeuron } from '../../../../src/eac/neurons/EaCLLMNeuron.ts';
-import { EaCToolExecutorNeuron } from '../../../../src/eac/neurons/EaCToolExecutorNeuron.ts';
-import { EaCNeuron } from '../../../../src/eac/EaCNeuron.ts';
-import { EaCGraphCircuitDetails } from '../../../../src/eac/EaCGraphCircuitDetails.ts';
-import { EverythingAsCodeSynaptic } from '../../../../src/eac/EverythingAsCodeSynaptic.ts';
+} from "../../../tests.deps.ts";
+import { AI_LOOKUP, buildTestIoC } from "../../../test-eac-setup.ts";
+import { EaCAzureOpenAILLMDetails } from "../../../../src/eac/EaCAzureOpenAILLMDetails.ts";
+import { EaCDynamicToolDetails } from "../../../../src/eac/tools/EaCDynamicToolDetails.ts";
+import { EaCPassthroughNeuron } from "../../../../src/eac/neurons/EaCPassthroughNeuron.ts";
+import { EaCLLMNeuron } from "../../../../src/eac/neurons/EaCLLMNeuron.ts";
+import { EaCToolExecutorNeuron } from "../../../../src/eac/neurons/EaCToolExecutorNeuron.ts";
+import { EaCNeuron } from "../../../../src/eac/EaCNeuron.ts";
+import { EaCGraphCircuitDetails } from "../../../../src/eac/EaCGraphCircuitDetails.ts";
+import { EverythingAsCodeSynaptic } from "../../../../src/eac/EverythingAsCodeSynaptic.ts";
 
 // https://github.com/langchain-ai/langgraphjs/blob/main/examples/how-tos/force-calling-a-tool-first.ipynb
 
-Deno.test('Graph Force Calling a Tool First Circuits', async (t) => {
+Deno.test("Graph Force Calling a Tool First Circuits", async (t) => {
   const eac = {
     AIs: {
       [AI_LOOKUP]: {
         LLMs: {
-          'thinky-test': {
+          "thinky-test": {
             Details: {
-              Type: 'AzureOpenAI',
-              Name: 'Azure OpenAI LLM',
-              Description: 'The LLM for interacting with Azure OpenAI.',
-              APIKey: Deno.env.get('AZURE_OPENAI_KEY')!,
-              Endpoint: Deno.env.get('AZURE_OPENAI_ENDPOINT')!,
-              DeploymentName: 'gpt-4o',
-              ModelName: 'gpt-4o',
+              Type: "AzureOpenAI",
+              Name: "Azure OpenAI LLM",
+              Description: "The LLM for interacting with Azure OpenAI.",
+              APIKey: Deno.env.get("AZURE_OPENAI_KEY")!,
+              Endpoint: Deno.env.get("AZURE_OPENAI_ENDPOINT")!,
+              DeploymentName: "gpt-4o",
+              ModelName: "gpt-4o",
               Streaming: true,
               Verbose: false,
-              ToolLookups: ['thinky|test'],
+              ToolLookups: ["thinky|test"],
             } as EaCAzureOpenAILLMDetails,
           },
         },
         Tools: {
           test: {
             Details: {
-              Type: 'Dynamic',
-              Name: 'search',
+              Type: "Dynamic",
+              Name: "search",
               Description:
-                'Use to surf the web, fetch current information, check the weather, and retrieve other information.',
+                "Use to surf the web, fetch current information, check the weather, and retrieve other information.",
               Schema: z.object({
-                query: z.string().describe('The query to use in your search.'),
+                query: z.string().describe("The query to use in your search."),
               }),
               Action: ({}: { query: string }) => {
-                return Promise.resolve('Cold, with a low of 13 ℃');
+                return Promise.resolve("Cold, with a low of 13 ℃");
               },
             } as EaCDynamicToolDetails,
           },
@@ -63,16 +63,16 @@ Deno.test('Graph Force Calling a Tool First Circuits', async (t) => {
     Circuits: {
       $neurons: {
         $pass: {
-          Type: 'Passthrough',
+          Type: "Passthrough",
         } as EaCPassthroughNeuron,
-        'thinky-llm': {
-          Type: 'LLM',
+        "thinky-llm": {
+          Type: "LLM",
           LLMLookup: `${AI_LOOKUP}|thinky-test`,
         } as EaCLLMNeuron,
-        'thinky-tools': {
-          Type: 'ToolExecutor',
-          ToolLookups: ['thinky|test'],
-          MessagesPath: '$.messages',
+        "thinky-tools": {
+          Type: "ToolExecutor",
+          ToolLookups: ["thinky|test"],
+          MessagesPath: "$.messages",
           Bootstrap: (r) => {
             return RunnableLambda.from(
               async (state: { messages: Array<BaseMessage> }) => {
@@ -81,14 +81,14 @@ Deno.test('Graph Force Calling a Tool First Circuits', async (t) => {
                 return {
                   messages: response,
                 };
-              }
+              },
             );
           },
         } as EaCToolExecutorNeuron,
       },
-      'tool-first': {
+      "tool-first": {
         Details: {
-          Type: 'Graph',
+          Type: "Graph",
           Priority: 100,
           State: {
             messages: {
@@ -98,7 +98,7 @@ Deno.test('Graph Force Calling a Tool First Circuits', async (t) => {
           },
           Neurons: {
             agent: [
-              'thinky-llm',
+              "thinky-llm",
               {
                 Bootstrap: (r) => {
                   return RunnableLambda.from(
@@ -108,7 +108,7 @@ Deno.test('Graph Force Calling a Tool First Circuits', async (t) => {
                       const response = await r.invoke(messages, config);
 
                       return { messages: [response] };
-                    }
+                    },
                   );
                 },
               } as Partial<EaCNeuron>,
@@ -118,19 +118,19 @@ Deno.test('Graph Force Calling a Tool First Circuits', async (t) => {
                 return RunnableLambda.from(
                   (state: { messages: BaseMessage[] }) => {
                     const humanInput =
-                      state.messages[state.messages.length - 1].content || '';
+                      state.messages[state.messages.length - 1].content || "";
 
                     return {
                       messages: [
                         new AIMessage({
-                          content: '',
+                          content: "",
                           additional_kwargs: {
                             tool_calls: [
                               {
-                                id: 'tool_abcd123',
-                                type: 'function',
+                                id: "tool_abcd123",
+                                type: "function",
                                 function: {
-                                  name: 'search',
+                                  name: "search",
                                   arguments: JSON.stringify({
                                     query: humanInput,
                                   }),
@@ -141,20 +141,20 @@ Deno.test('Graph Force Calling a Tool First Circuits', async (t) => {
                         }),
                       ],
                     };
-                  }
+                  },
                 );
               },
             } as Partial<EaCNeuron>,
-            action: 'thinky-tools',
+            action: "thinky-tools",
           },
           Edges: {
-            [START]: 'first_agent',
-            first_agent: 'action',
-            action: 'agent',
+            [START]: "first_agent",
+            first_agent: "action",
+            action: "agent",
             agent: {
               Node: {
                 [END]: END,
-                continue: 'action',
+                continue: "action",
               },
               Condition: (state: { messages: BaseMessage[] }) => {
                 const { messages } = state;
@@ -165,7 +165,7 @@ Deno.test('Graph Force Calling a Tool First Circuits', async (t) => {
                   return END;
                 }
 
-                return 'continue';
+                return "continue";
               },
             },
           },
@@ -176,14 +176,14 @@ Deno.test('Graph Force Calling a Tool First Circuits', async (t) => {
 
   const { ioc, kvCleanup } = await buildTestIoC(eac);
 
-  await t.step('Force Calling a Tool First Circuit', async () => {
+  await t.step("Force Calling a Tool First Circuit", async () => {
     const circuit = await ioc.Resolve<Runnable>(
-      ioc.Symbol('Circuit'),
-      'tool-first'
+      ioc.Symbol("Circuit"),
+      "tool-first",
     );
 
     const chunk = await circuit.invoke({
-      messages: [new HumanMessage('what is the weather in sf?')],
+      messages: [new HumanMessage("what is the weather in sf?")],
     });
 
     assert(chunk.messages.slice(-1)[0].content, JSON.stringify(chunk));

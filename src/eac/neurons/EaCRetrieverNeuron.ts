@@ -1,17 +1,17 @@
-import { EaCNeuron, isEaCNeuron } from '../EaCNeuron.ts';
+import { EaCNeuron, isEaCNeuron } from "../EaCNeuron.ts";
 
 export type EaCRetrieverNeuron = {
   RetrieverLookup: string;
-} & EaCNeuron<'Retriever'>;
+} & EaCNeuron<"Retriever">;
 
 export function isEaCRetrieverNeuron(
-  details: unknown
+  details: unknown,
 ): details is EaCRetrieverNeuron {
   const x = details as EaCRetrieverNeuron;
 
   return (
-    isEaCNeuron('Retriever', x) &&
+    isEaCNeuron("Retriever", x) &&
     x.RetrieverLookup !== undefined &&
-    typeof x.RetrieverLookup === 'string'
+    typeof x.RetrieverLookup === "string"
   );
 }
