@@ -12,7 +12,7 @@ export type EaCAzureSearchAIVectorStoreDetails = {
   IndexName?: string;
 
   QueryType: AzureAISearchQueryType;
-} & EaCVectorStoreDetails<'AzureSearchAI'>;
+} & EaCVectorStoreDetails<"AzureSearchAI">;
 
 export function isEaCAzureSearchAIVectorStoreDetails(
   details: unknown,

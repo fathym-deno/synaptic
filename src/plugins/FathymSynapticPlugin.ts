@@ -768,7 +768,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
           const embeddings = await ioc.Resolve<Embeddings>(
             ioc.Symbol(Embeddings.name),
-            vectorStore.Details!.EmbeddingsLookup
+            vectorStore.Details!.EmbeddingsLookup,
           );
 
           if (isEaCAzureSearchAIVectorStoreDetails(vectorStore.Details)) {
