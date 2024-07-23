@@ -68,6 +68,13 @@ export default {
         runnable = runnable ? runnable.pipe(synapses) : synapses;
       }
 
+      if (neuron.Bootstrap) {
+        runnable = await neuron.Bootstrap(
+          runnable ?? new RunnablePassthrough(),
+          neuron,
+        );
+      }
+
       if (neuron.BootstrapInput) {
         const bsInput = RunnableLambda.from(async (s, cfg) => {
           return await (neuron as EaCNeuron).BootstrapInput!(
@@ -78,13 +85,6 @@ export default {
         });
 
         runnable = runnable ? bsInput.pipe(runnable) : bsInput;
-      }
-
-      if (neuron.Bootstrap) {
-        runnable = await neuron.Bootstrap(
-          runnable ?? new RunnablePassthrough(),
-          neuron,
-        );
       }
 
       if (neuron.BootstrapOutput) {
