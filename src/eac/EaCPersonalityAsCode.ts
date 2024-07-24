@@ -5,7 +5,7 @@ import {
 } from "./EaCPersonalityDetails.ts";
 
 export type EaCPersonalityAsCode = {
-  Personalities?: string[];
+  PersonalityLookups?: string[];
 } & EaCDetails<EaCPersonalityDetails>;
 
 export function isEaCPersonalityAsCode(

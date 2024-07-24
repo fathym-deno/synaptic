@@ -540,7 +540,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
         let details = personality.Details!;
 
-        details = [...(personality.Personalities || [])]
+        details = [...(personality.PersonalityLookups || [])]
           .reverse()
           .reduce((acc, next) => {
             const nextPersonality = ai.Personalities![next];
