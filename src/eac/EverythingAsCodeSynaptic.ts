@@ -1,14 +1,14 @@
 import { EverythingAsCodeDFS } from "../src.deps.ts";
 import { EaCAIAsCode } from "./EaCAIAsCode.ts";
 import { EaCCircuitAsCode } from "./EaCCircuitAsCode.ts";
-import { EaCNeuron } from "./EaCNeuron.ts";
+import { EaCNeuronLike } from './EaCNeuron.ts';
 
 export type EverythingAsCodeSynaptic = {
   AIs?: Record<string, EaCAIAsCode>;
 
   Circuits?: Record<string, EaCCircuitAsCode> & {
     $handlers?: Array<string>;
-    $neurons?: Record<string, EaCNeuron>;
+    $neurons?: Record<string, EaCNeuronLike>;
     $remotes?: Record<string, string>;
   };
 } & EverythingAsCodeDFS;
