@@ -25,10 +25,10 @@ export default {
       : {};
 
     personality = mergeWithArrays(personality, {
-      SystemMessages: [neuron.SystemMessage],
-      Instructions: neuron.Instructions,
-      Messages: neuron.Messages,
-      NewMessages: neuron.NewMessages,
+      SystemMessages: neuron.SystemMessage ? [neuron.SystemMessage] : [],
+      Instructions: neuron.Instructions ?? [],
+      Messages: neuron.Messages ?? [],
+      NewMessages: neuron.NewMessages ?? [],
     } as EaCPersonalityDetails);
 
     if (
