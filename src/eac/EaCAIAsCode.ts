@@ -6,6 +6,7 @@ import { EaCEmbeddingsAsCode } from "./EaCEmbeddingsAsCode.ts";
 import { EaCIndexerAsCode } from "./EaCIndexerAsCode.ts";
 import { EaCLLMAsCode } from "./EaCLLMAsCode.ts";
 import { EaCPersistenceAsCode } from "./EaCPersistenceAsCode.ts";
+import { EaCPersonalityAsCode } from "./EaCPersonalityAsCode.ts";
 import { EaCRetrieverAsCode } from "./EaCRetrieverAsCode.ts";
 import { EaCTextSplitterAsCode } from "./EaCTextSplitterAsCode.ts";
 import { EaCToolAsCode } from "./EaCToolAsCode.ts";
@@ -23,6 +24,8 @@ export type EaCAIAsCode = {
   Loaders?: Record<string, EaCDocumentLoaderAsCode>;
 
   Persistence?: Record<string, EaCPersistenceAsCode>;
+
+  Personalities?: Record<string, EaCPersonalityAsCode>;
 
   Retrievers?: Record<string, EaCRetrieverAsCode>;
 

@@ -26,6 +26,7 @@ import {
   jsonSchemaToZod,
   MemorySaver,
   MemoryVectorStore,
+  mergeWithArrays,
   RecordManagerInterface,
   RecursiveCharacterTextSplitter,
   RemoteRunnable,
@@ -523,6 +524,39 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     });
   }
 
+  protected configureEaCPersonalities(
+    eac: EverythingAsCodeSynaptic,
+    ioc: IoCContainer,
+  ): void {
+    const aiLookups = Object.keys(eac!.AIs || {});
+
+    aiLookups.forEach((aiLookup) => {
+      const ai = eac!.AIs![aiLookup];
+
+      const personalityLookups = Object.keys(ai.Personalities || {});
+
+      personalityLookups.forEach((personalityLookup) => {
+        const personality = ai.Personalities![personalityLookup];
+
+        let details = personality.Details!;
+
+        details = [...(personality.Personalities || [])]
+          .reverse()
+          .reduce((acc, next) => {
+            const nextPersonality = ai.Personalities![next];
+
+            return mergeWithArrays(nextPersonality.Details!, acc);
+          }, details);
+
+        ioc.Register(() => details, {
+          Lazy: false,
+          Name: `${aiLookup}|${personalityLookup}`,
+          Type: ioc.Symbol("Personality"),
+        });
+      });
+    });
+  }
+
   protected async configureEaCRetrievers(
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer,
@@ -863,6 +897,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer,
   ): Promise<void> {
+    this.configureEaCPersonalities(eac, ioc);
+
     this.configureEaCTools(eac, ioc);
 
     this.configureEaCLLMs(eac, ioc);
