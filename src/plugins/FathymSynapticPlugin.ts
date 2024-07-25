@@ -225,7 +225,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             },
             {
               Lazy: false,
-              Name: `${remoteLookup}:${circuitLookup}`,
+              Name: `${remoteLookup}|${circuitLookup}`,
               Type: ioc.Symbol('Circuit'),
             }
           );
