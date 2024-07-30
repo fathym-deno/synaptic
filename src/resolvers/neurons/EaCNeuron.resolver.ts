@@ -41,6 +41,12 @@ export async function resolveEaCNeuronFromLike(
 
       neuron = await resolveEaCNeuronFromLike(neuronLike, ioc, eac);
 
+      if (!neuron) {
+        throw new Deno.errors.NotFound(
+          `Unable to locate neuron '${neoronLookup}' to extend.`
+        );
+      }
+
       const bootstraps = {
         BootstrapInput: neuron?.BootstrapInput,
         BootstrapOutput: neuron?.BootstrapOutput,
