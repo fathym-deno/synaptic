@@ -12,6 +12,7 @@ export { toText } from "https://deno.land/std@0.220.1/streams/mod.ts";
 
 export * from "https://deno.land/x/fathym_common@v0.0.185/mod.ts";
 export * from "https://deno.land/x/fathym_everything_as_code@v0.0.415/mod.ts";
+export * from 'https://deno.land/x/fathym_everything_as_code_api@v0.0.44/mod.ts';
 // export * from "../../eac-runtime/mod.ts";
 export * from "https://deno.land/x/fathym_eac_runtime@v0.0.275/mod.ts";
 export * from "https://deno.land/x/fathym_ioc@v0.0.10/mod.ts";
