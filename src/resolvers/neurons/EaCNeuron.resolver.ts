@@ -54,9 +54,11 @@ export async function resolveEaCNeuronFromLike(
       };
 
       if (neuronOverride.BootstrapInput) {
-        bootstraps.BootstrapInput = bootstraps.BootstrapInput
+        const boot = bootstraps.BootstrapInput;
+
+        bootstraps.BootstrapInput = boot
           ? async (input, neuron, cfg) => {
-              input = await bootstraps.BootstrapInput!(input, neuron, cfg);
+              input = await boot(input, neuron, cfg);
 
               return await neuronOverride.BootstrapInput!(input, neuron, cfg);
             }
@@ -64,9 +66,11 @@ export async function resolveEaCNeuronFromLike(
       }
 
       if (neuronOverride.BootstrapOutput) {
-        bootstraps.BootstrapOutput = bootstraps.BootstrapOutput
+        const boot = bootstraps.BootstrapOutput;
+
+        bootstraps.BootstrapOutput = boot
           ? async (input, neuron, cfg) => {
-              input = await bootstraps.BootstrapOutput!(input, neuron, cfg);
+              input = await boot(input, neuron, cfg);
 
               return await neuronOverride.BootstrapOutput!(input, neuron, cfg);
             }
@@ -74,9 +78,11 @@ export async function resolveEaCNeuronFromLike(
       }
 
       if (neuronOverride.Bootstrap) {
-        bootstraps.Bootstrap = bootstraps.Bootstrap
+        const boot = bootstraps.Bootstrap;
+
+        bootstraps.Bootstrap = boot
           ? async (input, cfg) => {
-              input = await bootstraps.Bootstrap!(input, cfg);
+              input = await boot(input, cfg);
 
               return await neuronOverride.Bootstrap!(input, cfg);
             }
