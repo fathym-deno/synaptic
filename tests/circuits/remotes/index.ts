@@ -6,7 +6,6 @@ import {
 import { buildTestIoC } from '../../test-eac-setup.ts';
 import { EaCCircuitNeuron } from '../../../src/eac/neurons/EaCCircuitNeuron.ts';
 import { EverythingAsCodeSynaptic } from '../../../src/eac/EverythingAsCodeSynaptic.ts';
-import FathymSynapticPlugin from '../../../src/plugins/FathymSynapticPlugin.ts';
 
 Deno.test('Circuits', async (t) => {
   const eac = {
