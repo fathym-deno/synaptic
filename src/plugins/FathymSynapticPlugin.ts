@@ -211,7 +211,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               string,
               Record<string, RemoteCircuitDefinition> | undefined
             ];
-          } catch (ex) {
+          } catch (_ex) {
             return [remoteLookup, undefined] as [
               string,
               Record<string, RemoteCircuitDefinition> | undefined

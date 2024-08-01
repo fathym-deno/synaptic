@@ -8,7 +8,7 @@ import { buildTestIoC } from '../../test-eac-setup.ts';
 import { EaCCircuitNeuron } from '../../../src/eac/neurons/EaCCircuitNeuron.ts';
 import { EverythingAsCodeSynaptic } from '../../../src/eac/EverythingAsCodeSynaptic.ts';
 import { RemoteRunnable } from 'npm:@langchain/core/runnables/remote';
-import { RunnableConfig, RunnableLambda } from '../../../src/src.deps.ts';
+import { RunnableConfig } from '../../../src/src.deps.ts';
 import { IterableReadableStream } from 'npm:@langchain/core/utils/stream';
 import { LogStreamCallbackHandlerInput } from 'npm:@langchain/core';
 import { StreamEvent } from 'npm:@langchain/core';
@@ -114,17 +114,17 @@ Deno.test('Circuits', async (t) => {
   // });
 
   await t.step('Test Thinky EaC Wait For Status - Stream Events', async () => {
-    // const circuit = await ioc.Resolve<Runnable>(
-    //   ioc.Symbol('Circuit'),
-    //   'wait-for-status'
-    // );
+    const circuit = await ioc.Resolve<Runnable>(
+      ioc.Symbol('Circuit'),
+      'wait-for-status'
+    );
 
-    const circuit = new SynapticRemoteRunnableRemoteRunnable({
-      url: new URL(
-        'FathymEaCStatus2Plugin|wait-for-status',
-        'http://localhost:6152/circuits/'
-      ).href,
-    });
+    // const circuit = new SynapticRemoteRunnableRemoteRunnable({
+    //   url: new URL(
+    //     'FathymEaCStatus2Plugin|wait-for-status',
+    //     'http://localhost:6152/circuits/'
+    //   ).href,
+    // });
 
     const events = await circuit
       // .pipe(
