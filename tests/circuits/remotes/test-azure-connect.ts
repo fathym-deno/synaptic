@@ -12,27 +12,28 @@ import { RunnableConfig } from '../../../src/src.deps.ts';
 import { IterableReadableStream } from 'npm:@langchain/core/utils/stream';
 import { LogStreamCallbackHandlerInput } from 'npm:@langchain/core';
 import { StreamEvent } from 'npm:@langchain/core';
+import { Runnable } from 'npm:@langchain/core/runnables';
 
-class SynapticRemoteRunnableRemoteRunnable<
-  RunInput,
-  RunOutput,
-  CallOptions extends RunnableConfig
-> extends RemoteRunnable<RunInput, RunOutput, CallOptions> {
-  // @ts-ignore Forcing this to try and fix
-  stream = (
-    input: RunInput,
-    options: Partial<CallOptions> & {
-      version: 'v1' | 'v2';
-    },
-    streamOptions?: Omit<LogStreamCallbackHandlerInput, 'autoClose'>
-  ): IterableReadableStream<StreamEvent> => {
-    if (!options.version) {
-      options.version = 'v2';
-    }
+// class SynapticRemoteRunnableRemoteRunnable<
+//   RunInput,
+//   RunOutput,
+//   CallOptions extends RunnableConfig
+// > extends RemoteRunnable<RunInput, RunOutput, CallOptions> {
+//   // @ts-ignore Forcing this to try and fix
+//   stream = (
+//     input: RunInput,
+//     options: Partial<CallOptions> & {
+//       version: 'v1' | 'v2';
+//     },
+//     streamOptions?: Omit<LogStreamCallbackHandlerInput, 'autoClose'>
+//   ): IterableReadableStream<StreamEvent> => {
+//     if (!options.version) {
+//       options.version = 'v2';
+//     }
 
-    return this.streamEvents(input, options, streamOptions);
-  };
-}
+//     return this.streamEvents(input, options, streamOptions);
+//   };
+// }
 
 Deno.test('Circuits', async (t) => {
   const eac = {
