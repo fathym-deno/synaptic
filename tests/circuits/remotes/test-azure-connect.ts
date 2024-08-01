@@ -7,11 +7,6 @@ import {
 import { buildTestIoC } from '../../test-eac-setup.ts';
 import { EaCCircuitNeuron } from '../../../src/eac/neurons/EaCCircuitNeuron.ts';
 import { EverythingAsCodeSynaptic } from '../../../src/eac/EverythingAsCodeSynaptic.ts';
-import { RemoteRunnable } from 'npm:@langchain/core/runnables/remote';
-import { RunnableConfig } from '../../../src/src.deps.ts';
-import { IterableReadableStream } from 'npm:@langchain/core/utils/stream';
-import { LogStreamCallbackHandlerInput } from 'npm:@langchain/core';
-import { StreamEvent } from 'npm:@langchain/core';
 import { Runnable } from 'npm:@langchain/core/runnables';
 
 // class SynapticRemoteRunnableRemoteRunnable<
