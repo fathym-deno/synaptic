@@ -201,19 +201,30 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
         remoteLookups.map(async (remoteLookup) => {
           const remoteCircuitUrl = $remotes[remoteLookup];
 
-          const circuitDefsResp = await fetch(remoteCircuitUrl);
+          try {
+            const circuitDefsResp = await fetch(remoteCircuitUrl);
 
-          const circuitDefs: Record<string, RemoteCircuitDefinition> =
-            await circuitDefsResp.json();
+            const circuitDefs: Record<string, RemoteCircuitDefinition> =
+              await circuitDefsResp.json();
 
-          return [remoteLookup, circuitDefs] as [
-            string,
-            Record<string, RemoteCircuitDefinition>
-          ];
+            return [remoteLookup, circuitDefs] as [
+              string,
+              Record<string, RemoteCircuitDefinition> | undefined
+            ];
+          } catch (ex) {
+            return [remoteLookup, undefined] as [
+              string,
+              Record<string, RemoteCircuitDefinition> | undefined
+            ];
+          }
         })
       );
 
       remoteCircuitDefs.forEach(([remoteLookup, circuitDefs]) => {
+        if (!circuitDefs) {
+          return;
+        }
+
         const remoteCircuitUrl = $remotes[remoteLookup];
 
         Object.keys(circuitDefs).forEach((circuitLookup) => {

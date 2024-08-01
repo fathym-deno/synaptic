@@ -158,11 +158,14 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
 
                 // https://github.com/langchain-ai/langserve/blob/main/langserve/api_handler.py#L1026
 
-                if (action === "stream") {
-                  const streamed = await circuit.Runnable.stream(input, config);
-
+                if (action === 'stream') {
                   const body = new ReadableStream({
                     async start(controller) {
+                      const streamed = await circuit.Runnable.stream(
+                        input,
+                        config
+                      );
+
                       const hasSentMetadata = false;
 
                       for await (const event of streamed) {
@@ -172,7 +175,7 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
 
                         controller.enqueue({
                           id: Date.now(),
-                          event: "data",
+                          event: 'data',
                           data: customStringify(event),
                         } as ServerSentEventMessage);
 
@@ -181,7 +184,7 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
 
                       controller.enqueue({
                         id: Date.now(),
-                        event: "end",
+                        event: 'end',
                       } as ServerSentEventMessage);
 
                       controller.close();
@@ -195,26 +198,28 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
                     body.pipeThrough(new ServerSentEventStream()),
                     {
                       headers: {
-                        "Content-Type": "text/event-stream",
-                        "Cache-Control": "no-cache",
+                        'Content-Type': 'text/event-stream',
+                        'Cache-Control': 'no-cache',
                       },
-                    },
+                    }
                   );
-                } else if (action === "stream_events") {
+                } else if (action === 'stream_events') {
                   const body = new ReadableStream({
                     async start(controller) {
+                      debugger;
+
                       const streamed = await circuit.Runnable.streamEvents(
                         input,
                         {
                           ...config,
-                          version: config.version || "v2",
-                        },
+                          version: config.version || 'v2',
+                        }
                       );
 
                       for await (const event of streamed) {
                         controller.enqueue({
                           id: Date.now(),
-                          event: "data",
+                          event: 'data',
                           data: customStringify(event),
                         } as ServerSentEventMessage);
 
@@ -223,7 +228,7 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
 
                       controller.enqueue({
                         id: Date.now(),
-                        event: "end",
+                        event: 'end',
                       } as ServerSentEventMessage);
 
                       controller.close();
@@ -237,15 +242,15 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
                     body.pipeThrough(new ServerSentEventStream()),
                     {
                       headers: {
-                        "Content-Type": "text/event-stream",
-                        "Cache-Control": "no-cache",
+                        'Content-Type': 'text/event-stream',
+                        'Cache-Control': 'no-cache',
                       },
-                    },
+                    }
                   );
-                } else if (action === "stream_log") {
+                } else if (action === 'stream_log') {
                   const streamed = await circuit.Runnable.streamLog(
                     input,
-                    config,
+                    config
                   );
 
                   const body = new ReadableStream({
@@ -253,7 +258,7 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
                       for await (const event of streamed) {
                         controller.enqueue({
                           id: Date.now(),
-                          event: "data",
+                          event: 'data',
                           data: customStringify(event),
                         } as ServerSentEventMessage);
 
@@ -271,10 +276,10 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
                     body.pipeThrough(new ServerSentEventStream()),
                     {
                       headers: {
-                        "Content-Type": "text/event-stream",
-                        "Cache-Control": "no-cache",
+                        'Content-Type': 'text/event-stream',
+                        'Cache-Control': 'no-cache',
                       },
-                    },
+                    }
                   );
                 } else {
                   const res = await circuit.Runnable.invoke(input, config);

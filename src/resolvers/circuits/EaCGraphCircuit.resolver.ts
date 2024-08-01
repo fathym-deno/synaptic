@@ -9,7 +9,7 @@ import {
   RunnableLike,
   StateGraph,
   StateGraphArgs,
-} from "../../src.deps.ts";
+} from '../../src.deps.ts';
 import { EaCNeuron, EaCNeuronLike } from "../../eac/EaCNeuron.ts";
 import {
   EaCGraphCircuitDetails,
