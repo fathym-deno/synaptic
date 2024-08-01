@@ -1,7 +1,7 @@
 import { EverythingAsCodeDFS } from "../src.deps.ts";
 import { EaCAIAsCode } from "./EaCAIAsCode.ts";
 import { EaCCircuitAsCode } from "./EaCCircuitAsCode.ts";
-import { EaCNeuronLike } from './EaCNeuron.ts';
+import { EaCNeuronLike } from "./EaCNeuron.ts";
 
 export type EverythingAsCodeSynaptic = {
   AIs?: Record<string, EaCAIAsCode>;

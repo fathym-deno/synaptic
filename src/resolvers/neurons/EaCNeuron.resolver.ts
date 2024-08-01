@@ -1,35 +1,35 @@
-import { SynapticNeuronResolver } from '../SynapticNeuronResolver.ts';
-import { SynapticResolverConfiguration } from '../SynapticResolverConfiguration.ts';
+import { SynapticNeuronResolver } from "../SynapticNeuronResolver.ts";
+import { SynapticResolverConfiguration } from "../SynapticResolverConfiguration.ts";
 import {
   IoCContainer,
   merge,
   Runnable,
   RunnableLambda,
   RunnablePassthrough,
-} from '../../src.deps.ts';
-import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from '../../eac/EaCNeuron.ts';
-import { EverythingAsCodeSynaptic } from '../../eac/EverythingAsCodeSynaptic.ts';
+} from "../../src.deps.ts";
+import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from "../../eac/EaCNeuron.ts";
+import { EverythingAsCodeSynaptic } from "../../eac/EverythingAsCodeSynaptic.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
-  Type: 'neuron',
+  Type: "neuron",
 };
 
 export async function resolveEaCNeuronFromLike(
   neuronLike: EaCNeuronLike,
   ioc: IoCContainer,
-  eac: EverythingAsCodeSynaptic
+  eac: EverythingAsCodeSynaptic,
 ): Promise<EaCNeuron | undefined> {
   let neuron: EaCNeuron | undefined;
 
   if (neuronLike) {
-    if (typeof neuronLike === 'string') {
+    if (typeof neuronLike === "string") {
       const lookup = neuronLike;
 
       neuronLike = eac.Circuits!.$neurons![lookup];
 
       if (!neuronLike) {
         throw new Deno.errors.NotFound(
-          `Unable to locate a neuron '${lookup}' in the $neurons bank.`
+          `Unable to locate a neuron '${lookup}' in the $neurons bank.`,
         );
       }
 
@@ -43,7 +43,7 @@ export async function resolveEaCNeuronFromLike(
 
       if (!neuron) {
         throw new Deno.errors.NotFound(
-          `Unable to locate neuron '${neoronLookup}' to extend.`
+          `Unable to locate neuron '${neoronLookup}' to extend.`,
         );
       }
 
@@ -58,10 +58,10 @@ export async function resolveEaCNeuronFromLike(
 
         bootstraps.BootstrapInput = boot
           ? async (input, neuron, cfg) => {
-              input = await boot(input, neuron, cfg);
+            input = await boot(input, neuron, cfg);
 
-              return await neuronOverride.BootstrapInput!(input, neuron, cfg);
-            }
+            return await neuronOverride.BootstrapInput!(input, neuron, cfg);
+          }
           : neuronOverride.BootstrapInput;
       }
 
@@ -70,10 +70,10 @@ export async function resolveEaCNeuronFromLike(
 
         bootstraps.BootstrapOutput = boot
           ? async (input, neuron, cfg) => {
-              input = await boot(input, neuron, cfg);
+            input = await boot(input, neuron, cfg);
 
-              return await neuronOverride.BootstrapOutput!(input, neuron, cfg);
-            }
+            return await neuronOverride.BootstrapOutput!(input, neuron, cfg);
+          }
           : neuronOverride.BootstrapOutput;
       }
 
@@ -82,10 +82,10 @@ export async function resolveEaCNeuronFromLike(
 
         bootstraps.Bootstrap = boot
           ? async (input, cfg) => {
-              input = await boot(input, cfg);
+            input = await boot(input, cfg);
 
-              return await neuronOverride.Bootstrap!(input, cfg);
-            }
+            return await neuronOverride.Bootstrap!(input, cfg);
+          }
           : neuronOverride.Bootstrap;
       }
 
@@ -110,11 +110,11 @@ export default {
     if (isEaCNeuron(undefined, neuron)) {
       const neuronResolver = await ioc.Resolve<
         SynapticNeuronResolver<typeof neuron>
-      >(ioc.Symbol('SynapticNeuronResolver'), neuron.Type as string);
+      >(ioc.Symbol("SynapticNeuronResolver"), neuron.Type as string);
 
       const neuronsResolver = await ioc.Resolve<
         SynapticNeuronResolver<Record<string, EaCNeuronLike> | undefined>
-      >(ioc.Symbol('SynapticNeuronResolver'), '$neurons');
+      >(ioc.Symbol("SynapticNeuronResolver"), "$neurons");
 
       runnable = neuron.Type
         ? await neuronResolver.Resolve(neuron, ioc, eac)
@@ -135,7 +135,7 @@ export default {
       if (neuron.Bootstrap) {
         runnable = await neuron.Bootstrap(
           runnable ?? new RunnablePassthrough(),
-          neuron
+          neuron,
         );
       }
 
@@ -144,7 +144,7 @@ export default {
           return await (neuron as EaCNeuron).BootstrapInput!(
             s,
             neuron as EaCNeuron,
-            cfg
+            cfg,
           );
         });
 
@@ -156,7 +156,7 @@ export default {
           return await (neuron as EaCNeuron).BootstrapOutput!(
             s,
             neuron as EaCNeuron,
-            cfg
+            cfg,
           );
         });
 

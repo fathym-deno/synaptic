@@ -3,11 +3,11 @@ import {
   EaCStatus,
   EaCStatusProcessingTypes,
   EverythingAsCodeDatabases,
-} from '../../tests.deps.ts';
-import { buildTestIoC } from '../../test-eac-setup.ts';
-import { EaCCircuitNeuron } from '../../../src/eac/neurons/EaCCircuitNeuron.ts';
-import { EverythingAsCodeSynaptic } from '../../../src/eac/EverythingAsCodeSynaptic.ts';
-import { Runnable } from 'npm:@langchain/core/runnables';
+  Runnable,
+} from "../../tests.deps.ts";
+import { buildTestIoC } from "../../test-eac-setup.ts";
+import { EaCCircuitNeuron } from "../../../src/eac/neurons/EaCCircuitNeuron.ts";
+import { EverythingAsCodeSynaptic } from "../../../src/eac/EverythingAsCodeSynaptic.ts";
 
 // class SynapticRemoteRunnableRemoteRunnable<
 //   RunInput,
@@ -30,51 +30,51 @@ import { Runnable } from 'npm:@langchain/core/runnables';
 //   };
 // }
 
-Deno.test('Circuits', async (t) => {
+Deno.test("Circuits", async (t) => {
   const eac = {
     Circuits: {
       $neurons: {},
       $remotes: {
-        'fathym|azure': 'http://localhost:6151/all-circuits/',
-        'thinky|eac|utils': 'http://localhost:6152/circuits/',
+        "fathym|azure": "http://localhost:6151/all-circuits/",
+        "thinky|eac|utils": "http://localhost:6152/circuits/",
       },
-      'remote-chat': {
+      "remote-chat": {
         Details: {
-          Type: 'Linear',
+          Type: "Linear",
           Neurons: {
-            '': {
-              Type: 'Circuit',
-              CircuitLookup: 'fathym|azure|test',
+            "": {
+              Type: "Circuit",
+              CircuitLookup: "fathym|azure|test",
               BootstrapInput() {
                 return {
-                  Input: 'Hello, tell me a story',
+                  Input: "Hello, tell me a story",
                 };
               },
             } as EaCCircuitNeuron,
           },
         },
       },
-      'azure-connect': {
+      "azure-connect": {
         Details: {
-          Type: 'Linear',
+          Type: "Linear",
           Priority: 100,
           Neurons: {
-            '': {
-              Type: 'Circuit',
+            "": {
+              Type: "Circuit",
               CircuitLookup:
-                'fathym|azure|AzureConnect2Plugin|cloud|azure-connect',
+                "fathym|azure|AzureConnect2Plugin|cloud|azure-connect",
             } as EaCCircuitNeuron,
           },
         },
       },
-      'wait-for-status': {
+      "wait-for-status": {
         Details: {
-          Type: 'Linear',
+          Type: "Linear",
           Neurons: {
-            '': {
-              Type: 'Circuit',
+            "": {
+              Type: "Circuit",
               CircuitLookup:
-                'thinky|eac|utils|FathymEaCStatus2Plugin|wait-for-status',
+                "thinky|eac|utils|FathymEaCStatus2Plugin|wait-for-status",
               BootstrapInput(s) {
                 return s;
               },
@@ -109,10 +109,10 @@ Deno.test('Circuits', async (t) => {
   //   console.log(chunk.Messages.slice(-1)[0].content);
   // });
 
-  await t.step('Test Thinky EaC Wait For Status - Stream Events', async () => {
+  await t.step("Test Thinky EaC Wait For Status - Stream Events", async () => {
     const circuit = await ioc.Resolve<Runnable>(
-      ioc.Symbol('Circuit'),
-      'wait-for-status'
+      ioc.Symbol("Circuit"),
+      "wait-for-status",
     );
 
     // const circuit = new SynapticRemoteRunnableRemoteRunnable({
@@ -135,11 +135,11 @@ Deno.test('Circuits', async (t) => {
             ID: crypto.randomUUID(),
             Processing: EaCStatusProcessingTypes.QUEUED,
             StartTime: new Date(),
-            Username: 'random-test@fathym.com',
+            Username: "random-test@fathym.com",
           } as EaCStatus,
-          Operation: 'Testing Thinky Wait for Status',
+          Operation: "Testing Thinky Wait for Status",
         },
-        { version: 'v2' }
+        { version: "v2" },
       );
 
     assert(events);
@@ -151,7 +151,7 @@ Deno.test('Circuits', async (t) => {
 
       // console.log(event.event);
 
-      if (event.event === 'on_chat_model_stream') {
+      if (event.event === "on_chat_model_stream") {
         console.log(event.data.chunk.content);
       }
     }
