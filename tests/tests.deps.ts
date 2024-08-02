@@ -20,22 +20,25 @@ export * from "https://deno.land/x/fathym_ioc@v0.0.10/mod.ts";
 export { z } from "npm:zod";
 export { zodToJsonSchema } from "npm:zod-to-json-schema";
 
-export { AzureAISearchQueryType } from "npm:@langchain/community/vectorstores/azure_aisearch";
-export { type AgentAction } from "npm:@langchain/core/agents";
-export { BaseListChatMessageHistory } from "npm:@langchain/core/chat_history";
-export { BaseLanguageModel } from "npm:@langchain/core/language_models/base";
+export { AzureAISearchQueryType } from 'npm:@langchain/community@0.2.22/vectorstores/azure_aisearch';
+export { type AgentAction } from 'npm:@langchain/core@0.2.19/agents';
+export { BaseListChatMessageHistory } from 'npm:@langchain/core@0.2.19/chat_history';
+export { BaseLanguageModel } from 'npm:@langchain/core@0.2.19/language_models/base';
 export {
   AIMessage,
   BaseMessage,
   FunctionMessage,
   HumanMessage,
-} from "npm:@langchain/core/messages";
+} from 'npm:@langchain/core@0.2.19/messages';
 export {
   type BaseMessagePromptTemplateLike,
   ChatPromptTemplate,
   MessagesPlaceholder,
-} from "npm:@langchain/core/prompts";
-export { Runnable, RunnableLambda } from "npm:@langchain/core/runnables";
-export { StructuredTool } from "npm:@langchain/core/tools";
-export { END, START, StateGraph } from "npm:@langchain/langgraph";
-export { ToolExecutor, ToolNode } from "npm:@langchain/langgraph/prebuilt";
+} from 'npm:@langchain/core@0.2.19/prompts';
+export { Runnable, RunnableLambda } from 'npm:@langchain/core@0.2.19/runnables';
+export { StructuredTool } from 'npm:@langchain/core@0.2.19/tools';
+export { END, START, StateGraph } from 'npm:@langchain/langgraph@0.0.31';
+export {
+  ToolExecutor,
+  ToolNode,
+} from 'npm:@langchain/langgraph@0.0.31/prebuilt';
