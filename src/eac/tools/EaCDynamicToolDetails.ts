@@ -7,7 +7,7 @@ import {
 import { EaCToolDetails, isEaCToolDetails } from "../EaCToolDetails.ts";
 
 export type EaCDynamicToolDetails<T extends z.ZodType<any> = z.ZodType<any>> = {
-  Action: (
+  Action?: (
     input: z.infer<T>,
     runManager?: CallbackManagerForToolRun,
     config?: RunnableConfig,

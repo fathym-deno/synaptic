@@ -145,7 +145,7 @@ export const eacAIsRoot = {
         Description: "The Vector Store for interacting with Azure Search AI.",
         APIKey: Deno.env.get("AZURE_AI_SEARCH_KEY")!,
         Endpoint: Deno.env.get("AZURE_AI_SEARCH_ENDPOINT")!,
-        EmbeddingsLookup: "thinky",
+        EmbeddingsLookup: "thinky|thinky",
         IndexerLookup: "thinky",
         QueryType: AzureAISearchQueryType.SimilarityHybrid,
       } as EaCAzureSearchAIVectorStoreDetails,

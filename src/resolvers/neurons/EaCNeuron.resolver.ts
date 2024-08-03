@@ -120,6 +120,13 @@ export default {
         ? await neuronResolver.Resolve(neuron, ioc, eac)
         : runnable;
 
+      if (neuron.Bootstrap) {
+        runnable = await neuron.Bootstrap(
+          runnable ?? new RunnablePassthrough(),
+          neuron,
+        );
+      }
+
       const neurons = await neuronsResolver.Resolve(neuron.Neurons, ioc, eac);
 
       if (neurons) {
@@ -130,13 +137,6 @@ export default {
 
       if (synapses) {
         runnable = runnable ? runnable.pipe(synapses) : synapses;
-      }
-
-      if (neuron.Bootstrap) {
-        runnable = await neuron.Bootstrap(
-          runnable ?? new RunnablePassthrough(),
-          neuron,
-        );
       }
 
       if (neuron.BootstrapInput) {

@@ -22,6 +22,7 @@ export { zodToJsonSchema } from "npm:zod-to-json-schema";
 
 export { AzureAISearchQueryType } from "npm:@langchain/community@0.2.22/vectorstores/azure_aisearch";
 export { type AgentAction } from "npm:@langchain/core@0.2.19/agents";
+export { dispatchCustomEvent } from "npm:@langchain/core@0.2.19/callbacks/dispatch";
 export { BaseListChatMessageHistory } from "npm:@langchain/core@0.2.19/chat_history";
 export { BaseLanguageModel } from "npm:@langchain/core@0.2.19/language_models/base";
 export {
