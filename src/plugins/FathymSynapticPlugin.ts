@@ -142,7 +142,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
       const chatHistoryLookups = Object.keys(ai.ChatHistories || {});
 
       chatHistoryLookups.forEach((chatHistoryLookup) => {
-        const chatHistory = ai.ChatHistories![chatHistoryLookup];
+        const chatHistory = ai.ChatHistories![chatHistoryLookup]!;
 
         if (isEaCDenoKVChatHistoryDetails(chatHistory.Details)) {
           const chDetails = chatHistory.Details as EaCDenoKVChatHistoryDetails;
@@ -199,7 +199,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
       const remoteCircuitDefs = await Promise.all(
         remoteLookups.map(async (remoteLookup) => {
-          const remoteCircuitUrl = $remotes[remoteLookup];
+          const remoteCircuitUrl = $remotes[remoteLookup]!;
 
           try {
             const circuitDefsResp = await fetch(remoteCircuitUrl);
@@ -225,7 +225,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
           return;
         }
 
-        const remoteCircuitUrl = $remotes[remoteLookup];
+        const remoteCircuitUrl = $remotes[remoteLookup]!;
 
         Object.keys(circuitDefs).forEach((circuitLookup) => {
           ioc.Register(
@@ -294,7 +294,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
       const embeddingsLookups = Object.keys(ai.Embeddings || {});
 
       embeddingsLookups.forEach((embeddingsLookup) => {
-        const embeddings = ai.Embeddings![embeddingsLookup];
+        const embeddings = ai.Embeddings![embeddingsLookup]!;
 
         if (isEaCAzureOpenAIEmbeddingsDetails(embeddings.Details)) {
           const embeddingsDetails =
@@ -332,7 +332,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
       const indexerLookups = Object.keys(ai.Indexers || {});
 
       indexerLookups.forEach((indexerLookup) => {
-        const indexer = ai.Indexers![indexerLookup];
+        const indexer = ai.Indexers![indexerLookup]!;
 
         if (isEaCDenoKVIndexerDetails(indexer.Details)) {
           const idxDetails = indexer.Details as EaCDenoKVIndexerDetails;
@@ -366,7 +366,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
       const llmLookups = Object.keys(ai.LLMs || {});
 
       llmLookups.forEach((llmLookup) => {
-        const llm = ai.LLMs![llmLookup];
+        const llm = ai.LLMs![llmLookup]!;
 
         if (isEaCAzureOpenAILLMDetails(llm.Details)) {
           const llmDetails = llm.Details as EaCAzureOpenAILLMDetails;
@@ -447,7 +447,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
       const loaderLookups = Object.keys(ai.Loaders || {});
 
       loaderLookups.forEach((loaderLookup) => {
-        const loader = ai.Loaders![loaderLookup];
+        const loader = ai.Loaders![loaderLookup]!;
 
         if (isEaCCheerioWebDocumentLoaderDetails(loader.Details)) {
           const details = loader.Details as EaCCheerioWebDocumentLoaderDetails;
@@ -504,7 +504,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
       const persistenceLookups = Object.keys(ai.Persistence || {});
 
       persistenceLookups.forEach((persistenceLookup) => {
-        const persistence = ai.Persistence![persistenceLookup];
+        const persistence = ai.Persistence![persistenceLookup]!;
 
         const details = persistence.Details;
 
@@ -548,13 +548,13 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
       const personalityLookups = Object.keys(ai.Personalities || {});
 
       personalityLookups.forEach((personalityLookup) => {
-        const personality = ai.Personalities![personalityLookup];
+        const personality = ai.Personalities![personalityLookup]!;
 
         let details = personality.Details!;
 
         details = [...(personality.PersonalityLookups || [])].reverse().reduce(
           (acc, next) => {
-            const nextPersonality = ai.Personalities![next];
+            const nextPersonality = ai.Personalities![next]!;
 
             return mergeWithArrays(
               {
@@ -597,7 +597,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
         await Promise.all(
           retrieverLookups.map(async (retrieverLookup) => {
-            const retriever = ai.Retrievers![retrieverLookup];
+            const retriever = ai.Retrievers![retrieverLookup]!;
 
             const vectorStore = await ioc.Resolve<VectorStore>(
               ioc.Symbol(VectorStore.name),
@@ -682,7 +682,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
       const textSplitterLookups = Object.keys(ai.TextSplitters || {});
 
       textSplitterLookups.forEach((textSplitterLookup) => {
-        const eacTxtSplitter = ai.TextSplitters![textSplitterLookup];
+        const eacTxtSplitter = ai.TextSplitters![textSplitterLookup]!;
 
         let textSplitter: Runnable | undefined;
 
@@ -732,7 +732,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
       const toolLookups = Object.keys(ai.Tools || {});
 
       toolLookups.forEach((toolLookup) => {
-        const tool = ai.Tools![toolLookup];
+        const tool = ai.Tools![toolLookup]!;
 
         const details = tool.Details;
 
@@ -859,7 +859,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
       const vectorStoreCalls = vectorStoreLookups.map(
         async (vectorStoreLookup) => {
-          const vectorStore = ai.VectorStores![vectorStoreLookup];
+          const vectorStore = ai.VectorStores![vectorStoreLookup]!;
 
           const embeddings = await ioc.Resolve<Embeddings>(
             ioc.Symbol(Embeddings.name),
