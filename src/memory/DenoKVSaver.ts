@@ -121,7 +121,16 @@ export class DenoKVSaver extends BaseCheckpointSaver {
     };
   }
 
-  protected async readCheckpoint(threadId: string, checkpointId: string) {
+  protected async readCheckpoint(
+    threadId: string,
+    checkpointId: string,
+  ): Promise<
+    | {
+      Checkpoint: Checkpoint;
+      Metadata: CheckpointMetadata;
+    }
+    | undefined
+  > {
     const checkpointKey = [
       ...this.rootKey,
       "Thread",

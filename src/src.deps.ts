@@ -1,4 +1,5 @@
 import "jsr:@std/dotenv@0.225.0/load";
+import "npm:cheerio@1.0.0";
 
 export { delay } from "jsr:@std/async@1.0.3/delay";
 export {
@@ -56,9 +57,9 @@ export {
 export { SerpAPI } from "npm:@langchain/community@0.2.22/tools/serpapi";
 export { TavilySearchResults } from "npm:@langchain/community@0.2.22/tools/tavily_search";
 export { HNSWLib } from "npm:@langchain/community@0.2.22/vectorstores/hnswlib";
-export { BaseListChatMessageHistory } from "npm:@langchain/core@0.2.19/chat_history";
-export { BaseDocumentLoader } from "npm:@langchain/core@0.2.19/document_loaders/base";
-export { Embeddings } from "npm:@langchain/core@0.2.19/embeddings";
+export { BaseListChatMessageHistory } from "npm:@langchain/core@0.2.23/chat_history";
+export { BaseDocumentLoader } from "npm:@langchain/core@0.2.23/document_loaders/base";
+export { Embeddings } from "npm:@langchain/core@0.2.23/embeddings";
 export {
   index,
   type ListKeyOptions,
@@ -66,13 +67,13 @@ export {
   type RecordManagerInterface,
   type UpdateOptions,
   UUIDV5_NAMESPACE,
-} from "npm:@langchain/core@0.2.19/indexing";
+} from "npm:@langchain/core@0.2.23/indexing";
 export {
   BaseLanguageModel,
   type LanguageModelLike,
-} from "npm:@langchain/core@0.2.19/language_models/base";
-export { CallbackManagerForToolRun } from "npm:@langchain/core@0.2.19/callbacks/manager";
-export { type ToolDefinition } from "npm:@langchain/core@0.2.19/language_models/base";
+} from "npm:@langchain/core@0.2.23/language_models/base";
+export { CallbackManagerForToolRun } from "npm:@langchain/core@0.2.23/callbacks/manager";
+export { type ToolDefinition } from "npm:@langchain/core@0.2.23/language_models/base";
 export {
   AIMessage,
   AIMessageChunk,
@@ -84,14 +85,14 @@ export {
   mapStoredMessagesToChatMessages,
   type StoredMessage,
   ToolMessage,
-} from "npm:@langchain/core@0.2.19/messages";
-export { StringOutputParser } from "npm:@langchain/core@0.2.19/output_parsers";
+} from "npm:@langchain/core@0.2.23/messages";
+export { StringOutputParser } from "npm:@langchain/core@0.2.23/output_parsers";
 export {
   type BaseMessagePromptTemplateLike,
   BasePromptTemplate,
   ChatPromptTemplate,
   PromptTemplate,
-} from "npm:@langchain/core@0.2.19/prompts";
+} from "npm:@langchain/core@0.2.23/prompts";
 export {
   Runnable,
   type RunnableConfig,
@@ -101,20 +102,20 @@ export {
   RunnableMap,
   RunnablePassthrough,
   RunnableWithMessageHistory,
-} from "npm:@langchain/core@0.2.19/runnables";
-export { RemoteRunnable } from "npm:@langchain/core@0.2.19/runnables/remote";
+} from "npm:@langchain/core@0.2.23/runnables";
+export { RemoteRunnable } from "npm:@langchain/core@0.2.23/runnables/remote";
 export {
   DynamicStructuredTool,
   DynamicTool,
   StructuredTool,
   type StructuredToolInterface,
   Tool,
-} from "npm:@langchain/core@0.2.19/tools";
+} from "npm:@langchain/core@0.2.23/tools";
 export {
   convertToOpenAIFunction,
   convertToOpenAITool,
-} from "npm:@langchain/core@0.2.19/utils/function_calling";
-export { VectorStore } from "npm:@langchain/core@0.2.19/vectorstores";
+} from "npm:@langchain/core@0.2.23/utils/function_calling";
+export { VectorStore } from "npm:@langchain/core@0.2.23/vectorstores";
 export { pull } from "npm:langchain@0.2.12/hub";
 export * from "npm:@langchain/langgraph@0.0.31";
 export {

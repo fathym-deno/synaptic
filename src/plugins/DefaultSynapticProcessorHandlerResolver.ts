@@ -2,6 +2,7 @@ import { isEaCSynapticCircuitsProcessor } from "../eac/EaCSynapticCircuitsProces
 import {
   EaCApplicationProcessorConfig,
   EaCRuntimeEaC,
+  EaCRuntimeHandler,
   IoCContainer,
   ProcessorHandlerResolver,
 } from "../src.deps.ts";
@@ -12,7 +13,7 @@ export class DefaultSynapticProcessorHandlerResolver
     ioc: IoCContainer,
     appProcCfg: EaCApplicationProcessorConfig,
     eac: EaCRuntimeEaC,
-  ) {
+  ): Promise<EaCRuntimeHandler | undefined> {
     let toResolveName = "";
 
     if (isEaCSynapticCircuitsProcessor(appProcCfg.Application.Processor)) {

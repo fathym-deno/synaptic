@@ -1,5 +1,4 @@
 // deno-lint-ignore-file no-explicit-any
-import "npm:cheerio";
 import {
   AzureAISearchVectorStore,
   AzureChatOpenAI,
@@ -693,13 +692,13 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
           const details = eacTxtSplitter
             .Details as EaCRecursiveCharacterTextSplitterDetails;
 
-          textSplitter = details.FromLanguage
+          textSplitter = (details.FromLanguage
             ? RecursiveCharacterTextSplitter.fromLanguage(details.FromLanguage)
             : new RecursiveCharacterTextSplitter({
               chunkOverlap: details.ChunkOverlap,
               chunkSize: details.ChunkSize,
               separators: details.Separators,
-            });
+            })) as unknown as Runnable;
         }
 
         if (textSplitter) {
@@ -986,7 +985,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                     "@fathym/eac/runtime/src/runtime/dfs/workers/EaCESMDistributedFileSystemWorker.ts",
                   ),
                 } as EaCESMDistributedFileSystem)
-              : eac.DFS![dfsLookup];
+              : eac.DFS![dfsLookup]!;
 
             const dfsHandler = await dfsHandlerResolver.Resolve(ioc, dfs);
 

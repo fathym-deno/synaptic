@@ -15,7 +15,7 @@ export async function configureEaCIoC(
   ioc: IoCContainer,
   eac: EverythingAsCode,
   plugins: EaCRuntimePlugin[],
-) {
+): Promise<EverythingAsCode> {
   eac = merge(eac, await configurePlugins(ioc, eac, plugins));
 
   eac = merge(eac, await finalizePlugins(ioc, eac, plugins));
@@ -27,7 +27,7 @@ export async function configurePlugins(
   ioc: IoCContainer,
   eac: EverythingAsCode,
   plugins: EaCRuntimePluginDef[],
-) {
+): Promise<EverythingAsCode> {
   for (let pluginDef of plugins || []) {
     const _pluginKey = pluginDef as EaCRuntimePluginDef;
 
@@ -71,7 +71,7 @@ export async function finalizePlugins(
   ioc: IoCContainer,
   eac: EverythingAsCode,
   plugins: EaCRuntimePlugin[],
-) {
+): Promise<EverythingAsCode> {
   const pluginConfigs = (
     await Promise.all(
       Array.from(plugins?.values() || []).map(async (plugin) => {
@@ -153,7 +153,11 @@ export async function buildEaCTestIoC(
   eac: EverythingAsCode,
   plugins: EaCRuntimePlugin[],
   useDefaultPlugins: boolean,
-) {
+): Promise<{
+  eac: EverythingAsCode;
+  ioc: IoCContainer;
+  kvCleanup: () => Promise<void>;
+}> {
   if (!plugins?.length) {
     plugins = [];
   }
@@ -205,7 +209,10 @@ export async function buildEaCTestIoC(
   };
 }
 
-export async function cleanupKv(kvLookup: string, ioc: IoCContainer) {
+export async function cleanupKv(
+  kvLookup: string,
+  ioc: IoCContainer,
+): Promise<() => void> {
   const kv = await ioc.Resolve(Deno.Kv, kvLookup);
 
   return () => kv.close();
