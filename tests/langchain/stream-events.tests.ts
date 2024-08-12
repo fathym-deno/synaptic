@@ -2,14 +2,14 @@ import { EaCGraphCircuitDetails } from "../../src/eac/EaCGraphCircuitDetails.ts"
 import { EaCNeuron } from "../../src/eac/EaCNeuron.ts";
 import { EverythingAsCodeSynaptic } from "../../src/eac/EverythingAsCodeSynaptic.ts";
 import { EaCCircuitNeuron } from "../../src/eac/neurons/EaCCircuitNeuron.ts";
-import { EaCPassthroughNeuron } from '../../src/eac/neurons/EaCPassthroughNeuron.ts';
+import { EaCPassthroughNeuron } from "../../src/eac/neurons/EaCPassthroughNeuron.ts";
 import {
   dispatchCustomEvent,
   END,
   EverythingAsCodeDatabases,
   RunnableLambda,
   START,
-} from '../tests.deps.ts';
+} from "../tests.deps.ts";
 
 type ValWithId = { id?: string; val: string };
 
@@ -18,31 +18,31 @@ Deno.test("Stream Events Tests", async (t) => {
     Circuits: {
       $neurons: {
         $pass: {
-          Type: 'Passthrough',
+          Type: "Passthrough",
         } as EaCPassthroughNeuron,
       },
       child: {
         Details: {
-          Type: 'Graph',
+          Type: "Graph",
           Priority: 100,
           State: {
             name: {
               value: (x: string, y?: string) => (y ? y : x),
-              default: () => 'default',
+              default: () => "default",
             },
             path: {
               value: (
                 left?: string[] | string,
-                right?: string[] | string
+                right?: string[] | string,
               ): string[] => {
                 if (!left) {
                   left = [];
-                } else if (typeof left === 'string') {
+                } else if (typeof left === "string") {
                   left = [left];
                 }
                 if (!right) {
                   right = [];
-                } else if (typeof right === 'string') {
+                } else if (typeof right === "string") {
                   right = [right];
                 }
                 return [...left, ...right];
@@ -52,70 +52,70 @@ Deno.test("Stream Events Tests", async (t) => {
           },
           Neurons: {
             child: {
-              Type: 'Circuit',
-              CircuitLookup: 'grandchild',
+              Type: "Circuit",
+              CircuitLookup: "grandchild",
             } as EaCCircuitNeuron,
             fin: {
               Bootstrap: () => {
                 return RunnableLambda.from(() => {
-                  return { path: ['fin'] };
+                  return { path: ["fin"] };
                 });
               },
             } as Partial<EaCNeuron>,
             grandparent: {
               Bootstrap: () => {
                 return RunnableLambda.from(() => {
-                  return { path: ['grandparent'] };
+                  return { path: ["grandparent"] };
                 });
               },
             } as Partial<EaCNeuron>,
             parent: {
               Bootstrap: () => {
                 return RunnableLambda.from(() => {
-                  return { path: ['parent'] };
+                  return { path: ["parent"] };
                 });
               },
             } as Partial<EaCNeuron>,
             sibling: {
               Bootstrap: () => {
                 return RunnableLambda.from(() => {
-                  return { path: ['sibling'] };
+                  return { path: ["sibling"] };
                 });
               },
             } as Partial<EaCNeuron>,
           },
           Edges: {
-            [START]: 'grandparent',
-            grandparent: 'parent',
-            parent: ['child', 'sibling'],
-            child: 'fin',
-            sibling: 'fin',
+            [START]: "grandparent",
+            grandparent: "parent",
+            parent: ["child", "sibling"],
+            child: "fin",
+            sibling: "fin",
             fin: END,
           },
         } as EaCGraphCircuitDetails,
       },
       grandchild: {
         Details: {
-          Type: 'Graph',
+          Type: "Graph",
           Priority: 100,
           State: {
             name: {
               value: (x: string, y?: string) => (y ? y : x),
-              default: () => 'default',
+              default: () => "default",
             },
             path: {
               value: (
                 left?: string[] | string,
-                right?: string[] | string
+                right?: string[] | string,
               ): string[] => {
                 if (!left) {
                   left = [];
-                } else if (typeof left === 'string') {
+                } else if (typeof left === "string") {
                   left = [left];
                 }
                 if (!right) {
                   right = [];
-                } else if (typeof right === 'string') {
+                } else if (typeof right === "string") {
                   right = [right];
                 }
                 return [...left, ...right];
@@ -127,55 +127,55 @@ Deno.test("Stream Events Tests", async (t) => {
             child_end: {
               Bootstrap: () => {
                 return RunnableLambda.from(() => {
-                  return { path: ['child_end'] };
+                  return { path: ["child_end"] };
                 });
               },
             } as Partial<EaCNeuron>,
             child_middle: {
               Bootstrap: () => {
                 return RunnableLambda.from(() => {
-                  return { path: ['child_middle'] };
+                  return { path: ["child_middle"] };
                 });
               },
             } as Partial<EaCNeuron>,
             child_start: {
               Bootstrap: () => {
                 return RunnableLambda.from(() => {
-                  return { path: ['child_start'] };
+                  return { path: ["child_start"] };
                 });
               },
             } as Partial<EaCNeuron>,
           },
           Edges: {
-            [START]: 'child_start',
-            child_start: 'child_middle',
-            child_middle: 'child_end',
+            [START]: "child_start",
+            child_start: "child_middle",
+            child_middle: "child_end",
             child_end: END,
           },
         } as EaCGraphCircuitDetails,
       },
       main: {
         Details: {
-          Type: 'Graph',
+          Type: "Graph",
           Priority: 100,
           State: {
             name: {
               value: (x: string, y?: string) => (y ? y : x),
-              default: () => 'default',
+              default: () => "default",
             },
             path: {
               value: (
                 left?: string[] | string,
-                right?: string[] | string
+                right?: string[] | string,
               ): string[] => {
                 if (!left) {
                   left = [];
-                } else if (typeof left === 'string') {
+                } else if (typeof left === "string") {
                   left = [left];
                 }
                 if (!right) {
                   right = [];
-                } else if (typeof right === 'string') {
+                } else if (typeof right === "string") {
                   right = [right];
                 }
                 return [...left, ...right];
@@ -185,44 +185,44 @@ Deno.test("Stream Events Tests", async (t) => {
           },
           Neurons: {
             child: {
-              Type: 'Circuit',
-              CircuitLookup: 'child',
+              Type: "Circuit",
+              CircuitLookup: "child",
             } as EaCCircuitNeuron,
             fin: {
               Bootstrap: () => {
                 return RunnableLambda.from(() => {
-                  return { path: ['fin'] };
+                  return { path: ["fin"] };
                 });
               },
             } as Partial<EaCNeuron>,
             grandparent: {
               Bootstrap: () => {
                 return RunnableLambda.from(() => {
-                  return { path: ['grandparent'] };
+                  return { path: ["grandparent"] };
                 });
               },
             } as Partial<EaCNeuron>,
             parent: {
               Bootstrap: () => {
                 return RunnableLambda.from(() => {
-                  return { path: ['parent'] };
+                  return { path: ["parent"] };
                 });
               },
             } as Partial<EaCNeuron>,
             sibling: {
               Bootstrap: () => {
                 return RunnableLambda.from(() => {
-                  return { path: ['sibling'] };
+                  return { path: ["sibling"] };
                 });
               },
             } as Partial<EaCNeuron>,
           },
           Edges: {
-            [START]: 'grandparent',
-            grandparent: 'parent',
-            parent: ['child', 'sibling'],
-            child: 'fin',
-            sibling: 'fin',
+            [START]: "grandparent",
+            grandparent: "parent",
+            parent: ["child", "sibling"],
+            child: "fin",
+            sibling: "fin",
             fin: END,
           },
         } as EaCGraphCircuitDetails,
@@ -273,12 +273,12 @@ Deno.test("Stream Events Tests", async (t) => {
   //   console.log(text);
   // });
 
-  await t.step('Custum Events', async () => {
+  await t.step("Custum Events", async () => {
     const runnable = RunnableLambda.from(() => {
-      dispatchCustomEvent('thinky:page:navigate', undefined);
+      dispatchCustomEvent("thinky:page:navigate", undefined);
     });
 
-    const events = runnable.streamEvents({}, { version: 'v2' });
+    const events = runnable.streamEvents({}, { version: "v2" });
 
     for await (const event of events) {
       console.log(event.name);

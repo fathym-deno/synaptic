@@ -1,24 +1,24 @@
-import "https://deno.land/std@0.220.1/dotenv/load.ts";
-import * as _azureSearch from "npm:@azure/search-documents";
-import * as _htmlToText from "npm:html-to-text";
-import * as _parse from "npm:pdf-parse";
+import "jsr:@std/dotenv@0.225.0/load";
+import * as _azureSearch from "npm:@azure/search-documents@12.1.0";
+import * as _htmlToText from "npm:html-to-text@9.0.5";
+import * as _parse from "npm:pdf-parse@1.1.1";
 
-export * from "https://deno.land/std@0.220.1/assert/mod.ts";
+export * from "jsr:@std/assert@1.0.2";
 export {
   type ServerSentEventMessage,
   ServerSentEventStream,
-} from "https://deno.land/std@0.220.1/http/server_sent_event_stream.ts";
-export { toText } from "https://deno.land/std@0.220.1/streams/mod.ts";
+} from "jsr:@std/http@1.0.2/server-sent-event-stream";
+export { toText } from "jsr:@std/streams@1.0.1";
 
-export * from "https://deno.land/x/fathym_common@v0.0.185/mod.ts";
-export * from "https://deno.land/x/fathym_everything_as_code@v0.0.415/mod.ts";
-export * from "https://deno.land/x/fathym_everything_as_code_api@v0.0.44/mod.ts";
+export * from "jsr:@fathym/common@0.0.211";
+export * from "jsr:@fathym/eac@0.0.434";
+export * from "jsr:@fathym/eac-api@0.0.51";
 // export * from "../../eac-runtime/mod.ts";
-export * from "https://deno.land/x/fathym_eac_runtime@v0.0.275/mod.ts";
-export * from "https://deno.land/x/fathym_ioc@v0.0.10/mod.ts";
+export * from "jsr:@fathym/eac-runtime@0.0.320";
+export { IoCContainer } from "jsr:@fathym/ioc@0.0.12";
 
-export { z } from "npm:zod";
-export { zodToJsonSchema } from "npm:zod-to-json-schema";
+export { z } from "npm:zod@3.23.8";
+export { zodToJsonSchema } from "npm:zod-to-json-schema@3.23.2";
 
 export { AzureAISearchQueryType } from "npm:@langchain/community@0.2.22/vectorstores/azure_aisearch";
 export { type AgentAction } from "npm:@langchain/core@0.2.19/agents";

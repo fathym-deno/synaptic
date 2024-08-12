@@ -1,15 +1,13 @@
 import {
   BaseCheckpointSaver,
+  Buffer,
   Checkpoint,
   CheckpointMetadata,
   CheckpointTuple,
   RunnableConfig,
   SerializerProtocol,
-} from "../src.deps.ts";
-import {
-  Buffer,
   toReadableStream,
-} from "https://deno.land/std@0.220.1/io/mod.ts";
+} from "../src.deps.ts";
 
 export class DenoKVSaver extends BaseCheckpointSaver {
   constructor(

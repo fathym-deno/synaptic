@@ -1,42 +1,42 @@
-import { IConversationState } from "../../conversations/IConversationState.ts";
-import { OpenAILLMAccessor } from "../../llms/openai/OpenAILLMAccessor.ts";
-import { PageManager } from "../../pages/PageManager.ts";
-import { PageBlockManager } from "../../pages/blocks/PageBlockManager.ts";
-import { IPersonalityProvider } from "../../personalities/IPersonalityProvider.ts";
-import { PersonalityKey } from "../../personalities/PersonalityKey.ts";
+// import { IConversationState } from "../../conversations/IConversationState.ts";
+// import { OpenAILLMAccessor } from "../../llms/openai/OpenAILLMAccessor.ts";
+// import { PageManager } from "../../pages/PageManager.ts";
+// import { PageBlockManager } from "../../pages/blocks/PageBlockManager.ts";
+// import { IPersonalityProvider } from "../../personalities/IPersonalityProvider.ts";
+// import { PersonalityKey } from "../../personalities/PersonalityKey.ts";
 
-export type SynapticConversationsAPIConfig = {
-  ChatPersonalityKey: PersonalityKey;
+// export type SynapticConversationsAPIConfig = {
+//   ChatPersonalityKey: PersonalityKey;
 
-  Root?: string;
-};
+//   Root?: string;
+// };
 
-export type SynapticPagesAPIConfig = {
-  Blocks: SynapticPageBlocksAPIConfig;
+// export type SynapticPagesAPIConfig = {
+//   Blocks: SynapticPageBlocksAPIConfig;
 
-  Root?: string;
-};
+//   Root?: string;
+// };
 
-export type SynapticPageBlocksAPIConfig = {
-  RegeneratePersonalityKey: PersonalityKey;
+// export type SynapticPageBlocksAPIConfig = {
+//   RegeneratePersonalityKey: PersonalityKey;
 
-  Root?: string;
-};
+//   Root?: string;
+// };
 
-export type SynapticConfig = {
-  APIRoot?: string;
+// export type SynapticConfig = {
+//   APIRoot?: string;
 
-  Conversations: SynapticConversationsAPIConfig;
+//   Conversations: SynapticConversationsAPIConfig;
 
-  ConvoState: IConversationState;
+//   ConvoState: IConversationState;
 
-  LLM: OpenAILLMAccessor;
+//   LLM: OpenAILLMAccessor;
 
-  PageBlockManager: PageBlockManager;
+//   PageBlockManager: PageBlockManager;
 
-  PageManager: PageManager;
+//   PageManager: PageManager;
 
-  Pages: SynapticPagesAPIConfig;
+//   Pages: SynapticPagesAPIConfig;
 
-  Personalities: IPersonalityProvider;
-};
+//   Personalities: IPersonalityProvider;
+// };
