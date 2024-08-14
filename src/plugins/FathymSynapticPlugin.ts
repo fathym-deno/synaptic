@@ -975,6 +975,9 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                   Type: "Local",
                   FileRoot: "./src/resolvers/",
                   Extensions: ["resolver.ts"],
+                  WorkerPath: import.meta.resolve(
+                    "@fathym/eac-runtime/workers/local",
+                  ),
                 } as EaCLocalDistributedFileSystem)
                 : ({
                   Type: "ESM",
@@ -982,7 +985,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                   EntryPoints: ["resolvers.ts"],
                   IncludeDependencies: false,
                   WorkerPath: import.meta.resolve(
-                    "@fathym/eac/runtime/src/runtime/dfs/workers/EaCESMDistributedFileSystemWorker.ts",
+                    "@fathym/eac-runtime/workers/jsr",
                   ),
                 } as EaCESMDistributedFileSystem)
               : eac.DFS![dfsLookup]!;
