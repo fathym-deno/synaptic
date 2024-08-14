@@ -9,12 +9,12 @@ export {
 
 export { Buffer, toReadableStream } from "jsr:@std/io@0.224.4";
 
-export * from "jsr:@fathym/common@0.0.211";
+export * from "jsr:@fathym/common@0";
 // export * from '../../everything-as-code/mod.ts';
-export * from "jsr:@fathym/eac@0.0.434";
+export * from "jsr:@fathym/eac@0";
 // export * from "../../eac-runtime/mod.ts";
-export * from "jsr:@fathym/eac-runtime@0.0.326";
-export { IoCContainer } from "jsr:@fathym/ioc@0.0.12";
+export * from "jsr:@fathym/eac-runtime@0";
+export { IoCContainer } from "jsr:@fathym/ioc@0";
 
 export { z, ZodObject, type ZodRawShape, type ZodType } from "npm:zod@3.23.8";
 export { zodToJsonSchema } from "npm:zod-to-json-schema@3.23.2";

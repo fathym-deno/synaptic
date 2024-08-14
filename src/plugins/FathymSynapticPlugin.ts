@@ -11,7 +11,7 @@ import {
   DFSFileHandlerResolver,
   DynamicStructuredTool,
   DynamicTool,
-  EaCESMDistributedFileSystem,
+  EaCJSRDistributedFileSystem,
   EaCLocalDistributedFileSystem,
   EaCRuntimeConfig,
   EaCRuntimePlugin,
@@ -980,14 +980,13 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                   ),
                 } as EaCLocalDistributedFileSystem)
                 : ({
-                  Type: "ESM",
-                  Root: import.meta.resolve("@fathym/synaptic/"),
-                  EntryPoints: ["resolvers.ts"],
-                  IncludeDependencies: false,
+                  Type: "JSR",
+                  Package: "@fathym/synaptic",
+                  Version: "",
                   WorkerPath: import.meta.resolve(
                     "@fathym/eac-runtime/workers/jsr",
                   ),
-                } as EaCESMDistributedFileSystem)
+                } as EaCJSRDistributedFileSystem)
               : eac.DFS![dfsLookup]!;
 
             const dfsHandler = await dfsHandlerResolver.Resolve(ioc, dfs);
