@@ -1013,17 +1013,20 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
         dfsFilePaths.map(async ({ dfs, fileHandler, paths }) => {
           const fileModules = (
             await Promise.all(
-              paths?.map(async (path) => {
-                const module = await importDFSTypescriptModule(
-                  undefined,
-                  fileHandler,
-                  path,
-                  dfs,
-                  "ts",
-                );
+              paths
+                // TODO(mcgear): Make extensions configurable... Maybe all DFSs should have an extensions options to trim them down
+                ?.filter((p) => p.endsWith("ts") || p.endsWith("tsx"))
+                .map(async (path) => {
+                  const module = await importDFSTypescriptModule(
+                    undefined,
+                    fileHandler,
+                    path,
+                    dfs,
+                    "ts",
+                  );
 
-                return module;
-              }) || [],
+                  return module;
+                }) || [],
             )
           )
             .filter((m) => !!m?.module?.SynapticResolverConfig)
