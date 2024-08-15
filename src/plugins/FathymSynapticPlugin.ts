@@ -239,7 +239,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             () => {
               return new RemoteRunnable({
                 url: new URL(circuitLookup, remoteCircuitUrl).href,
-              }).withConfig({ runName: circuitLookup });
+              }).withConfig({ runName: `${remoteLookup}|${circuitLookup}` });
             },
             {
               Lazy: false,
