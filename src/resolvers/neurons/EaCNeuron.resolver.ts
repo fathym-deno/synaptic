@@ -164,6 +164,6 @@ export default {
       }
     }
 
-    return runnable;
+    return runnable?.withConfig({ runName: neuron?.Name || undefined });
   },
 } as SynapticNeuronResolver<EaCNeuronLike>;
