@@ -21,23 +21,23 @@ export { z } from "npm:zod@3.23.8";
 export { zodToJsonSchema } from "npm:zod-to-json-schema@3.23.2";
 
 export { AzureAISearchQueryType } from "npm:@langchain/community@0.2.22/vectorstores/azure_aisearch";
-export { type AgentAction } from "npm:@langchain/core@0.2.19/agents";
-export { dispatchCustomEvent } from "npm:@langchain/core@0.2.19/callbacks/dispatch";
-export { BaseListChatMessageHistory } from "npm:@langchain/core@0.2.19/chat_history";
-export { BaseLanguageModel } from "npm:@langchain/core@0.2.19/language_models/base";
+export { type AgentAction } from "npm:@langchain/core@0.2.23/agents";
+export { dispatchCustomEvent } from "npm:@langchain/core@0.2.23/callbacks/dispatch";
+export { BaseListChatMessageHistory } from "npm:@langchain/core@0.2.23/chat_history";
+export { BaseLanguageModel } from "npm:@langchain/core@0.2.23/language_models/base";
 export {
   AIMessage,
   BaseMessage,
   FunctionMessage,
   HumanMessage,
-} from "npm:@langchain/core@0.2.19/messages";
+} from "npm:@langchain/core@0.2.23/messages";
 export {
   type BaseMessagePromptTemplateLike,
   ChatPromptTemplate,
   MessagesPlaceholder,
 } from "npm:@langchain/core@0.2.19/prompts";
-export { Runnable, RunnableLambda } from "npm:@langchain/core@0.2.19/runnables";
-export { StructuredTool } from "npm:@langchain/core@0.2.19/tools";
+export { Runnable, RunnableLambda } from "npm:@langchain/core@0.2.23/runnables";
+export { StructuredTool } from "npm:@langchain/core@0.2.23/tools";
 export { END, START, StateGraph } from "npm:@langchain/langgraph@0.0.31";
 export {
   ToolExecutor,

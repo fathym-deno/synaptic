@@ -17,7 +17,9 @@
   },
   "imports": {
     "preact": "npm:preact@10.20.1",
-    "preact/jsx-runtime": "npm:preact@10.20.1/jsx-runtime"
+    "preact/jsx-runtime": "npm:preact@10.20.1/jsx-runtime",
+
+    "@fathym/eac-runtime": "jsr:@fathym/eac-runtime@0"
   },
   "lint": {
     "rules": {

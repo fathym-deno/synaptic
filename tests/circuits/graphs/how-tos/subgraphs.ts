@@ -5,7 +5,6 @@ import {
   END,
   EverythingAsCodeDatabases,
   Runnable,
-  RunnableLambda,
   START,
 } from "../../../tests.deps.ts";
 import { buildTestIoC } from "../../../test-eac-setup.ts";
@@ -58,24 +57,18 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
           },
           Neurons: {
             child_end: {
-              Bootstrap: () => {
-                return RunnableLambda.from(() => {
-                  return { path: ["child_end"] };
-                });
+              BootstrapInput() {
+                return { path: ["child_end"] };
               },
             } as Partial<EaCNeuron>,
             child_middle: {
-              Bootstrap: () => {
-                return RunnableLambda.from(() => {
-                  return { path: ["child_middle"] };
-                });
+              BootstrapInput() {
+                return { path: ["child_middle"] };
               },
             } as Partial<EaCNeuron>,
             child_start: {
-              Bootstrap: () => {
-                return RunnableLambda.from(() => {
-                  return { path: ["child_start"] };
-                });
+              BootstrapInput() {
+                return { path: ["child_start"] };
               },
             } as Partial<EaCNeuron>,
           },
@@ -122,31 +115,23 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
               CircuitLookup: "child",
             } as EaCCircuitNeuron,
             fin: {
-              Bootstrap: () => {
-                return RunnableLambda.from(() => {
-                  return { path: ["fin"] };
-                });
+              BootstrapInput() {
+                return { path: ["fin"] };
               },
             } as Partial<EaCNeuron>,
             grandparent: {
-              Bootstrap: () => {
-                return RunnableLambda.from(() => {
-                  return { path: ["grandparent"] };
-                });
+              BootstrapInput() {
+                return { path: ["grandparent"] };
               },
             } as Partial<EaCNeuron>,
             parent: {
-              Bootstrap: () => {
-                return RunnableLambda.from(() => {
-                  return { path: ["parent"] };
-                });
+              BootstrapInput() {
+                return { path: ["parent"] };
               },
             } as Partial<EaCNeuron>,
             sibling: {
-              Bootstrap: () => {
-                return RunnableLambda.from(() => {
-                  return { path: ["sibling"] };
-                });
+              BootstrapInput() {
+                return { path: ["sibling"] };
               },
             } as Partial<EaCNeuron>,
           },
@@ -218,24 +203,18 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
           },
           Neurons: {
             child_end: {
-              Bootstrap: () => {
-                return RunnableLambda.from(() => {
-                  return { path: [{ val: "child_end" }] };
-                });
+              BootstrapInput() {
+                return { path: [{ val: "child_end" }] };
               },
             } as Partial<EaCNeuron>,
             child_middle: {
-              Bootstrap: () => {
-                return RunnableLambda.from(() => {
-                  return { path: [{ val: "child_middle" }] };
-                });
+              BootstrapInput() {
+                return { path: [{ val: "child_middle" }] };
               },
             } as Partial<EaCNeuron>,
             child_start: {
-              Bootstrap: () => {
-                return RunnableLambda.from(() => {
-                  return { path: [{ val: "child_start" }] };
-                });
+              BootstrapInput() {
+                return { path: [{ val: "child_start" }] };
               },
             } as Partial<EaCNeuron>,
           },
@@ -309,31 +288,23 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
               CircuitLookup: "state-handoff-child",
             } as EaCCircuitNeuron,
             fin: {
-              Bootstrap: () => {
-                return RunnableLambda.from(() => {
-                  return { path: [{ val: "fin" }] };
-                });
+              BootstrapInput() {
+                return { path: [{ val: "fin" }] };
               },
             } as Partial<EaCNeuron>,
             grandparent: {
-              Bootstrap: () => {
-                return RunnableLambda.from(() => {
-                  return { path: [{ val: "grandparent" }] };
-                });
+              BootstrapInput() {
+                return { path: [{ val: "grandparent" }] };
               },
             } as Partial<EaCNeuron>,
             parent: {
-              Bootstrap: () => {
-                return RunnableLambda.from(() => {
-                  return { path: [{ val: "parent" }] };
-                });
+              BootstrapInput() {
+                return { path: [{ val: "parent" }] };
               },
             } as Partial<EaCNeuron>,
             sibling: {
-              Bootstrap: () => {
-                return RunnableLambda.from(() => {
-                  return { path: [{ val: "sibling" }] };
-                });
+              BootstrapInput() {
+                return { path: [{ val: "sibling" }] };
               },
             } as Partial<EaCNeuron>,
           },

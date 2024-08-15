@@ -156,18 +156,6 @@ export default {
           : synapses;
       }
 
-      if (neuron.BootstrapInput) {
-        const bsInput = RunnableLambda.from(async (s, cfg) => {
-          return await (neuron as EaCNeuron).BootstrapInput!(
-            s,
-            neuron as EaCNeuron,
-            cfg,
-          );
-        }).withConfig({ runName: "BootstrapInput" });
-
-        runnable = runnable ? bsInput.pipe(runnable) : bsInput;
-      }
-
       if (neuron.BootstrapOutput) {
         const bsOut = RunnableLambda.from(async (s, cfg) => {
           return await (neuron as EaCNeuron).BootstrapOutput!(
@@ -179,10 +167,32 @@ export default {
 
         runnable = runnable ? runnable.pipe(bsOut) : bsOut;
       }
+
+      if (neuron.BootstrapInput) {
+        const bsInput = RunnableLambda.from(async (s, cfg) => {
+          return await (neuron as EaCNeuron).BootstrapInput!(
+            s,
+            neuron as EaCNeuron,
+            cfg,
+          );
+        }).withConfig({ runName: "BootstrapInput" });
+
+        runnable = runnable
+          ? bsInput.pipe(
+            runnable.withConfig({
+              runName: neuron?.Name || neuronLookup || undefined,
+            }),
+          )
+          : bsInput.withConfig({
+            runName: neuron?.Name || neuronLookup || undefined,
+          });
+      } else if (runnable) {
+        runnable = runnable.withConfig({
+          runName: neuron?.Name || neuronLookup || undefined,
+        });
+      }
     }
 
-    return runnable?.withConfig({
-      runName: neuron?.Name || neuronLookup || undefined,
-    });
+    return runnable;
   },
 } as SynapticNeuronResolver<EaCNeuronLike>;

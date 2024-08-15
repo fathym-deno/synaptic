@@ -99,7 +99,7 @@ Deno.test("Graph Respond in Format Circuits", async (t) => {
                   messages: response,
                 };
               },
-            );
+            ) as Runnable;
           },
         } as EaCToolExecutorNeuron,
       },
