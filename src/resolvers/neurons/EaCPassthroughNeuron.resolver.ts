@@ -10,7 +10,7 @@ export const SynapticResolverConfig: SynapticResolverConfiguration = {
 };
 
 export default {
-  Resolve(neuron) {
+  Resolve(_neuronLookup, neuron) {
     return neuron.Field
       ? new JSONPathRunnablePassthrough(neuron.Field)
       : new RunnablePassthrough();

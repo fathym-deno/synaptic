@@ -13,7 +13,7 @@ export const SynapticResolverConfig: SynapticResolverConfiguration = {
 };
 
 export default {
-  async Resolve(neuron, ioc, eac) {
+  async Resolve(_neuronLookup, neuron, ioc, eac) {
     const neuronResolver = await ioc.Resolve<
       SynapticNeuronResolver<EaCNeuronLike>
     >(ioc.Symbol("SynapticNeuronResolver"));
@@ -25,13 +25,14 @@ export default {
     const rootMessages = neuron.Messages;
 
     const childRunnable = await neuronResolver.Resolve(
+      "ChatNeuron",
       neuron.ChatNeuron,
       ioc,
       eac,
     );
 
     return new RunnableWithMessageHistory({
-      runnable: childRunnable,
+      runnable: childRunnable!,
       getMessageHistory: async (sessionId: string) => {
         const chatHistory = getMessageHistory(sessionId);
 

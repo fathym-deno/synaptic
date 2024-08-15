@@ -181,13 +181,21 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
       ...circuits
     } = eac.Circuits || {};
 
-    const resolveNeuron = (neuron: EaCNeuronLike): Runnable => {
+    const resolveNeuron = (
+      neuronLookup: string,
+      neuron: EaCNeuronLike,
+    ): Runnable => {
       return RunnableLambda.from(async () => {
         const neuronResolver = await ioc.Resolve<
           SynapticNeuronResolver<EaCNeuronLike>
         >(ioc.Symbol("SynapticNeuronResolver"));
 
-        const runnable = await neuronResolver.Resolve(neuron, ioc, eac);
+        const runnable = await neuronResolver.Resolve(
+          neuronLookup,
+          neuron,
+          ioc,
+          eac,
+        );
 
         return runnable;
       });
@@ -231,7 +239,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             () => {
               return new RemoteRunnable({
                 url: new URL(circuitLookup, remoteCircuitUrl).href,
-              });
+              }).withConfig({ runName: circuitLookup });
             },
             {
               Lazy: false,
@@ -267,7 +275,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
         );
 
         if (circuitNeuron) {
-          const circuit = await resolveNeuron(circuitNeuron);
+          const circuit = await resolveNeuron(circuitLookup, circuitNeuron);
 
           if (circuit) {
             ioc.Register(() => circuit, {

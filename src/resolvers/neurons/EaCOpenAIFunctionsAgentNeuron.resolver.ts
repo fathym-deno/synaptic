@@ -11,20 +11,25 @@ export const SynapticResolverConfig: SynapticResolverConfiguration = {
 };
 
 export default {
-  async Resolve(neuron, ioc, eac) {
+  async Resolve(_neuronLookup, neuron, ioc, eac) {
     const neuronResolver = await ioc.Resolve<
       SynapticNeuronResolver<EaCNeuronLike>
     >(ioc.Symbol("SynapticNeuronResolver"));
 
     const tools = await resolveTools(neuron.ToolLookups, ioc);
 
-    const llm = await neuronResolver.Resolve(neuron.LLM, ioc, eac);
+    const llm = await neuronResolver.Resolve("LLM", neuron.LLM, ioc, eac);
 
-    const prompt = await neuronResolver.Resolve(neuron.Prompt, ioc, eac);
+    const prompt = await neuronResolver.Resolve(
+      "Promp",
+      neuron.Prompt,
+      ioc,
+      eac,
+    );
 
     return (await createOpenAIFunctionsAgent({
-      llm,
-      prompt,
+      llm: llm!,
+      prompt: prompt!,
       tools: tools,
     })) as unknown as Runnable;
   },

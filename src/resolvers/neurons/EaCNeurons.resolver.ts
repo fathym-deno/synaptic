@@ -9,7 +9,7 @@ export const SynapticResolverConfig: SynapticResolverConfiguration = {
 };
 
 export default {
-  async Resolve(neurons, ioc, eac) {
+  async Resolve(_neuronLookup, neurons, ioc, eac) {
     let runnable: Runnable | undefined;
 
     const neuronLookups = Object.keys(neurons || {});
@@ -22,7 +22,7 @@ export default {
       if (neuronLookups.length === 1 && "" in neurons) {
         const neuron = neurons[""];
 
-        runnable = await neuronResolver.Resolve(neuron, ioc, eac);
+        runnable = await neuronResolver.Resolve("", neuron, ioc, eac);
       } else {
         type fromParams = Parameters<typeof RunnableMap.from>;
 
@@ -34,7 +34,7 @@ export default {
           const neuron = neurons[neuronLookup];
 
           runnables[neuronLookup] =
-            (await neuronResolver.Resolve(neuron, ioc, eac)) ??
+            (await neuronResolver.Resolve(neuronLookup, neuron, ioc, eac)) ??
               RunnableLambda.from(() => undefined);
         }
 

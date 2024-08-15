@@ -9,7 +9,7 @@ export const SynapticResolverConfig: SynapticResolverConfiguration = {
 };
 
 export default {
-  async Resolve(neuron) {
+  async Resolve(_neuronLookup, neuron) {
     return (await pull(neuron.Template)) as unknown as Runnable;
   },
 } as SynapticNeuronResolver<EaCPullChatPromptNeuron>;

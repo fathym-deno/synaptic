@@ -9,7 +9,7 @@ export const SynapticResolverConfig: SynapticResolverConfiguration = {
 };
 
 export default {
-  Resolve(neuron) {
+  Resolve(_neuronLookup, neuron) {
     return PromptTemplate.fromTemplate(neuron.PromptTemplate);
   },
 } as SynapticNeuronResolver<EaCPromptNeuron>;

@@ -46,13 +46,21 @@ export default {
 
             const neuronLookups = Object.keys(details.Neurons ?? {});
 
-            const resolveNeuron = (neuron: EaCNeuronLike): Runnable => {
+            const resolveNeuron = (
+              neuronLookup: string,
+              neuron: EaCNeuronLike,
+            ): Runnable => {
               return RunnableLambda.from(async () => {
                 const neuronResolver = await ioc.Resolve<
                   SynapticNeuronResolver<EaCNeuronLike>
                 >(ioc.Symbol("SynapticNeuronResolver"));
 
-                const runnable = await neuronResolver.Resolve(neuron, ioc, eac);
+                const runnable = await neuronResolver.Resolve(
+                  neuronLookup,
+                  neuron,
+                  ioc,
+                  eac,
+                );
 
                 return runnable;
               });
@@ -61,6 +69,7 @@ export default {
             const nodes = await Promise.all(
               neuronLookups.map(async (neuronLookup) => {
                 const runnable = await resolveNeuron(
+                  neuronLookup,
                   details.Neurons![neuronLookup],
                 );
 

@@ -10,7 +10,7 @@ export const SynapticResolverConfig: SynapticResolverConfiguration = {
 };
 
 export default {
-  async Resolve(neuron, ioc) {
+  async Resolve(_neuronLookup, neuron, ioc) {
     const tools = await resolveTools(neuron.ToolLookups, ioc);
 
     return new ToolNode(tools) as unknown as Runnable;

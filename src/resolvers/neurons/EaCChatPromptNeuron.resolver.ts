@@ -14,7 +14,7 @@ export const SynapticResolverConfig: SynapticResolverConfiguration = {
 };
 
 export default {
-  async Resolve(neuron, ioc) {
+  async Resolve(_neuronLookup, neuron, ioc) {
     const messages: BaseMessagePromptTemplateLike[] = [];
 
     let personality = neuron.PersonalityLookup

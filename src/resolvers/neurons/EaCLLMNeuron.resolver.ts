@@ -16,7 +16,7 @@ export const SynapticResolverConfig: SynapticResolverConfiguration = {
 };
 
 export default {
-  async Resolve(neuron, ioc) {
+  async Resolve(_neuronLookup, neuron, ioc) {
     let runnable: Runnable;
 
     const llm = await ioc.Resolve<BaseLanguageModel>(

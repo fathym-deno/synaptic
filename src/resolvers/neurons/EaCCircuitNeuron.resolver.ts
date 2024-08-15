@@ -9,7 +9,7 @@ export const SynapticResolverConfig: SynapticResolverConfiguration = {
 };
 
 export default {
-  async Resolve(neuron, ioc) {
+  async Resolve(_neuronLookup, neuron, ioc) {
     return await ioc.Resolve<Runnable>(
       ioc.Symbol("Circuit"),
       neuron.CircuitLookup,
