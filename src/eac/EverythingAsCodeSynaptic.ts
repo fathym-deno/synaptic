@@ -4,9 +4,9 @@ import { EaCCircuitAsCode } from "./EaCCircuitAsCode.ts";
 import { EaCNeuronLike } from "./EaCNeuron.ts";
 
 export type EverythingAsCodeSynaptic = {
-  AIs?: Record<string, EaCAIAsCode>;
+  AIs?: Record<string, EaCAIAsCode | null>;
 
-  Circuits?: Record<string, EaCCircuitAsCode> & {
+  Circuits?: Record<string, EaCCircuitAsCode | null> & {
     $handlers?: Array<string> | null;
     $neurons?: Record<string, EaCNeuronLike | null>;
     $remotes?: Record<string, string | null>;

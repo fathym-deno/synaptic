@@ -1,35 +1,35 @@
-import { SynapticNeuronResolver } from '../SynapticNeuronResolver.ts';
-import { SynapticResolverConfiguration } from '../SynapticResolverConfiguration.ts';
+import { SynapticNeuronResolver } from "../SynapticNeuronResolver.ts";
+import { SynapticResolverConfiguration } from "../SynapticResolverConfiguration.ts";
 import {
   IoCContainer,
   merge,
   Runnable,
   RunnableLambda,
   RunnablePassthrough,
-} from '../../src.deps.ts';
-import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from '../../eac/EaCNeuron.ts';
-import { EverythingAsCodeSynaptic } from '../../eac/EverythingAsCodeSynaptic.ts';
+} from "../../src.deps.ts";
+import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from "../../eac/EaCNeuron.ts";
+import { EverythingAsCodeSynaptic } from "../../eac/EverythingAsCodeSynaptic.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
-  Type: 'neuron',
+  Type: "neuron",
 };
 
 export async function resolveEaCNeuronFromLike(
   neuronLike: EaCNeuronLike,
   ioc: IoCContainer,
-  eac: EverythingAsCodeSynaptic
+  eac: EverythingAsCodeSynaptic,
 ): Promise<EaCNeuron | undefined> {
   let neuron: EaCNeuron | undefined;
 
   if (neuronLike) {
-    if (typeof neuronLike === 'string') {
+    if (typeof neuronLike === "string") {
       const lookup = neuronLike;
 
       neuronLike = eac.Circuits!.$neurons![lookup]!;
 
       if (!neuronLike) {
         throw new Deno.errors.NotFound(
-          `Unable to locate a neuron '${lookup}' in the $neurons bank.`
+          `Unable to locate a neuron '${lookup}' in the $neurons bank.`,
         );
       }
 
@@ -37,7 +37,7 @@ export async function resolveEaCNeuronFromLike(
     } else if (Array.isArray(neuronLike)) {
       const [neuronKeyLookup, neuronOverride] = neuronLike as [
         string,
-        EaCNeuron
+        EaCNeuron,
       ];
 
       neuronLike = eac.Circuits!.$neurons![neuronKeyLookup]!;
@@ -46,7 +46,7 @@ export async function resolveEaCNeuronFromLike(
 
       if (!neuron) {
         throw new Deno.errors.NotFound(
-          `Unable to locate neuron '${neuronKeyLookup}' to extend.`
+          `Unable to locate neuron '${neuronKeyLookup}' to extend.`,
         );
       }
 
@@ -111,7 +111,7 @@ export default {
     const neuron = await resolveEaCNeuronFromLike(neuronLike, ioc, eac);
 
     const configureName = (runnable: Runnable, runName?: string) => {
-      if ('withConfig' in runnable) {
+      if ("withConfig" in runnable) {
         runnable = runnable.withConfig({ runName });
       }
 
@@ -121,11 +121,11 @@ export default {
     if (isEaCNeuron(undefined, neuron)) {
       const neuronResolver = await ioc.Resolve<
         SynapticNeuronResolver<typeof neuron>
-      >(ioc.Symbol('SynapticNeuronResolver'), neuron.Type as string);
+      >(ioc.Symbol("SynapticNeuronResolver"), neuron.Type as string);
 
       const neuronsResolver = await ioc.Resolve<
         SynapticNeuronResolver<Record<string, EaCNeuronLike> | undefined>
-      >(ioc.Symbol('SynapticNeuronResolver'), '$neurons');
+      >(ioc.Symbol("SynapticNeuronResolver"), "$neurons");
 
       runnable = neuron.Type
         ? await neuronResolver.Resolve(neuronLookup, neuron, ioc, eac)
@@ -134,7 +134,14 @@ export default {
       if (neuron.Bootstrap) {
         runnable = await neuron.Bootstrap(
           runnable ?? new RunnablePassthrough(),
-          neuron
+          neuron,
+        );
+      }
+
+      if (runnable) {
+        runnable = configureName(
+          runnable,
+          neuron?.Name || neuronLookup || undefined,
         );
       }
 
@@ -142,65 +149,60 @@ export default {
         neuronLookup,
         neuron.Neurons,
         ioc,
-        eac
+        eac,
       );
 
       if (neurons) {
         runnable = runnable
-          ? runnable.pipe(configureName(neurons, 'Neurons'))
-          : neurons;
+          ? runnable.pipe(configureName(neurons, "Neurons"))
+          : configureName(neurons, neuron?.Name || neuronLookup || undefined);
       }
 
       const synapses = await neuronsResolver.Resolve(
         neuronLookup,
         neuron.Synapses,
         ioc,
-        eac
+        eac,
       );
 
       if (synapses) {
         runnable = runnable
-          ? runnable.pipe(configureName(synapses, 'Synapses'))
-          : synapses;
+          ? runnable.pipe(configureName(synapses, "Synapses"))
+          : configureName(synapses, neuron?.Name || neuronLookup || undefined);
       }
 
       if (neuron.BootstrapOutput) {
         const bsOut = configureName(
           RunnableLambda.from(async (s, cfg) => {
-            return await(neuron as EaCNeuron).BootstrapOutput!(
+            return await (neuron as EaCNeuron).BootstrapOutput!(
               s,
               neuron as EaCNeuron,
-              cfg
+              cfg,
             );
           }),
-          'BootstrapOutput'
+          "BootstrapOutput",
         );
 
-        runnable = runnable ? runnable.pipe(bsOut) : bsOut;
+        runnable = runnable
+          ? runnable.pipe(bsOut)
+          : configureName(bsOut, neuron?.Name || neuronLookup || undefined);
       }
 
       if (neuron.BootstrapInput) {
         const bsInput = configureName(
           RunnableLambda.from(async (s, cfg) => {
-            return await(neuron as EaCNeuron).BootstrapInput!(
+            return await (neuron as EaCNeuron).BootstrapInput!(
               s,
               neuron as EaCNeuron,
-              cfg
+              cfg,
             );
           }),
-          'BootstrapInput'
+          "BootstrapInput",
         );
 
         runnable = runnable
-          ? bsInput.pipe(
-              configureName(runnable, neuron?.Name || neuronLookup || undefined)
-            )
+          ? bsInput.pipe(runnable)
           : configureName(bsInput, neuron?.Name || neuronLookup || undefined);
-      } else if (runnable) {
-        runnable = configureName(
-          runnable,
-          neuron?.Name || neuronLookup || undefined
-        );
       }
     }
 

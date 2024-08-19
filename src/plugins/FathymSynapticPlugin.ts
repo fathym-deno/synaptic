@@ -136,7 +136,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     const aiLookups = Object.keys(eac!.AIs || {});
 
     aiLookups.forEach((aiLookup) => {
-      const ai = eac!.AIs![aiLookup];
+      const ai = eac!.AIs![aiLookup]!;
 
       const chatHistoryLookups = Object.keys(ai.ChatHistories || {});
 
@@ -296,7 +296,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     const aiLookups = Object.keys(eac!.AIs || {});
 
     aiLookups.forEach((aiLookup) => {
-      const ai = eac!.AIs![aiLookup];
+      const ai = eac!.AIs![aiLookup]!;
 
       const embeddingsLookups = Object.keys(ai.Embeddings || {});
 
@@ -334,7 +334,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     const aiLookups = Object.keys(eac!.AIs || {});
 
     aiLookups.forEach((aiLookup) => {
-      const ai = eac!.AIs![aiLookup];
+      const ai = eac!.AIs![aiLookup]!;
 
       const indexerLookups = Object.keys(ai.Indexers || {});
 
@@ -368,7 +368,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     const aiLookups = Object.keys(eac!.AIs || {});
 
     aiLookups.forEach((aiLookup) => {
-      const ai = eac!.AIs![aiLookup];
+      const ai = eac!.AIs![aiLookup]!;
 
       const llmLookups = Object.keys(ai.LLMs || {});
 
@@ -449,7 +449,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     // const deferRegister: (() => Promise<void>)[] = [];
 
     aiLookups.forEach((aiLookup) => {
-      const ai = eac!.AIs![aiLookup];
+      const ai = eac!.AIs![aiLookup]!;
 
       const loaderLookups = Object.keys(ai.Loaders || {});
 
@@ -506,7 +506,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     const aiLookups = Object.keys(eac!.AIs || {});
 
     aiLookups.forEach((aiLookup) => {
-      const ai = eac!.AIs![aiLookup];
+      const ai = eac!.AIs![aiLookup]!;
 
       const persistenceLookups = Object.keys(ai.Persistence || {});
 
@@ -550,7 +550,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     const aiLookups = Object.keys(eac!.AIs || {});
 
     aiLookups.forEach((aiLookup) => {
-      const ai = eac!.AIs![aiLookup];
+      const ai = eac!.AIs![aiLookup]!;
 
       const personalityLookups = Object.keys(ai.Personalities || {});
 
@@ -598,7 +598,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
     await Promise.all(
       aiLookups.map(async (aiLookup) => {
-        const ai = eac!.AIs![aiLookup];
+        const ai = eac!.AIs![aiLookup]!;
 
         const retrieverLookups = Object.keys(ai.Retrievers || {});
 
@@ -685,7 +685,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     const aiLookups = Object.keys(eac!.AIs || {});
 
     aiLookups.forEach((aiLookup) => {
-      const ai = eac!.AIs![aiLookup];
+      const ai = eac!.AIs![aiLookup]!;
 
       const textSplitterLookups = Object.keys(ai.TextSplitters || {});
 
@@ -735,7 +735,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     const aiLookups = Object.keys(eac!.AIs || {});
 
     aiLookups.forEach((aiLookup) => {
-      const ai = eac!.AIs![aiLookup];
+      const ai = eac!.AIs![aiLookup]!;
 
       const toolLookups = Object.keys(ai.Tools || {});
 
@@ -861,7 +861,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     const aiLookups = Object.keys(eac!.AIs || {});
 
     const calls = aiLookups.map(async (aiLookup) => {
-      const ai = eac!.AIs![aiLookup];
+      const ai = eac!.AIs![aiLookup]!;
 
       const vectorStoreLookups = Object.keys(ai.VectorStores || {});
 
