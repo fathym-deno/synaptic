@@ -983,17 +983,17 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                   Type: "Local",
                   FileRoot: "./src/resolvers/",
                   Extensions: ["resolver.ts"],
-                  WorkerPath: import.meta.resolve(
-                    "@fathym/eac-runtime/workers/local",
-                  ),
+                  // WorkerPath: import.meta.resolve(
+                  //   "@fathym/eac-runtime/workers/local",
+                  // ),
                 } as EaCLocalDistributedFileSystem)
                 : ({
                   Type: "JSR",
                   Package: "@fathym/synaptic",
                   Version: "",
-                  WorkerPath: import.meta.resolve(
-                    "@fathym/eac-runtime/workers/jsr",
-                  ),
+                  // WorkerPath: import.meta.resolve(
+                  //   "@fathym/eac-runtime/workers/jsr",
+                  // ),
                 } as EaCJSRDistributedFileSystem)
               : eac.DFS![dfsLookup]!;
 
