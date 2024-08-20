@@ -3,7 +3,7 @@ import {
   assert,
   assertEquals,
   HumanMessage,
-  jsonClone,
+  jsonMapSetClone,
   merge,
 } from "../tests.deps.ts";
 
@@ -12,7 +12,10 @@ Deno.test("Message Serialization", async (t) => {
     const msg = new HumanMessage("This is a test");
 
     // deno-lint-ignore no-explicit-any
-    const newMsg = merge<any>(jsonClone(msg), JSON.parse(customStringify(msg)));
+    const newMsg = merge<any>(
+      jsonMapSetClone(msg),
+      JSON.parse(customStringify(msg)),
+    );
 
     console.log(newMsg);
 
@@ -26,7 +29,10 @@ Deno.test("Message Serialization", async (t) => {
     const msg = new HumanMessage("This is a test");
 
     // deno-lint-ignore no-explicit-any
-    const newMsg = merge<any>(jsonClone(msg), JSON.parse(customStringify(msg)));
+    const newMsg = merge<any>(
+      jsonMapSetClone(msg),
+      JSON.parse(customStringify(msg)),
+    );
 
     console.log(newMsg);
 

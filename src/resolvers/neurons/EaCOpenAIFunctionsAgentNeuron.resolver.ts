@@ -1,7 +1,7 @@
+import { createOpenAIFunctionsAgent, Runnable } from "../../src.deps.ts";
 import { SynapticNeuronResolver } from "../SynapticNeuronResolver.ts";
 import { SynapticResolverConfiguration } from "../SynapticResolverConfiguration.ts";
 import { EaCOpenAIFunctionsAgentNeuron } from "../../eac/neurons/EaCOpenAIFunctionsAgentNeuron.ts";
-import { createOpenAIFunctionsAgent, Runnable } from "../../src.deps.ts";
 import { EaCNeuronLike } from "../../eac/EaCNeuron.ts";
 import { resolveTools } from "../../plugins/FathymSynapticPlugin.ts";
 
