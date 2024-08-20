@@ -8,7 +8,6 @@ import {
   EverythingAsCodeDatabases,
   HumanMessage,
   Runnable,
-  RunnableLambda,
   START,
   z,
 } from "../../../tests.deps.ts";
@@ -77,16 +76,8 @@ Deno.test("Graph Human in the Loop Circuits", async (t) => {
           Type: "ToolExecutor",
           ToolLookups: ["thinky|test"],
           MessagesPath: "$.messages",
-          Bootstrap: (r) => {
-            return RunnableLambda.from(
-              async (state: { messages: Array<BaseMessage> }) => {
-                const response = await r.invoke(state);
-
-                return {
-                  messages: response,
-                };
-              },
-            );
+          BootstrapOutput(msgs: BaseMessage[]) {
+            return { messages: msgs };
           },
         } as EaCToolExecutorNeuron,
       },
@@ -105,16 +96,11 @@ Deno.test("Graph Human in the Loop Circuits", async (t) => {
             agent: [
               "thinky-llm",
               {
-                Bootstrap: (r) => {
-                  return RunnableLambda.from(
-                    async (state: { messages: BaseMessage[] }, config) => {
-                      const { messages } = state;
-
-                      const response = await r.invoke(messages, config);
-
-                      return { messages: [response] };
-                    },
-                  );
+                BootstrapInput(state: { messages: BaseMessage[] }) {
+                  return state.messages;
+                },
+                BootstrapOutput(msgs: BaseMessage[]) {
+                  return { messages: msgs };
                 },
               } as Partial<EaCNeuron>,
             ],

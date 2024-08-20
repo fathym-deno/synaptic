@@ -7,7 +7,6 @@ import {
   EverythingAsCodeDatabases,
   HumanMessage,
   Runnable,
-  RunnableLambda,
   START,
   z,
 } from "../../../tests.deps.ts";
@@ -75,18 +74,8 @@ Deno.test("Graph Managing Agent Steps Circuits", async (t) => {
           Type: "ToolExecutor",
           ToolLookups: ["thinky|test"],
           MessagesPath: "$.messages",
-          Bootstrap: (r) => {
-            return RunnableLambda.from(
-              async (state: { messages: Array<BaseMessage> }) => {
-                const response = await r.invoke(state);
-
-                console.log("Called tool...");
-
-                return {
-                  messages: response,
-                };
-              },
-            );
+          BootstrapOutput(msgs: BaseMessage[]) {
+            return { messages: msgs };
           },
         } as EaCToolExecutorNeuron,
       },
@@ -105,32 +94,29 @@ Deno.test("Graph Managing Agent Steps Circuits", async (t) => {
             agent: [
               "thinky-llm",
               {
-                Bootstrap: (r) => {
-                  return RunnableLambda.from(
-                    async (state: { messages: BaseMessage[] }, config) => {
-                      const modelMessages = [];
+                BootstrapInput(state: { messages: BaseMessage[] }) {
+                  const modelMessages = [];
 
-                      for (let i = state.messages.length - 1; i >= 0; i--) {
-                        modelMessages.push(state.messages[i]);
+                  for (let i = state.messages.length - 1; i >= 0; i--) {
+                    modelMessages.push(state.messages[i]);
 
-                        if (modelMessages.length >= 5) {
-                          if (
-                            !ToolMessage.isInstance(
-                              modelMessages[modelMessages.length - 1],
-                            )
-                          ) {
-                            break;
-                          }
-                        }
+                    if (modelMessages.length >= 5) {
+                      if (
+                        !ToolMessage.isInstance(
+                          modelMessages[modelMessages.length - 1],
+                        )
+                      ) {
+                        break;
                       }
+                    }
+                  }
 
-                      modelMessages.reverse();
+                  modelMessages.reverse();
 
-                      const response = await r.invoke(modelMessages, config);
-
-                      return { messages: [response] };
-                    },
-                  );
+                  return modelMessages;
+                },
+                BootstrapOutput(msg: BaseMessage) {
+                  return { messages: [msg] };
                 },
               } as Partial<EaCNeuron>,
             ],

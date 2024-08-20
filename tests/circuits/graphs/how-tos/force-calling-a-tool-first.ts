@@ -6,7 +6,6 @@ import {
   EverythingAsCodeDatabases,
   HumanMessage,
   Runnable,
-  RunnableLambda,
   START,
   z,
 } from "../../../tests.deps.ts";
@@ -73,16 +72,8 @@ Deno.test("Graph Force Calling a Tool First Circuits", async (t) => {
           Type: "ToolExecutor",
           ToolLookups: ["thinky|test"],
           MessagesPath: "$.messages",
-          Bootstrap: (r) => {
-            return RunnableLambda.from(
-              async (state: { messages: Array<BaseMessage> }) => {
-                const response = await r.invoke(state);
-
-                return {
-                  messages: response,
-                };
-              },
-            );
+          BootstrapOutput(msgs: BaseMessage[]) {
+            return { messages: msgs };
           },
         } as EaCToolExecutorNeuron,
       },
@@ -100,49 +91,40 @@ Deno.test("Graph Force Calling a Tool First Circuits", async (t) => {
             agent: [
               "thinky-llm",
               {
-                Bootstrap: (r) => {
-                  return RunnableLambda.from(
-                    async (state: { messages: BaseMessage[] }, config) => {
-                      const { messages } = state;
-
-                      const response = await r.invoke(messages, config);
-
-                      return { messages: [response] };
-                    },
-                  );
+                BootstrapInput(state: { messages: BaseMessage[] }) {
+                  return state.messages;
+                },
+                BootstrapOutput(msgs: BaseMessage[]) {
+                  return { messages: msgs };
                 },
               } as Partial<EaCNeuron>,
             ],
             first_agent: {
-              Bootstrap: () => {
-                return RunnableLambda.from(
-                  (state: { messages: BaseMessage[] }) => {
-                    const humanInput =
-                      state.messages[state.messages.length - 1].content || "";
+              BootstrapInput(state: { messages: BaseMessage[] }) {
+                const humanInput =
+                  state.messages[state.messages.length - 1].content || "";
 
-                    return {
-                      messages: [
-                        new AIMessage({
-                          content: "",
-                          additional_kwargs: {
-                            tool_calls: [
-                              {
-                                id: "tool_abcd123",
-                                type: "function",
-                                function: {
-                                  name: "search",
-                                  arguments: JSON.stringify({
-                                    query: humanInput,
-                                  }),
-                                },
-                              },
-                            ],
+                return {
+                  messages: [
+                    new AIMessage({
+                      content: "",
+                      additional_kwargs: {
+                        tool_calls: [
+                          {
+                            id: "tool_abcd123",
+                            type: "function",
+                            function: {
+                              name: "search",
+                              arguments: JSON.stringify({
+                                query: humanInput,
+                              }),
+                            },
                           },
-                        }),
-                      ],
-                    };
-                  },
-                );
+                        ],
+                      },
+                    }),
+                  ],
+                };
               },
             } as Partial<EaCNeuron>,
             action: "thinky-tools",

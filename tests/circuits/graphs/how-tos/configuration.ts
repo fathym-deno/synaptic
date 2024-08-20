@@ -8,7 +8,6 @@ import {
   HumanMessage,
   MessagesPlaceholder,
   Runnable,
-  RunnableLambda,
   START,
 } from "../../../tests.deps.ts";
 import { buildTestIoC } from "../../../test-eac-setup.ts";
@@ -80,45 +79,26 @@ Deno.test("Graph Configuration Circuits", async (t) => {
               Neurons: {
                 "": "thinky-llm",
               },
-              Bootstrap: (r) => {
-                return RunnableLambda.from(
-                  async (
-                    state: { messages: BaseMessage[]; userInfo: string },
-                    config,
-                  ) => {
-                    const { messages, userInfo } = state;
-
-                    const response = await r.invoke(
-                      {
-                        messages,
-                        userInfo,
-                      },
-                      config,
-                    );
-
-                    return { messages: [response] };
-                  },
-                );
+              BootstrapOutput(msgs: BaseMessage[]) {
+                return { messages: msgs };
               },
             } as EaCChatPromptNeuron,
             "fetch-user-info": {
-              Bootstrap: () => {
-                return RunnableLambda.from((_, config) => {
-                  const userId = config?.configurable?.user;
+              BootstrapInput(_, __, config) {
+                const userId = config?.configurable?.user;
 
-                  if (userId) {
-                    const user = userDB[userId as keyof typeof userDB];
+                if (userId) {
+                  const user = userDB[userId as keyof typeof userDB];
 
-                    if (user) {
-                      return {
-                        userInfo:
-                          `Name: ${user.name}\nEmail: ${user.email}\nPhone: ${user.phone}`,
-                      };
-                    }
+                  if (user) {
+                    return {
+                      userInfo:
+                        `Name: ${user.name}\nEmail: ${user.email}\nPhone: ${user.phone}`,
+                    };
                   }
+                }
 
-                  return { userInfo: "N/A" };
-                });
+                return { userInfo: "N/A" };
               },
             } as Partial<EaCNeuron>,
           },

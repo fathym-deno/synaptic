@@ -4,7 +4,6 @@ import {
   END,
   EverythingAsCodeDatabases,
   Runnable,
-  RunnableLambda,
   START,
 } from "../../../tests.deps.ts";
 import { buildTestIoC } from "../../../test-eac-setup.ts";
@@ -22,22 +21,18 @@ type ScoredValue = {
 
 Deno.test("Graph Branching Circuits", async (t) => {
   const loadSimpleBootstrap = (value: string) => {
-    return () => {
-      return RunnableLambda.from((state: { aggregate: string[] }) => {
-        console.log(`Adding ${value} to ${state.aggregate}`);
+    return (state: { aggregate: string[] }) => {
+      console.log(`Adding ${value} to ${state.aggregate}`);
 
-        return { aggregate: [`I'm ${value}`] };
-      });
+      return { aggregate: [`I'm ${value}`] };
     };
   };
 
   const loadScoredBootstrap = (value: string, score: number) => {
-    return () => {
-      return RunnableLambda.from((state: { aggregate: string[] }) => {
-        console.log(`Adding ${value} to ${state.aggregate}`);
+    return (state: { aggregate: string[] }) => {
+      console.log(`Adding ${value} to ${state.aggregate}`);
 
-        return { fanoutValues: [{ value: `I'm ${value}`, score }] };
-      });
+      return { fanoutValues: [{ value: `I'm ${value}`, score }] };
     };
   };
 
@@ -60,16 +55,16 @@ Deno.test("Graph Branching Circuits", async (t) => {
           },
           Neurons: {
             a: {
-              Bootstrap: loadSimpleBootstrap("A"),
+              BootstrapInput: loadSimpleBootstrap("A"),
             } as Partial<EaCNeuron>,
             b: {
-              Bootstrap: loadSimpleBootstrap("B"),
+              BootstrapInput: loadSimpleBootstrap("B"),
             } as Partial<EaCNeuron>,
             c: {
-              Bootstrap: loadSimpleBootstrap("C"),
+              BootstrapInput: loadSimpleBootstrap("C"),
             } as Partial<EaCNeuron>,
             d: {
-              Bootstrap: loadSimpleBootstrap("D"),
+              BootstrapInput: loadSimpleBootstrap("D"),
             } as Partial<EaCNeuron>,
           },
           Edges: {
@@ -97,19 +92,19 @@ Deno.test("Graph Branching Circuits", async (t) => {
           },
           Neurons: {
             a: {
-              Bootstrap: loadSimpleBootstrap("A"),
+              BootstrapInput: loadSimpleBootstrap("A"),
             } as Partial<EaCNeuron>,
             b: {
-              Bootstrap: loadSimpleBootstrap("B"),
+              BootstrapInput: loadSimpleBootstrap("B"),
             } as Partial<EaCNeuron>,
             c: {
-              Bootstrap: loadSimpleBootstrap("C"),
+              BootstrapInput: loadSimpleBootstrap("C"),
             } as Partial<EaCNeuron>,
             d: {
-              Bootstrap: loadSimpleBootstrap("D"),
+              BootstrapInput: loadSimpleBootstrap("D"),
             } as Partial<EaCNeuron>,
             e: {
-              Bootstrap: loadSimpleBootstrap("E"),
+              BootstrapInput: loadSimpleBootstrap("E"),
             } as Partial<EaCNeuron>,
           },
           Edges: {
@@ -164,31 +159,28 @@ Deno.test("Graph Branching Circuits", async (t) => {
           },
           Neurons: {
             a: {
-              Bootstrap: loadSimpleBootstrap("A"),
+              BootstrapInput: loadSimpleBootstrap("A"),
             } as Partial<EaCNeuron>,
             b: {
-              Bootstrap: loadScoredBootstrap("B", 0.1),
+              BootstrapInput: loadScoredBootstrap("B", 0.1),
             } as Partial<EaCNeuron>,
             c: {
-              Bootstrap: loadScoredBootstrap("C", 0.9),
+              BootstrapInput: loadScoredBootstrap("C", 0.9),
             } as Partial<EaCNeuron>,
             d: {
-              Bootstrap: loadScoredBootstrap("D", 0.3),
+              BootstrapInput: loadScoredBootstrap("D", 0.3),
             } as Partial<EaCNeuron>,
             e: {
-              Bootstrap: () => {
-                return RunnableLambda.from(
-                  (state: { fanoutValues: ScoredValue[] }) => {
-                    // Sort by score (reversed)
-                    state.fanoutValues.sort((a, b) => b.score - a.score);
-                    return {
-                      aggregate: state.fanoutValues
-                        .map((v) => v.value)
-                        .concat(["I'm E"]),
-                      fanoutValues: [],
-                    };
-                  },
-                );
+              BootstrapInput(state: { fanoutValues: ScoredValue[] }) {
+                // Sort by score (reversed)
+                state.fanoutValues.sort((a, b) => b.score - a.score);
+
+                return {
+                  aggregate: state.fanoutValues
+                    .map((v) => v.value)
+                    .concat(["I'm E"]),
+                  fanoutValues: [],
+                };
               },
             } as Partial<EaCNeuron>,
           },

@@ -14,14 +14,14 @@ export class DenoKVSaver extends BaseCheckpointSaver {
     protected denoKv: Deno.Kv,
     protected rootKey: Deno.KvKey,
     protected checkpointTtl?: number,
-    serde?: SerializerProtocol,
+    serde?: SerializerProtocol<typeof BaseCheckpointSaver>,
   ) {
     super(serde);
   }
 
   public async getTuple(
     config: RunnableConfig,
-  ): Promise<CheckpointTuple | undefined> {
+  ): Promise<CheckpointTuple<BaseCheckpointSaver["getTuple"]> | undefined> {
     const threadId = config.configurable?.thread_id;
     const checkpointId = config.configurable?.checkpoint_id ??
       config.configurable?.transferCheckpointId;
@@ -64,7 +64,7 @@ export class DenoKVSaver extends BaseCheckpointSaver {
     config: RunnableConfig,
     limit?: number,
     before?: RunnableConfig,
-  ): AsyncGenerator<CheckpointTuple> {
+  ): AsyncGenerator<CheckpointTuple<BaseCheckpointSaver["getTuple"]>> {
     const threadId = config.configurable?.thread_id;
 
     const checkpointsRes = await this.denoKv.list<boolean>({
