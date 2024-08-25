@@ -74,9 +74,6 @@ Deno.test("Graph Stream Tokens Circuits", async (t) => {
           Type: "ToolExecutor",
           ToolLookups: ["thinky|test"],
           MessagesPath: "$.messages",
-          BootstrapInput(state: { messages: BaseMessage[] }) {
-            return state.messages;
-          },
           BootstrapOutput(msgs: BaseMessage[]) {
             return { messages: msgs };
           },
@@ -96,6 +93,9 @@ Deno.test("Graph Stream Tokens Circuits", async (t) => {
             agent: [
               "thinky-llm",
               {
+                BootstrapInput(state: { messages: BaseMessage[] }) {
+                  return state.messages;
+                },
                 BootstrapOutput(msg: BaseMessage) {
                   return { messages: [msg] };
                 },
