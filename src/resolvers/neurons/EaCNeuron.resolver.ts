@@ -106,106 +106,118 @@ export async function resolveEaCNeuronFromLike(
 
 export default {
   async Resolve(neuronLookup, neuronLike, ioc, eac) {
-    let runnable: Runnable | undefined;
+    try {
+      let runnable: Runnable | undefined;
 
-    const neuron = await resolveEaCNeuronFromLike(neuronLike, ioc, eac);
+      const neuron = await resolveEaCNeuronFromLike(neuronLike, ioc, eac);
 
-    const configureName = (runnable: Runnable, runName?: string) => {
-      if ("withConfig" in runnable) {
-        runnable = runnable.withConfig({ runName });
+      const configureName = (runnable: Runnable, runName?: string) => {
+        if ("withConfig" in runnable) {
+          runnable = runnable.withConfig({ runName });
+        }
+
+        return runnable;
+      };
+
+      if (isEaCNeuron(undefined, neuron)) {
+        const neuronResolver = await ioc.Resolve<
+          SynapticNeuronResolver<typeof neuron>
+        >(ioc.Symbol("SynapticNeuronResolver"), neuron.Type as string);
+
+        const neuronsResolver = await ioc.Resolve<
+          SynapticNeuronResolver<Record<string, EaCNeuronLike> | undefined>
+        >(ioc.Symbol("SynapticNeuronResolver"), "$neurons");
+
+        runnable = neuron.Type
+          ? await neuronResolver.Resolve(neuronLookup, neuron, ioc, eac)
+          : runnable;
+
+        if (neuron.Bootstrap) {
+          runnable = await neuron.Bootstrap(
+            runnable ?? new RunnablePassthrough(),
+            neuron,
+          );
+        }
+
+        if (runnable) {
+          runnable = configureName(
+            runnable,
+            neuron?.Name || neuronLookup || undefined,
+          );
+        }
+
+        const neurons = await neuronsResolver.Resolve(
+          neuronLookup,
+          neuron.Neurons,
+          ioc,
+          eac,
+        );
+
+        if (neurons) {
+          runnable = runnable
+            ? runnable.pipe(configureName(neurons, "Neurons"))
+            : configureName(neurons, neuron?.Name || neuronLookup || undefined);
+        }
+
+        const synapses = await neuronsResolver.Resolve(
+          neuronLookup,
+          neuron.Synapses,
+          ioc,
+          eac,
+        );
+
+        if (synapses) {
+          runnable = runnable
+            ? runnable.pipe(configureName(synapses, "Synapses"))
+            : configureName(
+              synapses,
+              neuron?.Name || neuronLookup || undefined,
+            );
+        }
+
+        if (neuron.BootstrapOutput) {
+          const bsOut = configureName(
+            RunnableLambda.from(async (s, cfg) => {
+              return await (neuron as EaCNeuron).BootstrapOutput!(
+                s,
+                neuron as EaCNeuron,
+                cfg,
+              );
+            }),
+            "BootstrapOutput",
+          );
+
+          runnable = runnable
+            ? runnable.pipe(bsOut)
+            : configureName(bsOut, neuron?.Name || neuronLookup || undefined);
+        }
+
+        if (neuron.BootstrapInput) {
+          const bsInput = configureName(
+            RunnableLambda.from(async (s, cfg) => {
+              return await (neuron as EaCNeuron).BootstrapInput!(
+                s,
+                neuron as EaCNeuron,
+                cfg,
+              );
+            }),
+            "BootstrapInput",
+          );
+
+          runnable = runnable
+            ? bsInput.pipe(runnable)
+            : configureName(bsInput, neuron?.Name || neuronLookup || undefined);
+        }
       }
 
       return runnable;
-    };
-
-    if (isEaCNeuron(undefined, neuron)) {
-      const neuronResolver = await ioc.Resolve<
-        SynapticNeuronResolver<typeof neuron>
-      >(ioc.Symbol("SynapticNeuronResolver"), neuron.Type as string);
-
-      const neuronsResolver = await ioc.Resolve<
-        SynapticNeuronResolver<Record<string, EaCNeuronLike> | undefined>
-      >(ioc.Symbol("SynapticNeuronResolver"), "$neurons");
-
-      runnable = neuron.Type
-        ? await neuronResolver.Resolve(neuronLookup, neuron, ioc, eac)
-        : runnable;
-
-      if (neuron.Bootstrap) {
-        runnable = await neuron.Bootstrap(
-          runnable ?? new RunnablePassthrough(),
-          neuron,
-        );
-      }
-
-      if (runnable) {
-        runnable = configureName(
-          runnable,
-          neuron?.Name || neuronLookup || undefined,
-        );
-      }
-
-      const neurons = await neuronsResolver.Resolve(
-        neuronLookup,
-        neuron.Neurons,
-        ioc,
-        eac,
+    } catch (err) {
+      console.error(
+        `Unable to configure neuron ${neuronLookup} with configuration:`,
       );
+      console.error(neuronLike);
 
-      if (neurons) {
-        runnable = runnable
-          ? runnable.pipe(configureName(neurons, "Neurons"))
-          : configureName(neurons, neuron?.Name || neuronLookup || undefined);
-      }
-
-      const synapses = await neuronsResolver.Resolve(
-        neuronLookup,
-        neuron.Synapses,
-        ioc,
-        eac,
-      );
-
-      if (synapses) {
-        runnable = runnable
-          ? runnable.pipe(configureName(synapses, "Synapses"))
-          : configureName(synapses, neuron?.Name || neuronLookup || undefined);
-      }
-
-      if (neuron.BootstrapOutput) {
-        const bsOut = configureName(
-          RunnableLambda.from(async (s, cfg) => {
-            return await (neuron as EaCNeuron).BootstrapOutput!(
-              s,
-              neuron as EaCNeuron,
-              cfg,
-            );
-          }),
-          "BootstrapOutput",
-        );
-
-        runnable = runnable
-          ? runnable.pipe(bsOut)
-          : configureName(bsOut, neuron?.Name || neuronLookup || undefined);
-      }
-
-      if (neuron.BootstrapInput) {
-        const bsInput = configureName(
-          RunnableLambda.from(async (s, cfg) => {
-            return await (neuron as EaCNeuron).BootstrapInput!(
-              s,
-              neuron as EaCNeuron,
-              cfg,
-            );
-          }),
-          "BootstrapInput",
-        );
-
-        runnable = runnable
-          ? bsInput.pipe(runnable)
-          : configureName(bsInput, neuron?.Name || neuronLookup || undefined);
-      }
+      throw err;
     }
-
-    return runnable;
   },
 } as SynapticNeuronResolver<EaCNeuronLike>;

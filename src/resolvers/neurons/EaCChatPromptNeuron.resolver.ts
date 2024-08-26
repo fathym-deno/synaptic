@@ -24,35 +24,58 @@ export default {
       )
       : {};
 
-    personality = mergeWithArrays(personality, {
-      SystemMessages: neuron.SystemMessage ? [neuron.SystemMessage] : [],
-      Instructions: neuron.Instructions ?? [],
-      Messages: neuron.Messages ?? [],
-      NewMessages: neuron.NewMessages ?? [],
-    } as EaCPersonalityDetails);
+      console.log(
+        '-------------------------Merging personality-------------------------'
+      );
 
-    if (
-      personality.SystemMessages?.length ||
-      personality.Instructions?.length
-    ) {
-      let sysMsg = personality.SystemMessages?.join("") ?? "";
+      personality = mergeWithArrays(personality, {
+        SystemMessages: neuron.SystemMessage ? [neuron.SystemMessage] : [],
+        Instructions: neuron.Instructions ?? [],
+        Messages: neuron.Messages ?? [],
+        NewMessages: neuron.NewMessages ?? [],
+      } as EaCPersonalityDetails);
 
-      if (personality.Instructions?.length) {
-        sysMsg += "\n\n";
+      if (
+        personality.SystemMessages?.length ||
+        personality.Instructions?.length
+      ) {
+        console.log(
+          '-------------------------Setting up system messages-------------------------'
+        );
 
-        sysMsg += personality.Instructions.join("\n\n");
+        let sysMsg = personality.SystemMessages?.join('') ?? '';
+
+        if (personality.Instructions?.length) {
+          console.log(
+            '-------------------------Setting up instructions-------------------------'
+          );
+
+          sysMsg += '\n\n';
+
+          sysMsg += personality.Instructions.join('\n\n');
+        }
+
+        messages.push(['system', sysMsg]);
       }
 
-      messages.push(["system", sysMsg]);
-    }
+      if (personality.Messages) {
+        console.log(
+          '-------------------------Setting up messages-------------------------'
+        );
 
-    if (personality.Messages) {
-      messages.push(...personality.Messages);
-    }
+        messages.push(...personality.Messages);
+      }
 
     if (personality.NewMessages) {
+      console.log(
+        '-------------------------Setting up new messages-------------------------'
+      );
+
       messages.push(...personality.NewMessages);
     }
+
+    console.log('-------------------------Messages:-------------------------');
+    console.log(messages);
 
     const template = ChatPromptTemplate.fromMessages(messages);
 
