@@ -1,5 +1,6 @@
 import {
   AIMessage,
+  Annotation,
   assert,
   BaseMessage,
   BaseMessagePromptTemplateLike,
@@ -10,7 +11,7 @@ import {
   Runnable,
   RunnableLambda,
   START,
-} from "../tests.deps.ts";
+} from '../tests.deps.ts';
 import { AI_LOOKUP, buildTestIoC } from "../test-eac-setup.ts";
 import { EaCCircuitToolDetails } from "../../src/eac/tools/EaCCircuitToolDetails.ts";
 import { EaCAzureOpenAILLMDetails } from "../../src/eac/EaCAzureOpenAILLMDetails.ts";
@@ -45,20 +46,20 @@ Deno.test("Circuits", async (t) => {
     AIs: {
       [AI_LOOKUP]: {
         LLMs: {
-          "thinky-llm-circuits": {
+          'thinky-llm-circuits': {
             Details: {
-              Type: "AzureOpenAI",
-              Name: "Azure OpenAI LLM",
-              Description: "The LLM for interacting with Azure OpenAI.",
-              APIKey: Deno.env.get("AZURE_OPENAI_KEY")!,
-              Instance: Deno.env.get("AZURE_OPENAI_INSTANCE")!,
-              DeploymentName: "gpt-4o",
-              ModelName: "gpt-4o",
+              Type: 'AzureOpenAI',
+              Name: 'Azure OpenAI LLM',
+              Description: 'The LLM for interacting with Azure OpenAI.',
+              APIKey: Deno.env.get('AZURE_OPENAI_KEY')!,
+              Instance: Deno.env.get('AZURE_OPENAI_INSTANCE')!,
+              DeploymentName: 'gpt-4o',
+              ModelName: 'gpt-4o',
               Streaming: true,
               Verbose: false,
               ToolLookups: [
-                "thinky|circuit-tools:chat",
-                "thinky|circuit-tools:search",
+                'thinky|circuit-tools:chat',
+                'thinky|circuit-tools:search',
               ],
               ToolsAsFunctions: true,
             } as EaCAzureOpenAILLMDetails,
@@ -67,25 +68,25 @@ Deno.test("Circuits", async (t) => {
         Retrievers: {
           fathym: {
             Details: {
-              IndexerLookup: "thinky|main",
-              LoaderLookups: ["thinky|fathym"],
-              LoaderTextSplitterLookups: { "thinky|fathym": "thinky|html" },
+              IndexerLookup: 'thinky|main',
+              LoaderLookups: ['thinky|fathym'],
+              LoaderTextSplitterLookups: { 'thinky|fathym': 'thinky|html' },
               RefreshOnStart: false,
-              VectorStoreLookup: "thinky|thinky",
+              VectorStoreLookup: 'thinky|thinky',
             },
           },
         },
         Tools: {
-          "circuit-tools:chat": {
+          'circuit-tools:chat': {
             Details: {
-              Type: "Circuit",
-              CircuitLookup: "circuit-tools:chat",
+              Type: 'Circuit',
+              CircuitLookup: 'circuit-tools:chat',
             } as EaCCircuitToolDetails,
           },
-          "circuit-tools:search": {
+          'circuit-tools:search': {
             Details: {
-              Type: "Circuit",
-              CircuitLookup: "circuit-tools:search",
+              Type: 'Circuit',
+              CircuitLookup: 'circuit-tools:search',
             } as EaCCircuitToolDetails,
           },
         },
@@ -94,42 +95,42 @@ Deno.test("Circuits", async (t) => {
     Circuits: {
       $neurons: {
         $pass: {
-          Type: "Passthrough",
+          Type: 'Passthrough',
         } as EaCPassthroughNeuron,
-        "chat-history": {
-          Type: "ChatHistory",
+        'chat-history': {
+          Type: 'ChatHistory',
           ChatHistoryLookup: `${AI_LOOKUP}|thinky`,
-          InputKey: "input",
-          HistoryKey: "chat_history",
+          InputKey: 'input',
+          HistoryKey: 'chat_history',
         } as EaCChatHistoryNeuron,
-        "thinky-llm": {
-          Type: "LLM",
+        'thinky-llm': {
+          Type: 'LLM',
           LLMLookup: `${AI_LOOKUP}|thinky`,
         } as EaCLLMNeuron,
-        "thinky-llm-tooled": {
-          Type: "LLM",
+        'thinky-llm-tooled': {
+          Type: 'LLM',
           LLMLookup: `${AI_LOOKUP}|thinky-tooled`,
         } as EaCLLMNeuron,
-        "thinky-llm-circuits": {
-          Type: "LLM",
+        'thinky-llm-circuits': {
+          Type: 'LLM',
           LLMLookup: `${AI_LOOKUP}|thinky-llm-circuits`,
         } as EaCLLMNeuron,
-        "test-chat": {
-          Type: "ChatPrompt",
+        'test-chat': {
+          Type: 'ChatPrompt',
           SystemMessage: systemMessage,
           Messages: baseMessages,
           Neurons: {
-            "": "thinky-llm",
+            '': 'thinky-llm',
           },
         } as EaCChatPromptNeuron,
-        "thinky-circuit-tools": {
-          Type: "ToolExecutor",
+        'thinky-circuit-tools': {
+          Type: 'ToolExecutor',
           ToolLookups: [
-            "thinky|circuit-tools:chat",
-            "thinky|circuit-tools:search",
+            'thinky|circuit-tools:chat',
+            'thinky|circuit-tools:search',
           ],
           ToolsAsFunctions: true,
-          MessagesPath: "$.messages",
+          MessagesPath: '$.messages',
           Bootstrap: (r) => {
             return RunnableLambda.from(
               async (state: { messages: Array<BaseMessage> }) => {
@@ -138,56 +139,56 @@ Deno.test("Circuits", async (t) => {
                 return {
                   messages: response,
                 };
-              },
+              }
             );
           },
         } as EaCToolExecutorNeuron,
       },
-      "basic-prompt": {
+      'basic-prompt': {
         Details: {
-          Type: "Linear",
+          Type: 'Linear',
           Priority: 100,
           Neurons: {
-            "": {
-              Type: "Prompt",
-              PromptTemplate: "What mood does the color {input} provoke?",
+            '': {
+              Type: 'Prompt',
+              PromptTemplate: 'What mood does the color {input} provoke?',
               Neurons: {
-                "": "thinky-llm",
+                '': 'thinky-llm',
               },
             } as EaCPromptNeuron,
           },
         },
       },
-      "basic-chat": {
+      'basic-chat': {
         Details: {
-          Type: "Linear",
+          Type: 'Linear',
           Priority: 100,
           Neurons: {
-            "": [
-              "test-chat",
+            '': [
+              'test-chat',
               {
-                NewMessages: [["human", "{input}"]],
+                NewMessages: [['human', '{input}']],
               } as Partial<EaCChatPromptNeuron>,
             ],
           },
         },
       },
-      "basic-chat-w-history": {
+      'basic-chat-w-history': {
         Details: {
-          Type: "Linear",
+          Type: 'Linear',
           Priority: 100,
           Neurons: {
-            "": [
-              "chat-history",
+            '': [
+              'chat-history',
               {
-                InputKey: "question",
+                InputKey: 'question',
                 ChatNeuron: [
-                  "test-chat",
+                  'test-chat',
                   {
-                    NewMessages: [["human", "{question}"]],
+                    NewMessages: [['human', '{question}']],
                     Messages: [
                       ...baseMessages,
-                      new MessagesPlaceholder("chat_history"),
+                      new MessagesPlaceholder('chat_history'),
                     ],
                   } as Partial<EaCChatPromptNeuron>,
                 ],
@@ -196,25 +197,24 @@ Deno.test("Circuits", async (t) => {
           },
         },
       },
-      "rag-chat": {
+      'rag-chat': {
         Details: {
-          Type: "Linear",
+          Type: 'Linear',
           Priority: 100,
           Neurons: {
-            question: "$pass",
+            question: '$pass',
             context: {
-              Type: "Retriever",
-              RetrieverLookup: "thinky|fathym",
+              Type: 'Retriever',
+              RetrieverLookup: 'thinky|fathym',
             } as EaCRetrieverNeuron,
           },
           Synapses: {
-            "": {
-              Type: "StuffDocuments",
-              LLM: "thinky-llm",
+            '': {
+              Type: 'StuffDocuments',
+              LLM: 'thinky-llm',
               Prompt: {
-                Type: "ChatPrompt",
-                SystemMessage:
-                  `You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise.
+                Type: 'ChatPrompt',
+                SystemMessage: `You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise.
 Question: {question}
 Context: {context}
 Answer:`,
@@ -223,73 +223,72 @@ Answer:`,
           },
         },
       },
-      "rag-chat-direct": {
+      'rag-chat-direct': {
         Details: {
-          Type: "Linear",
+          Type: 'Linear',
           Priority: 100,
           Neurons: {
-            question: "$pass",
+            question: '$pass',
             context: {
-              Type: "Retriever",
-              RetrieverLookup: "thinky|fathym",
+              Type: 'Retriever',
+              RetrieverLookup: 'thinky|fathym',
               Neurons: {
-                "": {
-                  Type: "DocumentsAsString",
+                '': {
+                  Type: 'DocumentsAsString',
                 } as EaCDocumentsAsStringNeuron,
               },
             } as EaCRetrieverNeuron,
           },
           Synapses: {
-            "": {
-              Type: "ChatPrompt",
-              SystemMessage:
-                `You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise.
+            '': {
+              Type: 'ChatPrompt',
+              SystemMessage: `You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise.
 Question: {question}
 Context: {context}
 Answer:`,
               Neurons: {
-                "": "thinky-llm",
+                '': 'thinky-llm',
               },
             } as EaCChatPromptNeuron,
           },
         },
       },
-      "tool-chat:search": {
+      'tool-chat:search': {
         Details: {
-          Type: "Linear",
+          Type: 'Linear',
           Priority: 100,
           Neurons: {
-            input: "$pass",
+            input: '$pass',
           },
           Synapses: {
             input: [
-              "$pass",
+              '$pass',
               {
-                Field: "$.input",
+                Field: '$.input',
               } as Partial<EaCPassthroughNeuron>,
             ],
             search: {
-              Type: "ChatPrompt",
-              SystemMessage: "You are an expert web researcher.",
+              Type: 'ChatPrompt',
+              SystemMessage: 'You are an expert web researcher.',
               NewMessages: [
                 [
-                  "human",
+                  'human',
                   `Turn the following user input into a search query for a search engine (just return the query, no extra quotes):
                   
 {input}`,
                 ],
               ],
               Neurons: {
-                "": [
-                  "thinky-llm",
+                '': [
+                  'thinky-llm',
                   {
                     Neurons: {
-                      "": {
-                        Type: "StringOutputParser",
+                      '': {
+                        Type: 'StringOutputParser',
                         Neurons: {
-                          "": {
-                            Type: "Tool",
-                            ToolLookup: "thinky|tavily",
+                          '': {
+                            Type: 'Tool',
+                            ToolLookup: 'thinky|tavily',
                           } as EaCToolNeuron,
                         },
                       } as EaCStringOutputParserNeuron,
@@ -301,31 +300,30 @@ Answer:`,
           },
         },
       },
-      "tool-chat": {
+      'tool-chat': {
         Details: {
-          Type: "Linear",
+          Type: 'Linear',
           Priority: 100,
           Neurons: {
-            "": {
-              Type: "Circuit",
-              CircuitLookup: "tool-chat:search",
+            '': {
+              Type: 'Circuit',
+              CircuitLookup: 'tool-chat:search',
               Neurons: {
-                "": {
-                  Type: "ChatPrompt",
-                  SystemMessage:
-                    `You are here to summarize the users JSON formatted web results, you will need to answer their original input:
+                '': {
+                  Type: 'ChatPrompt',
+                  SystemMessage: `You are here to summarize the users JSON formatted web results, you will need to answer their original input:
 
 {input}`,
                   NewMessages: [
                     [
-                      "human",
+                      'human',
                       `Please provide my answer based on:
 
                     {search}`,
                     ],
                   ],
                   Neurons: {
-                    "": "thinky-llm",
+                    '': 'thinky-llm',
                   },
                 } as EaCChatPromptNeuron,
               },
@@ -333,32 +331,32 @@ Answer:`,
           },
         },
       },
-      "graph-chat-model": {
+      'graph-chat-model': {
         Details: {
-          Type: "Graph",
+          Type: 'Graph',
           Priority: 100,
           Neurons: {
-            main: "thinky-llm",
+            main: 'thinky-llm',
           },
           Edges: {
-            [START]: "main",
+            [START]: 'main',
             main: END,
           },
         } as EaCGraphCircuitDetails,
       },
-      "graph-chat-basic:agent": {
+      'graph-chat-basic:agent': {
         Details: {
-          Type: "Linear",
+          Type: 'Linear',
           Priority: 100,
           Neurons: {
-            "": {
-              Type: "ChatPrompt",
+            '': {
+              Type: 'ChatPrompt',
               SystemMessage: `You are a helpful assistant.`,
               Messages: [
-                new MessagesPlaceholder("messages"),
+                new MessagesPlaceholder('messages'),
               ] as BaseMessagePromptTemplateLike[],
               Neurons: {
-                "": "thinky-llm-tooled",
+                '': 'thinky-llm-tooled',
               },
               Bootstrap: (r) => {
                 return RunnableLambda.from(
@@ -370,7 +368,7 @@ Answer:`,
                     return {
                       messages: [response],
                     };
-                  },
+                  }
                 );
               },
               // Synapses: {
@@ -381,15 +379,15 @@ Answer:`,
           },
         } as EaCLinearCircuitDetails,
       },
-      "graph-chat-basic:action": {
+      'graph-chat-basic:action': {
         Details: {
-          Type: "Linear",
+          Type: 'Linear',
           Priority: 100,
           Neurons: {
-            "": {
-              Type: "ToolExecutor",
-              ToolLookups: ["thinky|tavily"],
-              MessagesPath: "$.messages",
+            '': {
+              Type: 'ToolExecutor',
+              ToolLookups: ['thinky|tavily'],
+              MessagesPath: '$.messages',
               Bootstrap: (r) => {
                 return RunnableLambda.from(
                   async (state: { messages: Array<BaseMessage> }) => {
@@ -398,7 +396,7 @@ Answer:`,
                     return {
                       messages: response,
                     };
-                  },
+                  }
                 );
               },
             } as EaCToolExecutorNeuron,
@@ -406,31 +404,31 @@ Answer:`,
           },
         } as EaCLinearCircuitDetails,
       },
-      "graph-chat-basic": {
+      'graph-chat-basic': {
         Details: {
-          Type: "Graph",
+          Type: 'Graph',
           Priority: 100,
-          State: {
-            messages: {
-              value: (x: BaseMessage[], y: BaseMessage[]) => x.concat(y),
+          State: Annotation.Root({
+            messages: Annotation<BaseMessage[]>({
+              reducer: (x, y) => x.concat(y),
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             agent: {
-              Type: "Circuit",
-              CircuitLookup: "graph-chat-basic:agent",
+              Type: 'Circuit',
+              CircuitLookup: 'graph-chat-basic:agent',
             } as EaCCircuitNeuron,
             action: {
-              Type: "Circuit",
-              CircuitLookup: "graph-chat-basic:action",
+              Type: 'Circuit',
+              CircuitLookup: 'graph-chat-basic:action',
             } as EaCCircuitNeuron,
           },
           Edges: {
-            [START]: "agent",
+            [START]: 'agent',
             agent: {
               Node: {
-                continue: "action",
+                continue: 'action',
                 [END]: END,
               },
               // Node: END,
@@ -439,12 +437,12 @@ Answer:`,
 
                 const lastMessage = messages[messages.length - 1];
 
-                let node = "continue";
+                let node = 'continue';
 
                 if (
-                  (!("function_call" in lastMessage.additional_kwargs) ||
+                  (!('function_call' in lastMessage.additional_kwargs) ||
                     !lastMessage.additional_kwargs.function_call) &&
-                  (!("tool_calls" in lastMessage.additional_kwargs) ||
+                  (!('tool_calls' in lastMessage.additional_kwargs) ||
                     !lastMessage.additional_kwargs.tool_calls)
                 ) {
                   node = END;
@@ -453,23 +451,23 @@ Answer:`,
                 return node;
               },
             },
-            action: "agent",
+            action: 'agent',
           },
         } as EaCGraphCircuitDetails,
       },
-      "circuit-tools:chat": {
+      'circuit-tools:chat': {
         Details: {
-          Type: "Linear",
-          Name: "chat",
-          Description: "Used to have an open ended chat with you.",
+          Type: 'Linear',
+          Name: 'chat',
+          Description: 'Used to have an open ended chat with you.',
           Priority: 100,
           Neurons: {
-            "": [
-              "thinky-llm",
+            '': [
+              'thinky-llm',
               {
                 Neurons: {
-                  "": {
-                    Type: "StringOutputParser",
+                  '': {
+                    Type: 'StringOutputParser',
                   } as EaCStringOutputParserNeuron,
                 },
               } as Partial<EaCNeuron>,
@@ -477,38 +475,37 @@ Answer:`,
           },
         } as EaCLinearCircuitDetails,
       },
-      "circuit-tools:search": {
+      'circuit-tools:search': {
         Details: {
-          Type: "Linear",
-          Name: "search",
-          Description: "Used to search the web.",
+          Type: 'Linear',
+          Name: 'search',
+          Description: 'Used to search the web.',
           Priority: 100,
           Neurons: {
-            "": {
-              Type: "Circuit",
-              CircuitLookup: "tool-chat:search",
+            '': {
+              Type: 'Circuit',
+              CircuitLookup: 'tool-chat:search',
               Neurons: {
-                "": {
-                  Type: "ChatPrompt",
-                  SystemMessage:
-                    `You are here to summarize the users JSON formatted web results, you will need to answer their original input:
+                '': {
+                  Type: 'ChatPrompt',
+                  SystemMessage: `You are here to summarize the users JSON formatted web results, you will need to answer their original input:
 
 {input}`,
                   NewMessages: [
                     [
-                      "human",
+                      'human',
                       `Please provide my answer based on:
 
                     {search}`,
                     ],
                   ],
                   Neurons: {
-                    "": [
-                      "thinky-llm-circuits",
+                    '': [
+                      'thinky-llm-circuits',
                       {
                         Neurons: {
-                          "": {
-                            Type: "StringOutputParser",
+                          '': {
+                            Type: 'StringOutputParser',
                           } as EaCStringOutputParserNeuron,
                         },
                       } as Partial<EaCLLMNeuron>,
@@ -520,9 +517,9 @@ Answer:`,
           },
         } as EaCLinearCircuitDetails,
       },
-      "circuit-tools": {
+      'circuit-tools': {
         Details: {
-          Type: "Graph",
+          Type: 'Graph',
           Priority: 100,
           State: {
             messages: {
@@ -532,7 +529,7 @@ Answer:`,
           },
           Neurons: {
             agent: [
-              "thinky-llm-circuits",
+              'thinky-llm-circuits',
               {
                 Bootstrap: (r) => {
                   return RunnableLambda.from(
@@ -544,16 +541,16 @@ Answer:`,
                       console.log(response.additional_kwargs.tool_calls);
 
                       return { messages: [response] };
-                    },
+                    }
                   );
                 },
               } as Partial<EaCNeuron>,
             ],
-            circuits: "thinky-circuit-tools",
+            circuits: 'thinky-circuit-tools',
           },
           Edges: {
-            [START]: "agent",
-            agent: "circuits",
+            [START]: 'agent',
+            agent: 'circuits',
             circuits: END,
           },
         } as EaCGraphCircuitDetails,

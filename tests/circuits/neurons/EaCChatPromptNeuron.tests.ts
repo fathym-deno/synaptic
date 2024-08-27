@@ -5,6 +5,7 @@ import FathymSynapticPlugin from "../../../src/plugins/FathymSynapticPlugin.ts";
 import { buildTestIoC } from "../../test-eac-setup.ts";
 import {
   AIMessage,
+  Annotation,
   assert,
   assertEquals,
   BaseMessage,
@@ -16,12 +17,12 @@ import {
   Runnable,
   START,
   z,
-} from "../../tests.deps.ts";
-import { EaCGraphCircuitDetails } from "../../../src/eac/EaCGraphCircuitDetails.ts";
-import { InferSynapticState } from "../../../src/utils/types.ts";
-import { EaCDenoKVSaverPersistenceDetails } from "../../../src/eac/EaCDenoKVSaverPersistenceDetails.ts";
-import { EaCAzureOpenAILLMDetails } from "../../../src/eac/EaCAzureOpenAILLMDetails.ts";
-import { EaCLLMNeuron } from "../../../src/eac/neurons/EaCLLMNeuron.ts";
+} from '../../tests.deps.ts';
+import { EaCGraphCircuitDetails } from '../../../src/eac/EaCGraphCircuitDetails.ts';
+import { InferSynapticState } from '../../../src/utils/types.ts';
+import { EaCDenoKVSaverPersistenceDetails } from '../../../src/eac/EaCDenoKVSaverPersistenceDetails.ts';
+import { EaCAzureOpenAILLMDetails } from '../../../src/eac/EaCAzureOpenAILLMDetails.ts';
+import { EaCLLMNeuron } from '../../../src/eac/neurons/EaCLLMNeuron.ts';
 
 export const LovelaceSourceInformationInputSchema = z.object({
   Input: z.string().optional(),
@@ -31,12 +32,12 @@ export type LovelaceSourceInformationInputSchema = z.infer<
   typeof LovelaceSourceInformationInputSchema
 >;
 
-export const LovelaceSourceInformationGraphStateSchema = {
-  Messages: {
-    value: (x: BaseMessage[], y: BaseMessage[]) => x.concat(y),
+export const LovelaceSourceInformationGraphStateSchema = Annotation.Root({
+  Messages: Annotation<BaseMessage[]>({
+    reducer: (x, y) => x.concat(y),
     default: () => [],
-  },
-};
+  }),
+});
 
 export type LovelaceSourceInformationGraphStateSchema = InferSynapticState<
   typeof LovelaceSourceInformationGraphStateSchema
