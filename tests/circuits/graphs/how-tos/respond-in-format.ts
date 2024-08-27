@@ -32,7 +32,7 @@ Deno.test("Graph Respond in Format Circuits", async (t) => {
               Name: "Azure OpenAI LLM",
               Description: "The LLM for interacting with Azure OpenAI.",
               APIKey: Deno.env.get("AZURE_OPENAI_KEY")!,
-              Endpoint: Deno.env.get("AZURE_OPENAI_ENDPOINT")!,
+              Instance: Deno.env.get("AZURE_OPENAI_INSTANCE")!,
               DeploymentName: "gpt-4o",
               ModelName: "gpt-4o",
               Streaming: true,

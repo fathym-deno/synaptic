@@ -3,7 +3,9 @@ import { EaCVertexDetails } from "../src.deps.ts";
 export type EaCEmbeddingsDetails<TType = unknown> = {
   APIKey: string;
 
-  Endpoint: string;
+  APIVersion?: string;
+
+  Instance: string;
 
   Type: TType;
 } & EaCVertexDetails;
@@ -19,7 +21,7 @@ export function isEaCEmbeddingsDetails<TType = unknown>(
     (!type || x.Type === type) &&
     x.APIKey !== undefined &&
     typeof x.APIKey === "string" &&
-    x.Endpoint !== undefined &&
-    typeof x.Endpoint === "string"
+    x.Instance !== undefined &&
+    typeof x.Instance === "string"
   );
 }

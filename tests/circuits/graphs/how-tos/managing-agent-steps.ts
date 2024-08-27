@@ -1,4 +1,3 @@
-import { ToolMessage } from "npm:@langchain/core/messages";
 import {
   AIMessage,
   assert,
@@ -8,6 +7,7 @@ import {
   HumanMessage,
   Runnable,
   START,
+  ToolMessage,
   z,
 } from "../../../tests.deps.ts";
 import { AI_LOOKUP, buildTestIoC } from "../../../test-eac-setup.ts";
@@ -33,7 +33,7 @@ Deno.test("Graph Managing Agent Steps Circuits", async (t) => {
               Name: "Azure OpenAI LLM",
               Description: "The LLM for interacting with Azure OpenAI.",
               APIKey: Deno.env.get("AZURE_OPENAI_KEY")!,
-              Endpoint: Deno.env.get("AZURE_OPENAI_ENDPOINT")!,
+              Instance: Deno.env.get("AZURE_OPENAI_INSTANCE")!,
               DeploymentName: "gpt-4o",
               ModelName: "gpt-4o",
               Streaming: true,

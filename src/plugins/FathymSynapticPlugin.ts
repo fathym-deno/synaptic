@@ -6,8 +6,6 @@ import {
   BaseDocumentLoader,
   BaseLanguageModel,
   CheerioWebBaseLoader,
-  convertToOpenAIFunction,
-  convertToOpenAITool,
   DFSFileHandlerResolver,
   DynamicStructuredTool,
   DynamicTool,
@@ -17,6 +15,9 @@ import {
   EaCRuntimePlugin,
   EaCRuntimePluginConfig,
   Embeddings,
+  formatToOpenAIFunction,
+  formatToOpenAITool,
+  getPackageLogger,
   HNSWLib,
   HtmlToTextTransformer,
   importDFSTypescriptModule,
@@ -311,10 +312,12 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             AzureOpenAIEmbeddings,
             () =>
               new AzureOpenAIEmbeddings({
-                azureOpenAIEndpoint: embeddingsDetails.Endpoint,
-                azureOpenAIApiKey: embeddingsDetails.APIKey,
-                azureOpenAIEmbeddingsApiDeploymentName:
+                azureOpenAIApiInstanceName: embeddingsDetails.Instance,
+                azureOpenAIApiEmbeddingsDeploymentName:
                   embeddingsDetails.DeploymentName,
+                azureOpenAIApiKey: embeddingsDetails.APIKey,
+                azureOpenAIApiVersion: embeddingsDetails.APIVersion ??
+                  "2024-06-01",
               }),
             {
               Lazy: false,
@@ -382,10 +385,10 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             AzureChatOpenAI,
             async (ioc) => {
               const llm = new AzureChatOpenAI({
-                azureOpenAIEndpoint: llmDetails.Endpoint,
+                azureOpenAIApiDeploymentName: llmDetails.DeploymentName,
+                azureOpenAIApiInstanceName: llmDetails.Instance,
                 azureOpenAIApiKey: llmDetails.APIKey,
-                azureOpenAIEmbeddingsApiDeploymentName:
-                  llmDetails.DeploymentName,
+                azureOpenAIApiVersion: llmDetails.APIVersion ?? "2024-06-01",
                 modelName: llmDetails.ModelName,
                 temperature: 0.7,
                 // maxTokens: 1000,
@@ -400,11 +403,11 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
                 return llm.bind({
                   functions: llmDetails.ToolsAsFunctions
-                    ? tools.map(convertToOpenAIFunction)
+                    ? tools.map(formatToOpenAIFunction)
                     : undefined,
                   tools: llmDetails.ToolsAsFunctions
                     ? undefined
-                    : tools.map(convertToOpenAITool),
+                    : tools.map(formatToOpenAITool),
                 });
               }
 
@@ -594,6 +597,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer,
   ): Promise<void> {
+    const logger = await getPackageLogger();
+
     const aiLookups = Object.keys(eac!.AIs || {});
 
     await Promise.all(
@@ -658,9 +663,15 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                     },
                   });
 
-                  console.log(idxRes);
+                  logger.debug(
+                    `Retriever '${retrieverLookup}' index results:`,
+                    idxRes,
+                  );
                 } catch (err) {
-                  console.error(err);
+                  logger.error(
+                    `There was an issue indexing Retriever '${retrieverLookup}'`,
+                    err,
+                  );
 
                   throw err;
                 }
@@ -934,9 +945,9 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
     this.configureEaCTools(eac, ioc);
 
-    this.configureEaCLLMs(eac, ioc);
-
     this.configureEaCEmbeddings(eac, ioc);
+
+    this.configureEaCLLMs(eac, ioc);
 
     await this.configureEaCVectorStores(eac, ioc);
 

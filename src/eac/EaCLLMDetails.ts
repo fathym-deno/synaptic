@@ -3,7 +3,9 @@ import { EaCVertexDetails } from "../src.deps.ts";
 export type EaCLLMDetails<TType = unknown> = {
   APIKey?: string;
 
-  Endpoint?: string;
+  APIVersion?: string;
+
+  Instance?: string;
 
   Streaming?: boolean;
 

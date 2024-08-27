@@ -8,15 +8,16 @@ export {
 } from "jsr:@std/http@1.0.2/server-sent-event-stream";
 export { Buffer, toReadableStream } from "jsr:@std/io@0.224.4";
 
-export * from "jsr:@fathym/common@0.2.22";
+export * from "jsr:@fathym/common@0.2.33";
+export * from "jsr:@fathym/common@0.2.33/log";
 
 // export * from '../../everything-as-code/mod.ts';
-export * from "jsr:@fathym/eac@0.1.18";
-export * from "jsr:@fathym/eac@0.1.18/applications";
-export * from "jsr:@fathym/eac@0.1.18/dfs";
+export * from "jsr:@fathym/eac@0.1.21";
+export * from "jsr:@fathym/eac@0.1.21/applications";
+export * from "jsr:@fathym/eac@0.1.21/dfs";
 
 // export * from "../../eac-runtime/mod.ts";
-export * from "jsr:@fathym/eac-runtime@0.1.10";
+export * from "jsr:@fathym/eac-runtime@0.1.16";
 
 export { IoCContainer } from "jsr:@fathym/ioc@0.0.12";
 
@@ -27,123 +28,6 @@ export { jsonSchemaToZod } from "npm:json-schema-to-zod@2.4.0";
 import jsonpath from "npm:jsonpath@1.1.1";
 export { jsonpath };
 
-// export {
-//   type AzureExtensionsOptions,
-//   AzureKeyCredential,
-//   type FunctionDefinition,
-//   OpenAIClient,
-// } from 'npm:@azure/openai@2.0.0-beta.1';
-export {
-  createOpenAIFunctionsAgent,
-  // createOpenAIFunctionsAgent,
-  // createOpenAIToolsAgent,
-  // createReactAgent,
-  // createStructuredChatAgent,
-  // createToolCallingAgent,
-  // createXmlAgent,
-  Toolkit,
-} from "npm:langchain@0.2.16/agents";
-// export { AzureChatOpenAI } from 'npm:@langchain/openai@0.2.5';
-import {} from "npm:@langchain/openai@0.2.5";
-export {
-  AzureChatOpenAI,
-  AzureOpenAIEmbeddings,
-  type OpenAIBaseInput,
-} from "npm:@langchain/azure-openai@0.0.11";
-export { createStuffDocumentsChain } from "npm:langchain@0.2.16/chains/combine_documents";
-export { CheerioWebBaseLoader } from "npm:@langchain/community@0.2.28/document_loaders/web/cheerio";
-export { HtmlToTextTransformer } from "npm:@langchain/community@0.2.28/document_transformers/html_to_text";
-export { WatsonxAI } from "npm:@langchain/community@0.2.28/llms/watsonx_ai";
-export {
-  AzureAISearchQueryType,
-  AzureAISearchVectorStore,
-} from "npm:@langchain/community@0.2.28/vectorstores/azure_aisearch";
-export { SerpAPI } from "npm:@langchain/community@0.2.28/tools/serpapi";
-export { TavilySearchResults } from "npm:@langchain/community@0.2.28/tools/tavily_search";
-export { HNSWLib } from "npm:@langchain/community@0.2.28/vectorstores/hnswlib";
-export { BaseListChatMessageHistory } from "npm:@langchain/core@0.2.27/chat_history";
-export { BaseDocumentLoader } from "npm:@langchain/core@0.2.27/document_loaders/base";
-export { Embeddings } from "npm:@langchain/core@0.2.27/embeddings";
-export {
-  index,
-  type ListKeyOptions,
-  RecordManager,
-  type RecordManagerInterface,
-  type UpdateOptions,
-  UUIDV5_NAMESPACE,
-} from "npm:@langchain/core@0.2.27/indexing";
-export {
-  BaseLanguageModel,
-  type LanguageModelLike,
-} from "npm:@langchain/core@0.2.27/language_models/base";
-export { CallbackManagerForToolRun } from "npm:@langchain/core@0.2.27/callbacks/manager";
-export { type ToolDefinition } from "npm:@langchain/core@0.2.27/language_models/base";
-export {
-  AIMessage,
-  AIMessageChunk,
-  BaseMessage,
-  FunctionMessage,
-  HumanMessage,
-  HumanMessageChunk,
-  mapChatMessagesToStoredMessages,
-  mapStoredMessagesToChatMessages,
-  type StoredMessage,
-  ToolMessage,
-} from "npm:@langchain/core@0.2.27/messages";
-export { StringOutputParser } from "npm:@langchain/core@0.2.27/output_parsers";
-export {
-  type BaseMessagePromptTemplateLike,
-  BasePromptTemplate,
-  ChatPromptTemplate,
-  PromptTemplate,
-} from "npm:@langchain/core@0.2.27/prompts";
-export {
-  Runnable,
-  type RunnableConfig,
-  type RunnableInterface,
-  RunnableLambda,
-  type RunnableLike,
-  RunnableMap,
-  RunnablePassthrough,
-  RunnableWithMessageHistory,
-} from "npm:@langchain/core@0.2.27/runnables";
-export { RemoteRunnable } from "npm:@langchain/core@0.2.27/runnables/remote";
-export {
-  DynamicStructuredTool,
-  DynamicTool,
-  StructuredTool,
-  type StructuredToolInterface,
-  Tool,
-} from "npm:@langchain/core@0.2.27/tools";
-export {
-  convertToOpenAIFunction,
-  convertToOpenAITool,
-} from "npm:@langchain/core@0.2.27/utils/function_calling";
-export { VectorStore } from "npm:@langchain/core@0.2.27/vectorstores";
-export { pull } from "npm:langchain@0.2.16/hub";
-export {
-  ToolExecutor,
-  type ToolInvocationInterface,
-  ToolNode,
-} from "npm:@langchain/langgraph@0.0.34/prebuilt";
-export {
-  RecursiveCharacterTextSplitter,
-  type SupportedTextSplitterLanguage,
-  TextSplitter,
-} from "npm:@langchain/textsplitters@0.0.3";
-export { formatDocumentsAsString } from "npm:langchain@0.2.16/util/document";
-export { MemoryVectorStore } from "npm:langchain@0.2.16/vectorstores/memory";
+export * from "./langchain.deps.ts";
 
 export * from "./langgraph.deps.ts";
-
-type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
-
-// deno-lint-ignore no-explicit-any
-export type SerializerProtocol<T extends abstract new (...args: any) => any> =
-  Exclude<ConstructorParameters<T>[0], undefined>;
-
-// deno-lint-ignore no-explicit-any
-export type CheckpointTuple<T extends (...args: any) => any> = Exclude<
-  UnwrapPromise<ReturnType<T>>,
-  undefined
->;

@@ -4,8 +4,8 @@ import { EaCLLMNeuron } from "../../eac/neurons/EaCLLMNeuron.ts";
 import {
   AzureChatOpenAI,
   BaseLanguageModel,
-  convertToOpenAIFunction,
-  convertToOpenAITool,
+  formatToOpenAIFunction,
+  formatToOpenAITool,
   Runnable,
 } from "../../src.deps.ts";
 import { resolveTools } from "../../plugins/FathymSynapticPlugin.ts";
@@ -19,7 +19,7 @@ export default {
   async Resolve(_neuronLookup, neuron, ioc) {
     let runnable: Runnable;
 
-    const llm = await ioc.Resolve<BaseLanguageModel>(
+    const llm = await ioc.Resolve<AzureChatOpenAI>(
       ioc.Symbol(BaseLanguageModel.name),
       neuron.LLMLookup,
     );
@@ -27,16 +27,16 @@ export default {
     if (neuron.ToolLookups?.length) {
       const tools = await resolveTools(neuron.ToolLookups, ioc);
 
-      runnable = (llm as AzureChatOpenAI).bind({
+      runnable = llm.bind({
         functions: neuron.ToolsAsFunctions
-          ? tools.map(convertToOpenAIFunction)
+          ? tools.map(formatToOpenAIFunction)
           : undefined,
         tools: neuron.ToolsAsFunctions
           ? undefined
-          : tools.map(convertToOpenAITool),
-      });
+          : tools.map(formatToOpenAITool),
+      }) as unknown as Runnable;
     } else {
-      runnable = llm;
+      runnable = llm as unknown as Runnable;
     }
 
     return runnable;

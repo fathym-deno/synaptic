@@ -4,6 +4,7 @@ build/
 coverage/
 lcov/
 target/
+denoKv/
 
 # Synaptic build directory
 _synaptic/

@@ -24,8 +24,8 @@ export function isEaCAzureOpenAILLMDetails(
     typeof llmDetails.APIKey === "string" &&
     llmDetails.DeploymentName !== undefined &&
     typeof llmDetails.DeploymentName === "string" &&
-    llmDetails.Endpoint !== undefined &&
-    typeof llmDetails.Endpoint === "string" &&
+    llmDetails.Instance !== undefined &&
+    typeof llmDetails.Instance === "string" &&
     llmDetails.ModelName !== undefined &&
     typeof llmDetails.ModelName === "string"
   );

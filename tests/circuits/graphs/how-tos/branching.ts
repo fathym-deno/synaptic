@@ -210,7 +210,7 @@ Deno.test("Graph Branching Circuits", async (t) => {
     },
   } as EverythingAsCodeSynaptic & EverythingAsCodeDatabases;
 
-  const { ioc, kvCleanup } = await buildTestIoC(eac);
+  const { ioc } = await buildTestIoC(eac, undefined, false);
 
   await t.step("Fan Out Fan In Circuit", async () => {
     const circuit = await ioc.Resolve<Runnable>(
@@ -276,6 +276,4 @@ Deno.test("Graph Branching Circuits", async (t) => {
     assertEquals(chunk.aggregate[2], `I'm D`);
     assertEquals(chunk.aggregate[3], `I'm E`);
   });
-
-  await kvCleanup();
 });

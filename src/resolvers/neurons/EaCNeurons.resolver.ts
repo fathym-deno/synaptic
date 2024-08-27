@@ -1,6 +1,11 @@
 import { SynapticNeuronResolver } from "../SynapticNeuronResolver.ts";
 import { SynapticResolverConfiguration } from "../SynapticResolverConfiguration.ts";
-import { Runnable, RunnableLambda, RunnableMap } from "../../src.deps.ts";
+import {
+  getPackageLogger,
+  Runnable,
+  RunnableLambda,
+  RunnableMap,
+} from "../../src.deps.ts";
 import { EaCNeuronLike } from "../../eac/EaCNeuron.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
@@ -10,6 +15,8 @@ export const SynapticResolverConfig: SynapticResolverConfiguration = {
 
 export default {
   async Resolve(_neuronLookup, neurons, ioc, eac) {
+    const logger = await getPackageLogger();
+
     let runnable: Runnable | undefined;
 
     const neuronLookups = Object.keys(neurons || {});
@@ -20,10 +27,14 @@ export default {
       >(ioc.Symbol("SynapticNeuronResolver"));
 
       if (neuronLookups.length === 1 && "" in neurons) {
+        logger.debug(`Resolving neurons as direct runnable`);
+
         const neuron = neurons[""];
 
         runnable = await neuronResolver.Resolve("", neuron, ioc, eac);
       } else {
+        logger.debug(`Resolving neurons as runnable map`);
+
         type fromParams = Parameters<typeof RunnableMap.from>;
 
         type input = Parameters<typeof RunnableMap.from>;
