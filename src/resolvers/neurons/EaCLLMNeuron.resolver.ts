@@ -1,28 +1,28 @@
-import { SynapticNeuronResolver } from "../SynapticNeuronResolver.ts";
-import { SynapticResolverConfiguration } from "../SynapticResolverConfiguration.ts";
-import { EaCLLMNeuron } from "../../eac/neurons/EaCLLMNeuron.ts";
+import { SynapticNeuronResolver } from '../SynapticNeuronResolver.ts';
+import { SynapticResolverConfiguration } from '../SynapticResolverConfiguration.ts';
+import { EaCLLMNeuron } from '../../eac/neurons/EaCLLMNeuron.ts';
 import {
   AzureChatOpenAI,
   BaseLanguageModel,
   formatToOpenAIFunction,
   formatToOpenAITool,
   Runnable,
-} from "../../src.deps.ts";
-import { resolveTools } from "../../plugins/FathymSynapticPlugin.ts";
+} from '../../src.deps.ts';
+import { resolveTools } from '../../plugins/FathymSynapticPlugin.ts';
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
-  Type: "neuron",
-  Name: "LLM",
+  Type: 'neuron',
+  Name: 'LLM',
 };
 
 export default {
   async Resolve(_neuronLookup, neuron, ioc) {
     let runnable: Runnable;
 
-    const llm = await ioc.Resolve<AzureChatOpenAI>(
+    const llm = (await ioc.Resolve<BaseLanguageModel>(
       ioc.Symbol(BaseLanguageModel.name),
-      neuron.LLMLookup,
-    );
+      neuron.LLMLookup
+    )) as unknown as AzureChatOpenAI;
 
     if (neuron.ToolLookups?.length) {
       const tools = await resolveTools(neuron.ToolLookups, ioc);
