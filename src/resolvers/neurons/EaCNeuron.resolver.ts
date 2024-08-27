@@ -148,7 +148,7 @@ export default {
       const neuron = await resolveEaCNeuronFromLike(neuronLike, ioc, eac);
 
       if (isEaCNeuron(undefined, neuron)) {
-        logger.debug(`Resolving EaC neuron`);
+        logger.debug(`Resolving EaC neuron for '${neuronLookup}'`);
 
         const neuronResolver = await ioc.Resolve<
           SynapticNeuronResolver<typeof neuron>
@@ -167,7 +167,9 @@ export default {
         };
 
         if (neuron.Type) {
-          logger.debug(`Resolving EaC Neuron for type '${neuron.Type}'`);
+          logger.debug(
+            `Resolving EaC Neuron for '${neuronLookup}' of type '${neuron.Type}'`,
+          );
 
           runnable = await neuronResolver.Resolve(
             neuronLookup,
@@ -192,7 +194,7 @@ export default {
         runnable = configureName(runnable, baseName || undefined);
 
         if (neuron.Bootstrap) {
-          logger.debug(`Bootstraping EaC Neuron`);
+          logger.debug(`Bootstraping EaC Neuron for '${neuronLookup}'`);
 
           runnable = await neuron.Bootstrap(runnable, neuron);
 
@@ -207,7 +209,7 @@ export default {
         );
 
         if (neurons) {
-          logger.debug(`Attaching Neurons to the runnable pipe`);
+          logger.debug(`Attaching Neurons to '${neuronLookup}'`);
 
           runnable = runnable.pipe(configureName(neurons, "Neurons"));
         }
@@ -220,13 +222,13 @@ export default {
         );
 
         if (synapses) {
-          logger.debug(`Attaching Synapses to the runnable pipe`);
+          logger.debug(`Attaching Synapses to '${neuronLookup}'`);
 
           runnable = runnable.pipe(configureName(synapses, "Synapses"));
         }
 
         if (neuron.BootstrapOutput) {
-          logger.debug(`Bootstraping EaC Neuron output`);
+          logger.debug(`Bootstraping EaC Neuron output for '${neuronLookup}'`);
 
           const bsOut = configureName(
             RunnableLambda.from(async (s, cfg) => {
@@ -243,7 +245,7 @@ export default {
         }
 
         if (neuron.BootstrapInput) {
-          logger.debug(`Bootstraping EaC Neuron input`);
+          logger.debug(`Bootstraping EaC Neuron input for '${neuronLookup}'`);
 
           const bsInput = configureName(
             RunnableLambda.from(async (s, cfg) => {
