@@ -1,5 +1,5 @@
-// deno-lint-ignore-file no-explicit-any
 import {
+  Annotation,
   assert,
   assertEquals,
   END,
@@ -30,16 +30,13 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            name: {
-              value: (x: string, y?: string) => (y ? y : x),
+          State: Annotation.Root({
+            name: Annotation<string>({
+              reducer: (x, y) => (y ? y : x),
               default: () => "default",
-            },
-            path: {
-              value: (
-                left?: string[] | string,
-                right?: string[] | string,
-              ): string[] => {
+            }),
+            path: Annotation<string[] | string | undefined>({
+              reducer: (left, right): string[] => {
                 if (!left) {
                   left = [];
                 } else if (typeof left === "string") {
@@ -53,8 +50,8 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
                 return [...left, ...right];
               },
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             child_end: {
               BootstrapInput() {
@@ -84,16 +81,13 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            name: {
-              value: (x: string, y?: string) => (y ? y : x),
+          State: Annotation.Root({
+            name: Annotation<string>({
+              reducer: (x, y) => (y ? y : x),
               default: () => "default",
-            },
-            path: {
-              value: (
-                left?: string[] | string,
-                right?: string[] | string,
-              ): string[] => {
+            }),
+            path: Annotation<string[] | string | undefined>({
+              value: (left, right): string[] => {
                 if (!left) {
                   left = [];
                 } else if (typeof left === "string") {
@@ -107,8 +101,8 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
                 return [...left, ...right];
               },
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             child: {
               Type: "Circuit",
@@ -149,16 +143,13 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            name: {
-              value: (x: string, y?: string) => (y ? y : x),
+          State: Annotation.Root({
+            name: Annotation<string>({
+              reducer: (x, y) => (y ? y : x),
               default: () => "default",
-            },
-            path: {
-              value: (
-                left?: ValWithId[] | ValWithId,
-                right?: ValWithId[] | ValWithId,
-              ): any[] => {
+            }),
+            path: Annotation<ValWithId[] | ValWithId | undefined>({
+              value: (left, right): ValWithId[] => {
                 /**
                  * Append the right-hand list, replacing any elements with the same id in the left-hand list.
                  */
@@ -199,8 +190,8 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
                 return merged;
               },
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             child_end: {
               BootstrapInput() {
@@ -230,16 +221,13 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            name: {
-              value: (x: string, y?: string) => (y ? y : x),
+          State: Annotation.Root({
+            name: Annotation<string>({
+              reducer: (x, y) => (y ? y : x),
               default: () => "default",
-            },
-            path: {
-              value: (
-                left?: ValWithId[] | ValWithId,
-                right?: ValWithId[] | ValWithId,
-              ): any[] => {
+            }),
+            path: Annotation<ValWithId[] | ValWithId | undefined>({
+              value: (left, right): ValWithId[] => {
                 /**
                  * Append the right-hand list, replacing any elements with the same id in the left-hand list.
                  */
@@ -280,8 +268,8 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
                 return merged;
               },
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             child: {
               Type: "Circuit",

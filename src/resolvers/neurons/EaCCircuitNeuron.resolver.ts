@@ -1,22 +1,18 @@
-import { SynapticNeuronResolver } from '../SynapticNeuronResolver.ts';
-import { Runnable } from '../../src.deps.ts';
-import { SynapticResolverConfiguration } from '../SynapticResolverConfiguration.ts';
-import {
-  EaCCircuitNeuron,
-  isEaCCircuitNeuron,
-} from '../../eac/neurons/EaCCircuitNeuron.ts';
-import { isEaCGraphCircuitDetails } from '../../eac/EaCGraphCircuitDetails.ts';
+import { SynapticNeuronResolver } from "../SynapticNeuronResolver.ts";
+import { Runnable } from "../../src.deps.ts";
+import { SynapticResolverConfiguration } from "../SynapticResolverConfiguration.ts";
+import { EaCCircuitNeuron } from "../../eac/neurons/EaCCircuitNeuron.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
-  Type: 'neuron',
-  Name: 'Circuit',
+  Type: "neuron",
+  Name: "Circuit",
 };
 
 export default {
-  async Resolve(_neuronLookup, neuron, ioc, eac) {
+  async Resolve(_neuronLookup, neuron, ioc) {
     const runnable = await ioc.Resolve<Runnable>(
-      ioc.Symbol('Circuit'),
-      neuron.CircuitLookup
+      ioc.Symbol("Circuit"),
+      neuron.CircuitLookup,
     );
 
     // const state =

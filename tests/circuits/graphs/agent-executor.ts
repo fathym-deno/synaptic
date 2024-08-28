@@ -1,6 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 import {
   AIMessage,
+  Annotation,
   assert,
   assertFalse,
   assertStringIncludes,
@@ -51,18 +52,20 @@ Deno.test("Graph Agent Executor Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            input: {
-              value: null,
-            },
-            steps: {
-              value: (x: any[], y: any[]) => x.concat(y),
+          State: Annotation.Root({
+            input: Annotation<string>({
+              reducer: (_x, y) => y,
+              default: () => "",
+            }),
+            steps: Annotation<any[]>({
+              reducer: (x, y) => x.concat(y),
               default: () => [],
-            },
-            agentOutcome: {
-              value: null,
-            },
-          },
+            }),
+            agentOutcome: Annotation<string>({
+              reducer: (_x, y) => y,
+              default: () => "",
+            }),
+          }),
           Neurons: {
             agent: {
               Type: "OpenAIFunctionsAgent",

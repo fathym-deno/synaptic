@@ -1,5 +1,6 @@
 import {
   AIMessage,
+  Annotation,
   assert,
   BaseMessage,
   END,
@@ -84,12 +85,12 @@ Deno.test("Graph Managing Agent Steps Circuits", async (t) => {
           Type: "Graph",
           Priority: 100,
           PersistenceLookup: `${AI_LOOKUP}|memory`,
-          State: {
-            messages: {
-              value: (x: BaseMessage[], y: BaseMessage[]) => x.concat(y),
+          State: Annotation.Root({
+            messages: Annotation<BaseMessage[]>({
+              reducer: (x, y) => x.concat(y),
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             agent: [
               "thinky-llm",

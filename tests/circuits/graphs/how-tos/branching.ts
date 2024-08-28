@@ -1,4 +1,5 @@
 import {
+  Annotation,
   assert,
   assertEquals,
   END,
@@ -47,12 +48,12 @@ Deno.test("Graph Branching Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            aggregate: {
-              value: (x: string[], y: string[]) => x.concat(y),
+          State: Annotation.Root({
+            aggregate: Annotation<string[]>({
+              reducer: (x, y) => x.concat(y),
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             a: {
               BootstrapInput: loadSimpleBootstrap("A"),
@@ -80,16 +81,16 @@ Deno.test("Graph Branching Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            aggregate: {
-              value: (x: string[], y: string[]) => x.concat(y),
+          State: Annotation.Root({
+            aggregate: Annotation<string[]>({
+              reducer: (x, y) => x.concat(y),
               default: () => [],
-            },
-            which: {
-              value: (x: string, y: string) => (y ? y : x),
-              default: () => "bc",
-            },
-          },
+            }),
+            which: Annotation<string>({
+              reducer: (x, y) => (y ? y : x),
+              default: () => "",
+            }),
+          }),
           Neurons: {
             a: {
               BootstrapInput: loadSimpleBootstrap("A"),
@@ -134,17 +135,17 @@ Deno.test("Graph Branching Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            aggregate: {
-              value: (x: string[], y: string[]) => x.concat(y),
+          State: Annotation.Root({
+            aggregate: Annotation<string[]>({
+              reducer: (x, y) => x.concat(y),
               default: () => [],
-            },
-            which: {
-              value: (x: string, y: string) => (y ? y : x),
+            }),
+            which: Annotation<string>({
+              reducer: (x, y) => (y ? y : x),
               default: () => "",
-            },
-            fanoutValues: {
-              value: (left?: ScoredValue[], right?: ScoredValue[]) => {
+            }),
+            fanoutValues: Annotation<ScoredValue[]>({
+              reducer: (left, right) => {
                 if (!left) {
                   left = [];
                 }
@@ -155,8 +156,8 @@ Deno.test("Graph Branching Circuits", async (t) => {
                 return left.concat(right);
               },
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             a: {
               BootstrapInput: loadSimpleBootstrap("A"),

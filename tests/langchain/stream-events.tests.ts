@@ -4,6 +4,7 @@ import { EverythingAsCodeSynaptic } from "../../src/eac/EverythingAsCodeSynaptic
 import { EaCCircuitNeuron } from "../../src/eac/neurons/EaCCircuitNeuron.ts";
 import { EaCPassthroughNeuron } from "../../src/eac/neurons/EaCPassthroughNeuron.ts";
 import {
+  Annotation,
   dispatchCustomEvent,
   END,
   EverythingAsCodeDatabases,
@@ -25,16 +26,13 @@ Deno.test("Stream Events Tests", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            name: {
-              value: (x: string, y?: string) => (y ? y : x),
+          State: Annotation.Root({
+            name: Annotation<string>({
+              reducer: (x, y) => (y ? y : x),
               default: () => "default",
-            },
-            path: {
-              value: (
-                left?: string[] | string,
-                right?: string[] | string,
-              ): string[] => {
+            }),
+            path: Annotation<string[] | string | undefined>({
+              value: (left, right): string[] => {
                 if (!left) {
                   left = [];
                 } else if (typeof left === "string") {
@@ -48,8 +46,8 @@ Deno.test("Stream Events Tests", async (t) => {
                 return [...left, ...right];
               },
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             child: {
               Type: "Circuit",
@@ -98,16 +96,13 @@ Deno.test("Stream Events Tests", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            name: {
-              value: (x: string, y?: string) => (y ? y : x),
+          State: Annotation.Root({
+            name: Annotation<string>({
+              reducer: (x, y) => (y ? y : x),
               default: () => "default",
-            },
-            path: {
-              value: (
-                left?: string[] | string,
-                right?: string[] | string,
-              ): string[] => {
+            }),
+            path: Annotation<string[] | string | undefined>({
+              value: (left, right): string[] => {
                 if (!left) {
                   left = [];
                 } else if (typeof left === "string") {
@@ -121,8 +116,8 @@ Deno.test("Stream Events Tests", async (t) => {
                 return [...left, ...right];
               },
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             child_end: {
               Bootstrap: () => {
@@ -158,16 +153,13 @@ Deno.test("Stream Events Tests", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            name: {
-              value: (x: string, y?: string) => (y ? y : x),
+          State: Annotation.Root({
+            name: Annotation<string>({
+              reducer: (x, y) => (y ? y : x),
               default: () => "default",
-            },
-            path: {
-              value: (
-                left?: string[] | string,
-                right?: string[] | string,
-              ): string[] => {
+            }),
+            path: Annotation<string[] | string | undefined>({
+              value: (left, right): string[] => {
                 if (!left) {
                   left = [];
                 } else if (typeof left === "string") {
@@ -181,8 +173,8 @@ Deno.test("Stream Events Tests", async (t) => {
                 return [...left, ...right];
               },
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             child: {
               Type: "Circuit",

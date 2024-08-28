@@ -1,6 +1,7 @@
 import {
   AIMessage,
   AIMessageChunk,
+  Annotation,
   assert,
   assertFalse,
   BaseMessage,
@@ -83,12 +84,12 @@ Deno.test("Graph Stream Tokens Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            messages: {
-              value: (x: BaseMessage[], y: BaseMessage[]) => x.concat(y),
+          State: Annotation.Root({
+            messages: Annotation<BaseMessage[]>({
+              reducer: (x, y) => x.concat(y),
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             agent: [
               "thinky-llm",

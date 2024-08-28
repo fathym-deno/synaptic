@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
-import { SynapticCircuitResolver } from '../SynapticCircuitResolver.ts';
-import { SynapticResolverConfiguration } from '../SynapticResolverConfiguration.ts';
+import { SynapticCircuitResolver } from "../SynapticCircuitResolver.ts";
+import { SynapticResolverConfiguration } from "../SynapticResolverConfiguration.ts";
 import {
   BaseCheckpointSaver,
   MessageGraph,
@@ -8,19 +8,18 @@ import {
   RunnableLambda,
   RunnableLike,
   StateGraph,
-  StateGraphArgs,
-} from '../../src.deps.ts';
-import { EaCNeuron, EaCNeuronLike } from '../../eac/EaCNeuron.ts';
+} from "../../src.deps.ts";
+import { EaCNeuron, EaCNeuronLike } from "../../eac/EaCNeuron.ts";
 import {
   EaCGraphCircuitDetails,
   EaCGraphCircuitEdge,
   EaCGraphCircuitEdgeLike,
-} from '../../eac/EaCGraphCircuitDetails.ts';
-import { SynapticNeuronResolver } from '../SynapticNeuronResolver.ts';
+} from "../../eac/EaCGraphCircuitDetails.ts";
+import { SynapticNeuronResolver } from "../SynapticNeuronResolver.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
-  Type: 'circuit',
-  Name: 'Graph',
+  Type: "circuit",
+  Name: "Graph",
 };
 
 export default {
@@ -34,36 +33,30 @@ export default {
       BootstrapOutput: eacCircuit.Details!.BootstrapOutput,
       Synapses: eacCircuit.Details!.Synapses,
       Neurons: {
-        '': {
+        "": {
           async Bootstrap() {
             const details = eacCircuit.Details!;
 
-            if (details.State) {
-            }
-
             let graph = details.State
-              ? new StateGraph({
-                  channels:
-                    details.State as StateGraphArgs<unknown>['channels'],
-                })
+              ? new StateGraph(details.State)
               : new MessageGraph();
 
             const neuronLookups = Object.keys(details.Neurons ?? {});
 
             const resolveNeuron = (
               neuronLookup: string,
-              neuron: EaCNeuronLike
+              neuron: EaCNeuronLike,
             ): Runnable => {
               return RunnableLambda.from(async () => {
                 const neuronResolver = await ioc.Resolve<
                   SynapticNeuronResolver<EaCNeuronLike>
-                >(ioc.Symbol('SynapticNeuronResolver'));
+                >(ioc.Symbol("SynapticNeuronResolver"));
 
                 const runnable = await neuronResolver.Resolve(
                   neuronLookup,
                   neuron,
                   ioc,
-                  eac
+                  eac,
                 );
 
                 return runnable;
@@ -74,11 +67,11 @@ export default {
               neuronLookups.map(async (neuronLookup) => {
                 const runnable = await resolveNeuron(
                   neuronLookup,
-                  details.Neurons![neuronLookup]
+                  details.Neurons![neuronLookup],
                 );
 
                 return [neuronLookup, runnable!] as [string, RunnableLike];
-              })
+              }),
             );
 
             nodes.forEach(([neuronLookup, runnable]) => {
@@ -93,7 +86,7 @@ export default {
 
               const edgeConfigs: EaCGraphCircuitEdge[] = [];
 
-              if (typeof edgeNode === 'string') {
+              if (typeof edgeNode === "string") {
                 edgeConfigs.push({
                   Node: edgeNode,
                 });
@@ -106,7 +99,7 @@ export default {
                 )[];
 
                 workingNodes.forEach((node) => {
-                  if (typeof node === 'string') {
+                  if (typeof node === "string") {
                     edgeConfigs.push({
                       Node: node,
                     });
@@ -117,13 +110,13 @@ export default {
               }
 
               edgeConfigs.forEach((config) => {
-                if (typeof config.Node === 'string') {
+                if (typeof config.Node === "string") {
                   graph.addEdge(edgeNodeLookup as any, config.Node as any);
                 } else {
                   graph.addConditionalEdges(
                     edgeNodeLookup as any,
                     config.Condition as any,
-                    config.Node as any
+                    config.Node as any,
                   );
                 }
               });
@@ -133,8 +126,8 @@ export default {
 
             if (details.PersistenceLookup) {
               checkpointer = await ioc.Resolve<BaseCheckpointSaver>(
-                ioc.Symbol('Persistence'),
-                details.PersistenceLookup
+                ioc.Symbol("Persistence"),
+                details.PersistenceLookup,
               );
             }
 

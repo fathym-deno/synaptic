@@ -17,12 +17,12 @@ import {
   Runnable,
   START,
   z,
-} from '../../tests.deps.ts';
-import { EaCGraphCircuitDetails } from '../../../src/eac/EaCGraphCircuitDetails.ts';
-import { InferSynapticState } from '../../../src/utils/types.ts';
-import { EaCDenoKVSaverPersistenceDetails } from '../../../src/eac/EaCDenoKVSaverPersistenceDetails.ts';
-import { EaCAzureOpenAILLMDetails } from '../../../src/eac/EaCAzureOpenAILLMDetails.ts';
-import { EaCLLMNeuron } from '../../../src/eac/neurons/EaCLLMNeuron.ts';
+} from "../../tests.deps.ts";
+import { EaCGraphCircuitDetails } from "../../../src/eac/EaCGraphCircuitDetails.ts";
+import { InferSynapticState } from "../../../src/utils/types.ts";
+import { EaCDenoKVSaverPersistenceDetails } from "../../../src/eac/EaCDenoKVSaverPersistenceDetails.ts";
+import { EaCAzureOpenAILLMDetails } from "../../../src/eac/EaCAzureOpenAILLMDetails.ts";
+import { EaCLLMNeuron } from "../../../src/eac/neurons/EaCLLMNeuron.ts";
 
 export const LovelaceSourceInformationInputSchema = z.object({
   Input: z.string().optional(),
@@ -218,6 +218,8 @@ Deno.test("EaCChatPromptNeuron Tests", async (t) => {
 
     assert(result);
     assertEquals(result.Messages.length, 1);
+
+    console.log(result.Messages[0].content);
   });
 
   await kvCleanup();

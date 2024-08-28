@@ -1,4 +1,5 @@
 import {
+  Annotation,
   assert,
   assertStringIncludes,
   BaseMessage,
@@ -56,18 +57,18 @@ Deno.test("Graph Configuration Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            messages: {
-              value: (x: BaseMessage[], y: BaseMessage[]) => x.concat(y),
+          State: Annotation.Root({
+            messages: Annotation<BaseMessage[]>({
+              reducer: (x, y) => x.concat(y),
               default: () => [],
-            },
-            userInfo: {
-              value: (x?: string, y?: string) => {
+            }),
+            userInfo: Annotation<string>({
+              reducer: (x, y) => {
                 return y ? y : x ? x : "N/A";
               },
               default: () => "N/A",
-            },
-          },
+            }),
+          }),
           Neurons: {
             agent: {
               Type: "ChatPrompt",

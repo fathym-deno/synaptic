@@ -3,8 +3,8 @@ import { EaCVertexDetails, Runnable, RunnableConfig } from "../src.deps.ts";
 
 // @ts-ignore: It is ok for the circular reference with it being a child prop with infinite nesting
 export type EaCNeuronLike =
-  | EaCNeuron
-  | Partial<EaCNeuron>
+  | EaCNeuron<any>
+  | Partial<EaCNeuron<any>>
   | string
   | [string, EaCNeuronLike];
 

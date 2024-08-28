@@ -1,5 +1,6 @@
 import {
   AIMessage,
+  Annotation,
   assert,
   assertStringIncludes,
   BaseMessage,
@@ -97,12 +98,12 @@ Deno.test("Persistence Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            messages: {
-              value: (x: BaseMessage[], y: BaseMessage[]) => x.concat(y),
+          State: Annotation.Root({
+            messages: Annotation<BaseMessage[]>({
+              reducer: (x, y) => x.concat(y),
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             agent: "thinky-agent",
             tools: "thinky-tools",
@@ -135,12 +136,12 @@ Deno.test("Persistence Circuits", async (t) => {
           Type: "Graph",
           Priority: 100,
           PersistenceLookup: `${AI_LOOKUP}|memory`,
-          State: {
-            messages: {
-              value: (x: BaseMessage[], y: BaseMessage[]) => x.concat(y),
+          State: Annotation.Root({
+            messages: Annotation<BaseMessage[]>({
+              reducer: (x, y) => x.concat(y),
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             agent: "thinky-agent",
             tools: "thinky-tools",
@@ -173,12 +174,12 @@ Deno.test("Persistence Circuits", async (t) => {
           Type: "Graph",
           Priority: 100,
           PersistenceLookup: `${AI_LOOKUP}|denokv`,
-          State: {
-            messages: {
-              value: (x: BaseMessage[], y: BaseMessage[]) => x.concat(y),
+          State: Annotation.Root({
+            messages: Annotation<BaseMessage[]>({
+              reducer: (x, y) => x.concat(y),
               default: () => [],
-            },
-          },
+            }),
+          }),
           Neurons: {
             agent: "thinky-agent",
             tools: "thinky-tools",
