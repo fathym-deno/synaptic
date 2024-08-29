@@ -16,7 +16,9 @@ export function isEaCDFSDocumentLoaderDetails(
 
   return (
     isEaCDocumentLoaderDetails("DFSDocument", x) &&
-    x.DFSLookups !== undefined &&
-    Array.isArray(x.DFSLookups)
+    x.DFSLookup !== undefined &&
+    typeof x.DFSLookup === "string" &&
+    x.Documents !== undefined &&
+    Array.isArray(x.Documents)
   );
 }
