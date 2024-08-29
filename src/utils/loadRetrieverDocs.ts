@@ -1,4 +1,3 @@
-import { EaCRetrieverAsCode } from "../eac/EaCRetrieverAsCode.ts";
 import {
   BaseDocumentLoader,
   getPackageLogger,
@@ -9,13 +8,19 @@ import {
   TextSplitter,
   VectorStore,
 } from "../src.deps.ts";
+import { EaCRetrieverAsCode } from "../eac/EaCRetrieverAsCode.ts";
 
 export const loadRetrieverDocs: (
   ioc: IoCContainer,
   retrieverLookup: string,
   retriever: EaCRetrieverAsCode,
   vectorStore: VectorStore,
-) => Promise<void> = async (ioc, retrieverLookup, retriever, vectorStore) => {
+) => Promise<unknown> = async (
+  ioc,
+  retrieverLookup,
+  retriever,
+  vectorStore,
+) => {
   const logger = await getPackageLogger();
 
   const loadedDocs = (
@@ -58,6 +63,8 @@ export const loadRetrieverDocs: (
       });
 
       logger.debug(`Retriever '${retrieverLookup}' index results:`, idxRes);
+
+      return idxRes;
     } catch (err) {
       logger.error(
         `There was an issue indexing Retriever '${retrieverLookup}'`,
@@ -68,5 +75,7 @@ export const loadRetrieverDocs: (
     }
   } else {
     await vectorStore.addDocuments(loadedDocs);
+
+    return {};
   }
 };
