@@ -15,7 +15,6 @@ export * from "./EaCDenoKVChatHistoryDetails.ts";
 export * from "./EaCDenoKVIndexerDetails.ts";
 export * from "./EaCDenoKVSaverPersistenceDetails.ts";
 export * from "./EaCDFSDocumentLoaderDetails.ts";
-export * from "./EaCDFSDocumentLoaderDetails.ts";
 export * from "./EaCDocumentLoaderAsCode.ts";
 export * from "./EaCDocumentLoaderDetails.ts";
 export * from "./EaCEmbeddingsAsCode.ts";
