@@ -23,9 +23,11 @@ export const loadRetrieverDocs: (
 ) => {
   const logger = await getPackageLogger();
 
+  const details = retriever.Details!;
+
   const loadedDocs = (
     await Promise.all(
-      retriever.Details!.LoaderLookups.map(async (loaderLookup) => {
+      details!.LoaderLookups.map(async (loaderLookup) => {
         const loader = await ioc.Resolve<BaseDocumentLoader>(
           ioc.Symbol("DocumentLoader"),
           loaderLookup,
@@ -35,7 +37,7 @@ export const loadRetrieverDocs: (
 
         const splitter = await ioc.Resolve<Runnable>(
           ioc.Symbol(TextSplitter.name),
-          retriever.Details!.LoaderTextSplitterLookups[loaderLookup],
+          details!.LoaderTextSplitterLookups[loaderLookup],
         );
 
         const splitDocs = await splitter.invoke(docs);
@@ -45,10 +47,10 @@ export const loadRetrieverDocs: (
     )
   ).flatMap((ld) => ld);
 
-  if (retriever.Details!.IndexerLookup) {
+  if (details!.IndexerLookup) {
     const recordManager = await ioc.Resolve<RecordManagerInterface>(
       ioc.Symbol("RecordManager"),
-      retriever.Details!.IndexerLookup,
+      details!.IndexerLookup,
     );
 
     try {
