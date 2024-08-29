@@ -18,17 +18,14 @@ import {
   Embeddings,
   formatToOpenAIFunction,
   formatToOpenAITool,
-  getPackageLogger,
   HNSWLib,
   HtmlToTextTransformer,
   importDFSTypescriptModule,
-  index,
   IoCContainer,
   jsonSchemaToZod,
   MemorySaver,
   MemoryVectorStore,
   mergeWithArrays,
-  RecordManagerInterface,
   RecursiveCharacterTextSplitter,
   RemoteRunnable,
   Runnable,
@@ -108,6 +105,7 @@ import {
   isEaCDFSDocumentLoaderDetails,
 } from "../eac/EaCDFSDocumentLoaderDetails.ts";
 import { EaCPersonalityDetails } from "../eac/EaCPersonalityDetails.ts";
+import { loadRetrieverDocs } from "../utils/loadRetrieverDocs.ts";
 
 export default class FathymSynapticPlugin implements EaCRuntimePlugin {
   protected dfsHandlerResolver: DFSFileHandlerResolver | undefined;
@@ -652,8 +650,6 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer,
   ): Promise<void> {
-    const logger = await getPackageLogger();
-
     const aiLookups = Object.keys(eac!.AIs || {});
 
     await Promise.all(
@@ -677,66 +673,13 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               Type: ioc.Symbol("Retriever"),
             });
 
-            const setupRetriever = async () => {
-              const loadedDocs = (
-                await Promise.all(
-                  retriever.Details!.LoaderLookups.map(async (loaderLookup) => {
-                    const loader = await ioc.Resolve<BaseDocumentLoader>(
-                      ioc.Symbol("DocumentLoader"),
-                      loaderLookup,
-                    );
-
-                    const docs = await loader.load();
-
-                    const splitter = await ioc.Resolve<Runnable>(
-                      ioc.Symbol(TextSplitter.name),
-                      retriever.Details!
-                        .LoaderTextSplitterLookups[loaderLookup],
-                    );
-
-                    const splitDocs = await splitter.invoke(docs);
-
-                    return splitDocs;
-                  }),
-                )
-              ).flatMap((ld) => ld);
-
-              if (retriever.Details!.IndexerLookup) {
-                const recordManager = await ioc.Resolve<RecordManagerInterface>(
-                  ioc.Symbol("RecordManager"),
-                  retriever.Details!.IndexerLookup,
-                );
-
-                try {
-                  const idxRes = await index({
-                    docsSource: loadedDocs,
-                    recordManager,
-                    vectorStore,
-                    options: {
-                      cleanup: "incremental",
-                      sourceIdKey: "source",
-                    },
-                  });
-
-                  logger.debug(
-                    `Retriever '${retrieverLookup}' index results:`,
-                    idxRes,
-                  );
-                } catch (err) {
-                  logger.error(
-                    `There was an issue indexing Retriever '${retrieverLookup}'`,
-                    err,
-                  );
-
-                  throw err;
-                }
-              } else {
-                await vectorStore.addDocuments(loadedDocs);
-              }
-            };
-
             if (retriever.Details!.RefreshOnStart) {
-              await setupRetriever();
+              await loadRetrieverDocs(
+                ioc,
+                retrieverLookup,
+                retriever,
+                vectorStore,
+              );
             }
           }),
         );
