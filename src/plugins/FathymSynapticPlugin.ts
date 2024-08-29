@@ -7,6 +7,7 @@ import {
   BaseLanguageModel,
   CheerioWebBaseLoader,
   DFSFileHandlerResolver,
+  Document,
   DynamicStructuredTool,
   DynamicTool,
   EaCJSRDistributedFileSystem,
@@ -39,6 +40,7 @@ import {
   TavilySearchResults,
   TextSplitter,
   Toolkit,
+  toText,
   VectorStore,
   WatsonxAI,
   z,
@@ -101,15 +103,24 @@ import {
   EaCCompoundDocumentLoaderDetails,
   isEaCCompoundDocumentLoaderDetails,
 } from "../eac/EaCCompoundDocumentLoaderDetails.ts";
+import {
+  EaCDFSDocumentLoaderDetails,
+  isEaCDFSDocumentLoaderDetails,
+} from "../eac/EaCDFSDocumentLoaderDetails.ts";
 import { EaCPersonalityDetails } from "../eac/EaCPersonalityDetails.ts";
 
 export default class FathymSynapticPlugin implements EaCRuntimePlugin {
+  protected dfsHandlerResolver: DFSFileHandlerResolver | undefined;
+
   constructor(protected isLocal = false) {}
 
   public async AfterEaCResolved(
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer,
   ): Promise<void> {
+    this.dfsHandlerResolver = await ioc.Resolve<DFSFileHandlerResolver>(
+      ioc.Symbol("DFSFileHandler"),
+    );
     await this.configureEaCSynaptic(eac, ioc);
   }
 
@@ -469,6 +480,48 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             Name: `${aiLookup}|${loaderLookup}`,
             Type: ioc.Symbol("DocumentLoader"),
           });
+        } else if (isEaCDFSDocumentLoaderDetails(loader.Details)) {
+          const details = loader.Details as EaCDFSDocumentLoaderDetails;
+
+          ioc.Register(
+            () => {
+              return {
+                load: async () => {
+                  const dfs = eac.DFS![details.DFSLookup]!;
+
+                  const dfsHandler = await this.dfsHandlerResolver!.Resolve(
+                    ioc,
+                    dfs,
+                  );
+
+                  const loadedDocs = await Promise.all(
+                    details.Documents.map(async (doc) => {
+                      const file = await dfsHandler?.GetFileInfo(
+                        doc,
+                        Date.now(),
+                      );
+
+                      return file
+                        ? ({
+                          pageContent: await toText(file?.Contents!),
+                          metadata: {
+                            source: `${details.DFSLookup}://${doc}`,
+                          },
+                        } as Document)
+                        : undefined;
+                    }),
+                  );
+
+                  return loadedDocs.filter((ld) => ld);
+                },
+              };
+            },
+            {
+              Lazy: false,
+              Name: `${aiLookup}|${loaderLookup}`,
+              Type: ioc.Symbol("DocumentLoader"),
+            },
+          );
         } else if (isEaCCompoundDocumentLoaderDetails(loader.Details)) {
           const details = loader.Details as EaCCompoundDocumentLoaderDetails;
 
@@ -984,12 +1037,6 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
       const dfsFilePaths = (
         await Promise.all(
           handlerDFSLookups?.map(async (dfsLookup) => {
-            const dfsHandlerResolver = await ioc.Resolve<
-              DFSFileHandlerResolver
-            >(
-              ioc.Symbol("DFSFileHandler"),
-            );
-
             const dfs = dfsLookup === "$handlers"
               ? this.isLocal
                 ? ({
@@ -1010,7 +1057,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                 } as EaCJSRDistributedFileSystem)
               : eac.DFS![dfsLookup]!;
 
-            const dfsHandler = await dfsHandlerResolver.Resolve(ioc, dfs);
+            const dfsHandler = await this.dfsHandlerResolver!.Resolve(ioc, dfs);
 
             return {
               dfs,

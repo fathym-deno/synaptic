@@ -35,6 +35,7 @@ export { HNSWLib } from "npm:@langchain/community@0.2.31/vectorstores/hnswlib";
 
 export { BaseListChatMessageHistory } from "npm:@langchain/core@0.2.30/chat_history";
 export { BaseDocumentLoader } from "npm:@langchain/core@0.2.30/document_loaders/base";
+export { type Document } from "npm:@langchain/core@0.2.30/documents";
 export { Embeddings } from "npm:@langchain/core@0.2.30/embeddings";
 export {
   index,
