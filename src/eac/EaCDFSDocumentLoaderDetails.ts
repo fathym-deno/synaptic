@@ -1,10 +1,13 @@
-import { EaCIndexerDetails, isEaCIndexerDetails } from "./EaCIndexerDetails.ts";
+import {
+  EaCDocumentLoaderDetails,
+  isEaCDocumentLoaderDetails,
+} from "./EaCDocumentLoaderDetails.ts";
 
 export type EaCDFSDocumentLoaderDetails = {
   Documents: string[];
 
   DFSLookup: string;
-} & EaCIndexerDetails<"DFSDocument">;
+} & EaCDocumentLoaderDetails<"DFSDocument">;
 
 export function isEaCDFSDocumentLoaderDetails(
   details: unknown,
@@ -12,7 +15,7 @@ export function isEaCDFSDocumentLoaderDetails(
   const x = details as EaCDFSDocumentLoaderDetails;
 
   return (
-    isEaCIndexerDetails("DFSDocuments", x) &&
+    isEaCDocumentLoaderDetails("DFSDocument", x) &&
     x.DFSLookups !== undefined &&
     Array.isArray(x.DFSLookups)
   );
