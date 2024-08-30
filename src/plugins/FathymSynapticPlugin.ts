@@ -283,7 +283,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
               return runnable;
             }).withConfig({
-              runName: "Circuit Neuron Resolver",
+              runName: eacCircuit?.Details?.Name ?? "Circuit Neuron Resolver",
             });
           };
 
