@@ -1000,6 +1000,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             const dfsHandler = await this.dfsHandlerResolver!.Resolve(ioc, dfs);
 
             return {
+              dfsLookup,
               dfs,
               fileHandler: dfsHandler,
               paths: await dfsHandler?.LoadAllPaths(Date.now()),
@@ -1011,6 +1012,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
         .filter((s) => !!s?.fileHandler)
         .map((s) => {
           return {
+            dfsLookup: s.dfsLookup,
             dfs: s.dfs,
             fileHandler: s.fileHandler!,
             paths: s.paths,
@@ -1018,7 +1020,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
         });
 
       await Promise.all(
-        dfsFilePaths.map(async ({ dfs, fileHandler, paths }) => {
+        dfsFilePaths.map(async ({ dfsLookup, dfs, fileHandler, paths }) => {
           const fileModules = (
             await Promise.all(
               paths
@@ -1030,6 +1032,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                     fileHandler,
                     path,
                     dfs,
+                    dfsLookup,
                     "ts",
                   );
 

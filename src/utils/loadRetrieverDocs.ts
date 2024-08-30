@@ -53,9 +53,27 @@ export const loadRetrieverDocs: (
       details!.IndexerLookup,
     );
 
+    let docs = loadedDocs.filter((ld) => ld.pageContent);
+
+    let idxRes = {
+      numAdded: 0,
+      numDeleted: 0,
+      numSkipped: 0,
+      numUpdated: 0,
+    };
+
+    // while (docs.length) {
+    // const isFirst = docs.length === loadedDocs.length;
+
+    const slice = loadedDocs.length; //idxRes.numAdded >= 2040 ? 1 : 10;
+
+    const nextDocs = docs.slice(0, slice);
+
+    docs = docs.slice(slice);
+
     try {
-      const idxRes = await index({
-        docsSource: loadedDocs,
+      const ir = await index({
+        docsSource: nextDocs,
         recordManager,
         vectorStore,
         options: {
@@ -66,7 +84,12 @@ export const loadRetrieverDocs: (
 
       logger.debug(`Retriever '${retrieverLookup}' index results:`, idxRes);
 
-      return idxRes;
+      idxRes = {
+        numAdded: idxRes.numAdded + ir.numAdded,
+        numDeleted: idxRes.numDeleted + ir.numDeleted,
+        numSkipped: idxRes.numSkipped + ir.numSkipped,
+        numUpdated: idxRes.numUpdated + ir.numUpdated,
+      };
     } catch (err) {
       logger.error(
         `There was an issue indexing Retriever '${retrieverLookup}'`,
@@ -75,6 +98,9 @@ export const loadRetrieverDocs: (
 
       throw err;
     }
+    // }
+
+    return idxRes;
   } else {
     await vectorStore.addDocuments(loadedDocs);
 

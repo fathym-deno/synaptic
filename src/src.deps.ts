@@ -19,7 +19,7 @@ export * from "jsr:@fathym/eac@0.1.21/applications";
 export * from "jsr:@fathym/eac@0.1.21/dfs";
 
 // export * from "../../eac-runtime/mod.ts";
-export * from "jsr:@fathym/eac-runtime@0.1.16";
+export * from "jsr:@fathym/eac-runtime@0.1.19";
 
 export { IoCContainer } from "jsr:@fathym/ioc@0.0.12";
 
