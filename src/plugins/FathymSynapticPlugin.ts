@@ -494,10 +494,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
                   const loadedDocs = await Promise.all(
                     details.Documents.map(async (doc) => {
-                      const file = await dfsHandler?.GetFileInfo(
-                        doc,
-                        Date.now(),
-                      );
+                      const file = await dfsHandler?.GetFileInfo(doc, 0);
 
                       return file
                         ? ({
