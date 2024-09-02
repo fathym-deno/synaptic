@@ -1,6 +1,6 @@
 import { EaCVertexDetails } from "../src.deps.ts";
 
-export type EaCVectorStoreDetails<TType = unknown> = {
+export type EaCVectorStoreDetails<TType = string> = {
   EmbeddingsLookup: string;
 
   Type: TType;

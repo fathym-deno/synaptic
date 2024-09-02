@@ -1,2 +1,2 @@
 export * from "./mod.ts";
-export * from "./src/plugins/fresh/_exports.ts";
+export * from "./src/plugins/fresh/.exports.ts";

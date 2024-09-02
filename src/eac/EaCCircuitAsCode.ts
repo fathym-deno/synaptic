@@ -2,7 +2,7 @@ import { EaCDetails } from "../src.deps.ts";
 import { EaCCircuitDetails, isEaCCircuitDetails } from "./EaCCircuitDetails.ts";
 
 export type EaCCircuitAsCode = {
-  Circuits?: Record<string, EaCCircuitAsCode | null>;
+  Circuits?: Record<string, EaCCircuitAsCode>;
 } & EaCDetails<EaCCircuitDetails>;
 
 export function isEaCCircuitAsCode(eac: unknown): eac is EaCCircuitAsCode {

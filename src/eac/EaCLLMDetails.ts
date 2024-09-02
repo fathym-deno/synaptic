@@ -1,6 +1,6 @@
 import { EaCVertexDetails } from "../src.deps.ts";
 
-export type EaCLLMDetails<TType = unknown> = {
+export type EaCLLMDetails<TType = string> = {
   APIKey?: string;
 
   APIVersion?: string;

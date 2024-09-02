@@ -1,6 +1,6 @@
 import { EaCVertexDetails } from "../src.deps.ts";
 
-export type EaCEmbeddingsDetails<TType = unknown> = {
+export type EaCEmbeddingsDetails<TType = string> = {
   APIKey: string;
 
   APIVersion?: string;

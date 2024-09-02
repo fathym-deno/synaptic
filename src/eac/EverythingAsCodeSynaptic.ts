@@ -1,17 +1,25 @@
-import { EverythingAsCodeDFS } from "../src.deps.ts";
+import {
+  EverythingAsCode,
+  EverythingAsCodeDatabases,
+  EverythingAsCodeDFS,
+} from "../src.deps.ts";
 import { EaCAIAsCode } from "./EaCAIAsCode.ts";
 import { EaCCircuitAsCode } from "./EaCCircuitAsCode.ts";
 import { EaCNeuronLike } from "./EaCNeuron.ts";
 
-export type EverythingAsCodeSynaptic = {
-  AIs?: Record<string, EaCAIAsCode | null>;
+export type EverythingAsCodeSynaptic =
+  & {
+    AIs?: Record<string, EaCAIAsCode>;
 
-  Circuits?: Record<string, EaCCircuitAsCode | null> & {
-    $handlers?: Array<string> | null;
-    $neurons?: Record<string, EaCNeuronLike | null>;
-    $remotes?: Record<string, string | null>;
-  };
-} & EverythingAsCodeDFS;
+    Circuits?: {
+      $handlers?: Array<string>;
+      $neurons?: Record<string, EaCNeuronLike>;
+      $remotes?: Record<string, string>;
+    } & Record<string, EaCCircuitAsCode>;
+  }
+  & EverythingAsCode
+  & EverythingAsCodeDatabases
+  & EverythingAsCodeDFS;
 
 export function isEverythingAsCodeSynaptic(
   eac: unknown,
