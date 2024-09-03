@@ -1,21 +1,15 @@
-import { EverythingAsCodeSynaptic } from '../../src/eac/.exports.ts';
-import { EaCAzureOpenAIEmbeddingsDetails } from '../../src/eac/EaCAzureOpenAIEmbeddingsDetails.ts';
-import { eacFluentBuilder } from '../../src/fluent/.exports.ts';
-import {
-  assert,
-  assertEquals,
-  assertFalse,
-  assertNotEquals,
-  jsonMapSetClone,
-} from '../tests.deps.ts';
+import { EverythingAsCodeSynaptic } from "../../src/eac/.exports.ts";
+import { EaCAzureOpenAIEmbeddingsDetails } from "../../src/eac/EaCAzureOpenAIEmbeddingsDetails.ts";
+import { eacFluentBuilder } from "../../src/fluent/.exports.ts";
+import { assert, assertEquals, assertFalse } from "../tests.deps.ts";
 
-Deno.test('Overview Bench', async (t) => {
-  await t.step('AI as Code Builder', async () => {
-    const aiLookup = 'SynapticAIAsCodeBuilderTest';
+Deno.test("Overview Bench", async (t) => {
+  await t.step("AI as Code Builder", async () => {
+    const aiLookup = "SynapticAIAsCodeBuilderTest";
 
-    const aiName = 'The test AIs config';
+    const aiName = "The test AIs config";
 
-    const eacName = 'AI as Code Builder Test';
+    const eacName = "AI as Code Builder Test";
 
     const eacBldr = eacFluentBuilder<EverythingAsCodeSynaptic>({
       Details: {
@@ -27,14 +21,14 @@ Deno.test('Overview Bench', async (t) => {
       bldr
         .Details()
         .Name(aiName)
-        .Description('Used for testing the AIs configuration.');
+        .Description("Used for testing the AIs configuration.");
 
       bldr
-        .Embeddings('TestEmbedding')
+        .Embeddings("TestEmbedding")
         .Details<EaCAzureOpenAIEmbeddingsDetails>()
-        .Type('AzureOpenAI')
-        .Name('SynapticAIAsCodeBuilderTest')
-        .Description('A test AI');
+        .Type("AzureOpenAI")
+        .Name("SynapticAIAsCodeBuilderTest")
+        .Description("A test AI");
 
       // bldr
       //   .Embeddings("")

@@ -1,4 +1,4 @@
-import { jsonMapSetClone } from '../src.deps.ts';
+import { jsonMapSetClone } from "../src.deps.ts";
 import {
   configureEaCIoC,
   EaCRuntimePlugin,
@@ -8,14 +8,15 @@ import {
   FathymSynapticPlugin,
   IoCContainer,
   ValueType,
-} from './.deps.ts';
-import { SelectEaCFluentMethods } from './types/SelectEaCFluentMethods.ts';
+} from "./.deps.ts";
+import { SelectEaCFluentMethods } from "./types/SelectEaCFluentMethods.ts";
 
 export function eacFluentBuilder<
-  TEaC extends EverythingAsCode = EverythingAsCode
+  TEaC extends EverythingAsCode = EverythingAsCode,
 >(eac?: TEaC): EaCFluentBuilder<TEaC> & SelectEaCFluentMethods<TEaC, TEaC> {
-  return new EaCFluentBuilder<TEaC>([], eac) as EaCFluentBuilder<TEaC> &
-    SelectEaCFluentMethods<TEaC, TEaC>;
+  return new EaCFluentBuilder<TEaC>([], eac) as
+    & EaCFluentBuilder<TEaC>
+    & SelectEaCFluentMethods<TEaC, TEaC>;
 }
 
 export class EaCFluentBuilder<TEaC extends EverythingAsCode> {
@@ -33,7 +34,7 @@ export class EaCFluentBuilder<TEaC extends EverythingAsCode> {
 
   public async Compile(
     ioc?: IoCContainer,
-    plugins?: EaCRuntimePlugin[]
+    plugins?: EaCRuntimePlugin[],
   ): Promise<IoCContainer> {
     const circsIoC = new IoCContainer();
 
@@ -61,7 +62,7 @@ export class EaCFluentBuilder<TEaC extends EverythingAsCode> {
 
     let eacWorking = newEaC as Record<string, unknown>;
 
-    this.keyDepth.forEach((nextKey, i) => {
+    this.keyDepth.forEach((nextKey) => {
       // if (i < this.keyDepth.length - 1) {
       const workingProps = Object.keys(eacWorking ?? {});
 
@@ -80,16 +81,18 @@ export class EaCFluentBuilder<TEaC extends EverythingAsCode> {
   }
 
   public With(
-    action: (x: this) => void
-  ): this &
-    SelectEaCFluentMethods<
+    action: (x: this) => void,
+  ):
+    & this
+    & SelectEaCFluentMethods<
       ValueType<ReturnType<typeof this.workingRecords>>,
       TEaC
     > {
     action(this);
 
-    return this as this &
-      SelectEaCFluentMethods<
+    return this as
+      & this
+      & SelectEaCFluentMethods<
         ValueType<ReturnType<typeof this.workingRecords>>,
         TEaC
       >;
@@ -109,9 +112,9 @@ export class EaCFluentBuilder<TEaC extends EverythingAsCode> {
 
           if (args?.length) {
             if (
-              typeof target.workingRecords() === 'object' &&
-              'Details' in target.workingRecords() &&
-              typeof target.workingRecords().Details !== 'undefined'
+              typeof target.workingRecords() === "object" &&
+              "Details" in target.workingRecords() &&
+              typeof target.workingRecords().Details !== "undefined"
             ) {
               const [lookup] = args as [string];
 
@@ -137,7 +140,7 @@ export class EaCFluentBuilder<TEaC extends EverythingAsCode> {
 
           return new EaCFluentBuilder<TEaC>(
             [...target.keyDepth, ...newKeys],
-            target.eac
+            target.eac,
           );
         };
       },
