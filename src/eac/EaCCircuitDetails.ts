@@ -1,5 +1,4 @@
 // deno-lint-ignore-file no-explicit-any
-import { EaCFluentTag } from "../fluent/types/SelectEaCFluentMethods.ts";
 import {
   EaCVertexDetails,
   Runnable,
@@ -42,13 +41,9 @@ export type EaCCircuitDetails<TType = unknown> = {
 
   InputSchema?: ZodType<any>;
 
-  Neurons?:
-    & Record<string, EaCNeuronLike>
-    & EaCFluentTag<"FluentMethods", "Record">;
+  Neurons?: Record<string, EaCNeuronLike>;
 
-  Synapses?:
-    & Record<string, EaCNeuronLike>
-    & EaCFluentTag<"FluentMethods", "Record">;
+  Synapses?: Record<string, EaCNeuronLike>;
 
   Type: TType;
 } & EaCVertexDetails;
