@@ -5,16 +5,15 @@ export {
   type CheckpointMetadata,
   MemorySaver,
   MessageGraph,
-  type StateDefinition,
   StateGraph,
   type StateGraphArgs,
   type StateType,
-} from "npm:@langchain/langgraph@0.2.0";
+} from "npm:@langchain/langgraph@0.1.4";
 export {
   ToolExecutor,
   type ToolInvocationInterface,
   ToolNode,
-} from "npm:@langchain/langgraph@0.2.0/prebuilt";
+} from "npm:@langchain/langgraph@0.1.4/prebuilt";
 
 export type {
   CheckpointListOptions,
@@ -22,4 +21,4 @@ export type {
   CheckpointTuple,
   PendingWrite,
   SerializerProtocol,
-} from "npm:@langchain/langgraph-checkpoint@0.0.4";
+} from "npm:@langchain/langgraph-checkpoint@0.0.3";
