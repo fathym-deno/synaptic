@@ -23,6 +23,7 @@ export {
 export {} from "npm:@langchain/openai@0.2.8/";
 
 export { CheerioWebBaseLoader } from "npm:@langchain/community@0.2.31/document_loaders/web/cheerio";
+export { PDFLoader } from "npm:@langchain/community@0.2.31/document_loaders/fs/pdf";
 export { HtmlToTextTransformer } from "npm:@langchain/community@0.2.31/document_transformers/html_to_text";
 export { WatsonxAI } from "npm:@langchain/community@0.2.31/llms/watsonx_ai";
 export {

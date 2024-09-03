@@ -7,7 +7,7 @@ export {
   ServerSentEventStream,
 } from "jsr:@std/http@1.0.2/server-sent-event-stream";
 export { Buffer, toReadableStream } from "jsr:@std/io@0.224.4";
-export { toText } from "jsr:@std/streams@1.0.1";
+export { toBlob, toText } from "jsr:@std/streams@1.0.1";
 
 export * from "jsr:@fathym/common@0.2.34";
 export * from "jsr:@fathym/common@0.2.34/log";
