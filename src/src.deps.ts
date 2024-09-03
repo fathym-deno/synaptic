@@ -1,6 +1,7 @@
 import "jsr:@std/dotenv@0.225.0/load";
 import "npm:cheerio@1.0.0";
 import "npm:html-to-text@9.0.5";
+import "npm:pdf-parse@1.1.1";
 
 export { delay } from "jsr:@std/async@1.0.3/delay";
 export {
@@ -8,7 +9,7 @@ export {
   ServerSentEventStream,
 } from "jsr:@std/http@1.0.2/server-sent-event-stream";
 export { Buffer, toReadableStream } from "jsr:@std/io@0.224.4";
-export { toText } from "jsr:@std/streams@1.0.1";
+export { toBlob, toText } from "jsr:@std/streams@1.0.1";
 
 export * from "jsr:@fathym/common@0.2.50";
 export * from "jsr:@fathym/common@0.2.50/log";
