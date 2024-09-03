@@ -9,12 +9,12 @@ export {
   StateGraph,
   type StateGraphArgs,
   type StateType,
-} from "npm:@langchain/langgraph@0.1.9";
+} from "npm:@langchain/langgraph@0.2.0";
 export {
   ToolExecutor,
   type ToolInvocationInterface,
   ToolNode,
-} from "npm:@langchain/langgraph@0.1.9/prebuilt";
+} from "npm:@langchain/langgraph@0.2.0/prebuilt";
 
 export type {
   CheckpointListOptions,

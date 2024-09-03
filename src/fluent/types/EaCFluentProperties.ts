@@ -1,9 +1,9 @@
-import {
-  NoPropertiesUndefined,
-  OptionalProperties,
-  RequiredProperties,
-} from "../.deps.ts";
+// import {
+//   NoPropertiesUndefined,
+//   OptionalProperties,
+//   RequiredProperties,
+// } from "../.deps.ts";
 
-export type EaCFluentProperties<T> = RequiredProperties<T> & {
-  Optional: NoPropertiesUndefined<OptionalProperties<T>>;
-};
+// export type EaCFluentProperties<T> = RequiredProperties<T> & {
+//   Optional: NoPropertiesUndefined<OptionalProperties<T>>;
+// };

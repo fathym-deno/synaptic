@@ -1,3 +1,7 @@
+import "npm:cheerio@1.0.0";
+import "npm:html-to-text@9.0.5";
+import "npm:pdf-parse@1.1.1";
+
 export {
   createOpenAIFunctionsAgent,
   // createOpenAIFunctionsAgent,

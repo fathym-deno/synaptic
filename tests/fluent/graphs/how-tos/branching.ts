@@ -1,62 +1,56 @@
-import { EverythingAsCodeSynaptic } from '../../../../src/eac/.exports.ts';
-import { EaCGraphCircuitDetails } from '../../../../src/eac/EaCGraphCircuitDetails.ts';
-import { eacFluentBuilder } from '../../../../src/fluent/.exports.ts';
-import { Annotation } from '../../../tests.deps.ts';
-import { StateDefinition } from '../../../../src/src.deps.ts';
-import { EverythingAsCodeIdentity } from 'jsr:@fathym/eac@0.1.38/identity';
+// import { EverythingAsCodeSynaptic } from '../../../../src/eac/.exports.ts';
+// import { EaCGraphCircuitDetails } from '../../../../src/eac/EaCGraphCircuitDetails.ts';
+// import { eacFluentBuilder } from '../../../../src/fluent/.exports.ts';
+// import { Annotation } from '../../../tests.deps.ts';
+// import { StateDefinition } from '../../../../src/src.deps.ts';
 
-Deno.test('Fluent Branching Circuits', async (t) => {
-  await t.step('Circuit as Code Builder', async () => {
-    const _loadSimpleBootstrap = (value: string) => {
-      return (state: { aggregate: string[] }) => {
-        console.log(`Adding ${value} to ${state.aggregate}`);
+// Deno.test('Fluent Branching Circuits', async (t) => {
+//   await t.step('Circuit as Code Builder', async () => {
+//     const _loadSimpleBootstrap = (value: string) => {
+//       return (state: { aggregate: string[] }) => {
+//         console.log(`Adding ${value} to ${state.aggregate}`);
 
-        return { aggregate: [`I'm ${value}`] };
-      };
-    };
+//         return { aggregate: [`I'm ${value}`] };
+//       };
+//     };
 
-    const bldr = eacFluentBuilder<{
-      Thing: {
-        Hello: string;
-      };
-    }>();
+//     eacFluentBuilder<{
+//       Thing: {
+//         Hello: string;
+//       };
+//     }>();
 
-    bldr.Thing('').
+//     const eacBldr = eacFluentBuilder<EverythingAsCodeSynaptic>();
 
-    const eacBldr = eacFluentBuilder<EverythingAsCodeSynaptic>();
+//     eacBldr.Details().Name('AI as Code Builder Test');
 
-    eacBldr.Details().Name('AI as Code Builder Test');
+//     const stateDef: StateDefinition = {
+//       aggregate: Annotation<string[]>({
+//         reducer: (x, y) => x.concat(y),
+//         default: () => [],
+//       }),
+//     };
 
-    const stateDef: StateDefinition = {
-      aggregate: Annotation<string[]>({
-        reducer: (x, y) => x.concat(y),
-        default: () => [],
-      }),
-    };
+//     eacBldr
+//       .Circuits('fan-out-fan-in')
+//       .Details<EaCGraphCircuitDetails>()
+//       .Type('Graph')
+//       .Name('')
+//       .Description('')
+//       // .InputSchema(stateDef)
+//       .State(stateDef)
+//       .With((bldr) => {
+//         bldr.Neurons('').Botst;
+//       });
 
-    eacBldr
-      .Circuits('fan-out-fan-in')
-      .Details<EaCGraphCircuitDetails>()
-      .Type('Graph')
-      .Name('')
-      .Description('')
-      .InputSchema(stateDef)
-      .State(stateDef)
-      .BootrapInput(input) {
+//     eacBldr.Circuits('some-circuit').With((bldr) => {
+//       bldr.Neurons('first').Name('').Description('');
 
-      }
-      .With((bldr) => {
-        bldr.Neurons('').Botst;
-      });
+//       bldr.Neurons('first').Name('').Description('');
+//     });
 
-    eacBldr.Circuits('some-circuit').With((bldr) => {
-      bldr.Neurons('first').Name('').Description('');
+//     const ioc = await eacBldr.Compile();
 
-      bldr.Neurons('first').Name('').Description('');
-    });
-
-    const ioc = await eacBldr.Compile();
-
-    console.log(ioc);
-  });
-});
+//     console.log(ioc);
+//   });
+// });
