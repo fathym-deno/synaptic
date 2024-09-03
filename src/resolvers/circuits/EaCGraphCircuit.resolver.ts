@@ -2,6 +2,7 @@
 import { SynapticCircuitResolver } from "../SynapticCircuitResolver.ts";
 import { SynapticResolverConfiguration } from "../SynapticResolverConfiguration.ts";
 import {
+  Annotation,
   BaseCheckpointSaver,
   MessageGraph,
   Runnable,
@@ -38,7 +39,7 @@ export default {
             const details = eacCircuit.Details!;
 
             let graph = details.State
-              ? new StateGraph(details.State)
+              ? new StateGraph(Annotation.Root(details.State))
               : new MessageGraph();
 
             const neuronLookups = Object.keys(details.Neurons ?? {});
