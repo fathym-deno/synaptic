@@ -1,7 +1,7 @@
-import { EverythingAsCode } from '../.deps.ts';
-import { EaCFluentBuilder } from '../EaCFluentBuilder.ts';
+import { EverythingAsCode } from "../.deps.ts";
+import { EaCFluentBuilder } from "../EaCFluentBuilder.ts";
 
 export type SelectFluentBuilder<
   T,
-  TEaC extends EverythingAsCode
+  TEaC extends EverythingAsCode,
 > = EaCFluentBuilder<TEaC>;

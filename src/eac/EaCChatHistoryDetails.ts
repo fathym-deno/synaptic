@@ -1,4 +1,4 @@
-import { EaCVertexDetails } from '../src.deps.ts';
+import { EaCVertexDetails } from "../src.deps.ts";
 
 export type EaCChatHistoryDetails<TType = unknown> = {
   Type: TType;
@@ -6,7 +6,7 @@ export type EaCChatHistoryDetails<TType = unknown> = {
 
 export function isEaCChatHistoryDetails<TType = unknown>(
   type: TType,
-  details: unknown
+  details: unknown,
 ): details is EaCChatHistoryDetails {
   const x = details as EaCChatHistoryDetails;
 

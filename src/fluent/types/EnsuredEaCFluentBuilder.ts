@@ -1,6 +1,6 @@
 // import { IsObject } from '../.deps.ts';
-import { EverythingAsCode } from '../.deps.ts';
-import { EaCFluentBuilder } from '../EaCFluentBuilder.ts';
+import { EverythingAsCode } from "../.deps.ts";
+import { EaCFluentBuilder } from "../EaCFluentBuilder.ts";
 // import { EaCObjectFluentBuilder } from '../EaCObjectFluentBuilder.ts';
 // import { EaCPropertyFluentBuilder } from '../EaCPropertyFluentBuilder.ts';
 
