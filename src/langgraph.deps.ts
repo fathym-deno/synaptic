@@ -1,21 +1,20 @@
 export {
   Annotation,
-  AnnotationRoot,
   BaseCheckpointSaver,
   type Checkpoint,
   type CheckpointMetadata,
   MemorySaver,
   MessageGraph,
+  type StateDefinition,
   StateGraph,
   type StateGraphArgs,
   type StateType,
-} from 'npm:@langchain/langgraph@0.1.4-rc.1';
+} from 'npm:@langchain/langgraph@0.2.0';
 export {
   ToolExecutor,
   type ToolInvocationInterface,
   ToolNode,
-} from 'npm:@langchain/langgraph@0.1.4-rc.1/prebuilt';
-export type { StateDefinition } from 'npm:@langchain/langgraph@0.1.4-rc.1/_types';
+} from 'npm:@langchain/langgraph@0.2.0/prebuilt';
 
 export type {
   CheckpointListOptions,

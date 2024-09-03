@@ -1,6 +1,8 @@
 // deno-lint-ignore-file no-explicit-any
+import { StateDefinition } from '../../src.deps.ts';
 import {
   EaCCircuitAsCode,
+  EaCCircuitDetails,
   EaCGraphCircuitDetails,
   EverythingAsCode,
   ExcludeKeysByPrefix,
@@ -100,23 +102,46 @@ type HasEaCTag<T, TTag> = true extends HasTypeCheck<T, TTag> ? true : false;
 /**
  * Utility type to remove EaCFluentTag from a single property
  */
-type StripEaCTag<T> = T extends EaCTag<string, any>
-  ? Exclude<T, EaCTag<string, any>>
+type StripEaCTag<T> = T extends EaCTag<'FluentMethods', infer U>
+  ? Omit<T, keyof EaCTag<'FluentMethods', U>>
   : T;
 
 /**
  * Recursive utility type to apply StripEaCFluentTag across an entire object tree, including tuples and arrays
  */
-type DeepStripEaCTag<T> = T extends (infer U)[]
-  ? DeepStripEaCTag<U>[] // Handle arrays
-  : T extends [...infer U]
-  ? { [K in keyof U]: DeepStripEaCTag<U[K]> } // Handle tuples
-  : T extends object
-  ? { [K in keyof T]: DeepStripEaCTag<StripEaCTag<T[K]>> }
-  : StripEaCTag<T>;
+// type DeepStripEaCTag<T> = T extends (infer U)[]
+//   ? DeepStripEaCTag<U>[] // Handle arrays
+//   : T extends [...infer U]
+//   ? { [K in keyof U]: DeepStripEaCTag<U[K]> } // Handle tuples
+//   : T extends object
+//   ? { [K in keyof T]: DeepStripEaCTag<StripEaCTag<T[K]>> }
+//   : StripEaCTag<T>;
+type DeepStripEaCTag<T> = StripEaCTag<{
+  [K in keyof T]: T[K] extends never
+    ? never
+    : T[K] extends (infer U)[]
+    ? DeepStripEaCTag<U>[]
+    : // : T extends [...infer U]
+    // ? DeepStripEaCTag<{ [K in keyof U]: never }> //U[K]
+    T extends object
+    ? DeepStripEaCTag<T[K]>
+    : StripEaCTag<T[K]>;
+}>;
 
-type CleanedEaCCircuitAsCode = DeepStripEaCTag<EaCCircuitAsCode>;
-type hasTag = HasEaCTag<EaCGraphCircuitDetails['State'], 'fluentMethods'>;
+type shasTag = HasEaCTag<
+  EaCGraphCircuitDetails['State'],
+  EaCFluentTag<'FluentMethods', 'Property'>
+>;
+type stripped = DeepStripEaCTag<EaCGraphCircuitDetails>;
+type shasTag2 = HasEaCTag<
+  stripped['State'],
+  EaCFluentTag<'FluentMethods', 'Property'>
+>;
+
+type State = StateDefinition & EaCFluentTag<'FluentMethods', 'Property'>;
+type hasTag = HasEaCTag<State, EaCFluentTag<'FluentMethods', 'Property'>>;
+type xState = StripEaCTag<State>;
+type hasTag2 = HasEaCTag<xState, EaCFluentTag<'FluentMethods', 'Property'>>;
 
 // type c = IsUndefined<EaCAIDetails['Name']>;
 // type cc = IsRequiredProperty<EaCAIDetails, 'Name'>;

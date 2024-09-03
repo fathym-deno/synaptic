@@ -1,4 +1,4 @@
-import { AnnotationRoot } from 'npm:@langchain/langgraph@0.1.4-rc.1';
+import { AnnotationRoot } from 'npm:@langchain/langgraph@0.2.0';
 import { EverythingAsCodeSynaptic } from '../../../../src/eac/.exports.ts';
 import { EaCGraphCircuitDetails } from '../../../../src/eac/EaCGraphCircuitDetails.ts';
 import { eacFluentBuilder } from '../../../../src/fluent/.exports.ts';

@@ -1,9 +1,5 @@
 import { EaCFluentTag } from '../fluent/types/SelectEaCFluentMethods.ts';
-import {
-  AnnotationRoot,
-  RunnableConfig,
-  StateDefinition,
-} from '../src.deps.ts';
+import { RunnableConfig, StateDefinition } from '../src.deps.ts';
 import { EaCCircuitDetails, isEaCCircuitDetails } from './EaCCircuitDetails.ts';
 
 export type EaCGraphCircuitEdge = {
@@ -31,14 +27,8 @@ export type EaCGraphCircuitDetails = {
 
   PersistenceLookup?: string;
 
-  State?: ExtractStateDefinition<AnnotationRoot<any>> &
-    EaCFluentTag<'FluentMethods', 'Property'>;
+  State?: StateDefinition & EaCFluentTag<'FluentMethods', 'Property'>;
 } & EaCCircuitDetails<'Graph'>;
-
-type ExtractStateDefinition<T> = T extends AnnotationRoot<infer SD>
-  ? SD
-  : never;
-type x = AnnotationRoot<any> & EaCFluentTag<'FluentMethods', 'Property'>;
 
 export function isEaCGraphCircuitDetails(
   details: unknown
