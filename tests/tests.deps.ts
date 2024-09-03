@@ -11,7 +11,7 @@ export {
 } from 'jsr:@std/http@1.0.2/server-sent-event-stream';
 export { toText } from 'jsr:@std/streams@1.0.1';
 
-export * from 'jsr:@fathym/common@0.2.49';
+export * from 'jsr:@fathym/common@0.2.50';
 export * from 'jsr:@fathym/eac@0.1.37';
 export * from 'jsr:@fathym/eac@0.1.37/databases';
 export * from 'jsr:@fathym/eac@0.1.37/dfs';

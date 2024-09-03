@@ -6,5 +6,5 @@ export type EaCDetailsFluentMethods<
   T,
   K extends keyof T,
   TEaC extends EverythingAsCode
-> = <TDetails extends T[K] = T[K]>() => SelectFluentBuilder<TEaC> &
+> = <TDetails extends T[K] = T[K]>() => SelectFluentBuilder<T[K], TEaC> &
   SelectEaCFluentMethods<TDetails, TEaC>;

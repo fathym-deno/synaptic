@@ -6,4 +6,4 @@ export type EaCObjectFluentMethods<
   T,
   K extends keyof T,
   TEaC extends EverythingAsCode
-> = () => SelectFluentBuilder<TEaC> & SelectEaCFluentMethods<T[K], TEaC>;
+> = () => SelectFluentBuilder<T[K], TEaC> & SelectEaCFluentMethods<T[K], TEaC>;

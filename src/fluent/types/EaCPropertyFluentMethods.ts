@@ -8,5 +8,5 @@ export type EaCPropertyFluentMethods<
   TEaC extends EverythingAsCode
 > = (
   input: T[K]
-) => SelectFluentBuilder<TEaC> &
+) => SelectFluentBuilder<T[K], TEaC> &
   SelectEaCFluentMethods<Omit<RemoveIndexSignature<T>, K>, TEaC>;

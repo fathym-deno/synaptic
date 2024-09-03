@@ -1,4 +1,4 @@
-import { EverythingAsCode, ValueType } from '../.deps.ts';
+import { EverythingAsCode, ExcludeKeysByPrefix, ValueType } from '../.deps.ts';
 import { SelectEaCFluentMethods } from './SelectEaCFluentMethods.ts';
 import { SelectFluentBuilder } from './SelectFluentBuilder.ts';
 
@@ -8,4 +8,5 @@ export type EaCAsCodeFluentMethods<
   TEaC extends EverythingAsCode
 > = (
   lookup: string
-) => SelectFluentBuilder<TEaC> & SelectEaCFluentMethods<ValueType<T[K]>, TEaC>;
+) => SelectFluentBuilder<ValueType<ExcludeKeysByPrefix<T[K], '$'>>, TEaC> &
+  SelectEaCFluentMethods<ValueType<ExcludeKeysByPrefix<T[K], '$'>>, TEaC>;

@@ -10,9 +10,9 @@ export {
 export { Buffer, toReadableStream } from 'jsr:@std/io@0.224.4';
 export { toText } from 'jsr:@std/streams@1.0.1';
 
-export * from 'jsr:@fathym/common@0.2.49';
-export * from 'jsr:@fathym/common@0.2.49/log';
-export * from 'jsr:@fathym/common@0.2.49/types';
+export * from 'jsr:@fathym/common@0.2.50';
+export * from 'jsr:@fathym/common@0.2.50/log';
+export * from 'jsr:@fathym/common@0.2.50/types';
 
 // export * from '../../everything-as-code/mod.ts';
 export * from 'jsr:@fathym/eac@0.1.37';

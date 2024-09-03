@@ -1,9 +1,10 @@
-import { EaCDetails } from "../src.deps.ts";
-import { EaCCircuitDetails, isEaCCircuitDetails } from "./EaCCircuitDetails.ts";
+// deno-lint-ignore-file no-explicit-any
+import { EaCDetails } from '../src.deps.ts';
+import { EaCCircuitDetails, isEaCCircuitDetails } from './EaCCircuitDetails.ts';
 
 export type EaCCircuitAsCode = {
   Circuits?: Record<string, EaCCircuitAsCode>;
-} & EaCDetails<EaCCircuitDetails>;
+} & EaCDetails<EaCCircuitDetails<any>>;
 
 export function isEaCCircuitAsCode(eac: unknown): eac is EaCCircuitAsCode {
   const x = eac as EaCCircuitAsCode;

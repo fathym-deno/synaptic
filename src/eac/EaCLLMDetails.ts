@@ -1,6 +1,6 @@
-import { EaCVertexDetails } from "../src.deps.ts";
+import { EaCVertexDetails } from '../src.deps.ts';
 
-export type EaCLLMDetails<TType = string> = {
+export type EaCLLMDetails<TType = unknown> = {
   APIKey?: string;
 
   APIVersion?: string;
@@ -16,7 +16,7 @@ export type EaCLLMDetails<TType = string> = {
 
 export function isEaCLLMDetails<TType = unknown>(
   type: TType,
-  details: unknown,
+  details: unknown
 ): details is EaCLLMDetails {
   const x = details as EaCLLMDetails;
 
