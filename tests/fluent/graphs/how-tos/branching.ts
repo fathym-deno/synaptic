@@ -3,6 +3,7 @@ import { EaCGraphCircuitDetails } from '../../../../src/eac/EaCGraphCircuitDetai
 import { eacFluentBuilder } from '../../../../src/fluent/.exports.ts';
 import { Annotation } from '../../../tests.deps.ts';
 import { StateDefinition } from '../../../../src/src.deps.ts';
+import { EverythingAsCodeIdentity } from 'jsr:@fathym/eac@0.1.38/identity';
 
 Deno.test('Fluent Branching Circuits', async (t) => {
   await t.step('Circuit as Code Builder', async () => {
@@ -13,6 +14,14 @@ Deno.test('Fluent Branching Circuits', async (t) => {
         return { aggregate: [`I'm ${value}`] };
       };
     };
+
+    const bldr = eacFluentBuilder<{
+      Thing: {
+        Hello: string;
+      };
+    }>();
+
+    bldr.Thing('').
 
     const eacBldr = eacFluentBuilder<EverythingAsCodeSynaptic>();
 
@@ -31,10 +40,20 @@ Deno.test('Fluent Branching Circuits', async (t) => {
       .Type('Graph')
       .Name('')
       .Description('')
+      .InputSchema(stateDef)
       .State(stateDef)
+      .BootrapInput(input) {
+
+      }
       .With((bldr) => {
-        bldr.Neurons('');
+        bldr.Neurons('').Botst;
       });
+
+    eacBldr.Circuits('some-circuit').With((bldr) => {
+      bldr.Neurons('first').Name('').Description('');
+
+      bldr.Neurons('first').Name('').Description('');
+    });
 
     const ioc = await eacBldr.Compile();
 
