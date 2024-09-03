@@ -1,1 +1,1 @@
-import './how-tos/branching.ts';
+import "./how-tos/branching.ts";

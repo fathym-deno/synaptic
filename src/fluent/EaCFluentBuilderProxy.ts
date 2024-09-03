@@ -1,5 +1,5 @@
-import { EverythingAsCode } from './.deps.ts';
-import { EaCFluentBuilder } from './EaCFluentBuilder.ts';
+import { EverythingAsCode } from "./.deps.ts";
+import { EaCFluentBuilder } from "./EaCFluentBuilder.ts";
 
 export class EaCFluentBuilderProxy<TEaC extends EverythingAsCode> {
   protected eac: TEaC;
@@ -28,9 +28,9 @@ export class EaCFluentBuilderProxy<TEaC extends EverythingAsCode> {
 
           if (args?.length) {
             if (
-              typeof target.workingRecords() === 'object' &&
-              'Details' in target.workingRecords() &&
-              typeof target.workingRecords().Details !== 'undefined'
+              typeof target.workingRecords() === "object" &&
+              "Details" in target.workingRecords() &&
+              typeof target.workingRecords().Details !== "undefined"
             ) {
               const [lookup] = args as [string];
 
@@ -56,7 +56,7 @@ export class EaCFluentBuilderProxy<TEaC extends EverythingAsCode> {
 
           return new EaCFluentBuilder<TEaC>(
             [...target.keyDepth, ...newKeys],
-            target.eac
+            target.eac,
           );
         };
       },

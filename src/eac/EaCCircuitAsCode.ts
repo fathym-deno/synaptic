@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
-import { EaCDetails } from '../src.deps.ts';
-import { EaCCircuitDetails, isEaCCircuitDetails } from './EaCCircuitDetails.ts';
+import { EaCDetails } from "../src.deps.ts";
+import { EaCCircuitDetails, isEaCCircuitDetails } from "./EaCCircuitDetails.ts";
 
 export type EaCCircuitAsCode = {
   Circuits?: Record<string, EaCCircuitAsCode>;

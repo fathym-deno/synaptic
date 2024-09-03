@@ -1,4 +1,4 @@
-import { EaCVertexDetails } from '../src.deps.ts';
+import { EaCVertexDetails } from "../src.deps.ts";
 
 export type EaCVectorStoreDetails<TType = unknown> = {
   EmbeddingsLookup: string;
@@ -8,7 +8,7 @@ export type EaCVectorStoreDetails<TType = unknown> = {
 
 export function isEaCVectorStoreDetails<TType = unknown>(
   type: TType,
-  details: unknown
+  details: unknown,
 ): details is EaCVectorStoreDetails {
   const x = details as EaCVectorStoreDetails;
 
@@ -16,6 +16,6 @@ export function isEaCVectorStoreDetails<TType = unknown>(
     x &&
     (!type || x.Type === type) &&
     x.EmbeddingsLookup !== undefined &&
-    typeof x.EmbeddingsLookup === 'string'
+    typeof x.EmbeddingsLookup === "string"
   );
 }

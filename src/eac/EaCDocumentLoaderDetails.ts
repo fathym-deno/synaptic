@@ -1,4 +1,4 @@
-import { EaCVertexDetails } from '../src.deps.ts';
+import { EaCVertexDetails } from "../src.deps.ts";
 
 export type EaCDocumentLoaderDetails<TType = unknown> = {
   Type: TType;
@@ -6,7 +6,7 @@ export type EaCDocumentLoaderDetails<TType = unknown> = {
 
 export function isEaCDocumentLoaderDetails<TType = unknown>(
   type: TType,
-  details: unknown
+  details: unknown,
 ): details is EaCDocumentLoaderDetails {
   const x = details as EaCDocumentLoaderDetails;
 

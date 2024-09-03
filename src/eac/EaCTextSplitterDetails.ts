@@ -1,4 +1,4 @@
-import { EaCVertexDetails } from '../src.deps.ts';
+import { EaCVertexDetails } from "../src.deps.ts";
 
 export type EaCTextSplitterDetails<TType = unknown> = {
   TransformerLookup?: string;
@@ -8,7 +8,7 @@ export type EaCTextSplitterDetails<TType = unknown> = {
 
 export function isEaCTextSplitterDetails<TType = unknown>(
   type: TType,
-  details: unknown
+  details: unknown,
 ): details is EaCTextSplitterDetails {
   const x = details as EaCTextSplitterDetails;
 

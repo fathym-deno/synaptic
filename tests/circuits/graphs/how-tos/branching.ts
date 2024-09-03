@@ -3,7 +3,6 @@ import {
   assert,
   assertEquals,
   END,
-  EverythingAsCodeDatabases,
   Runnable,
   START,
 } from "../../../tests.deps.ts";
@@ -48,12 +47,12 @@ Deno.test("Graph Branching Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: Annotation.Root({
+          State: {
             aggregate: Annotation<string[]>({
               reducer: (x, y) => x.concat(y),
               default: () => [],
             }),
-          }),
+          },
           Neurons: {
             a: {
               BootstrapInput: loadSimpleBootstrap("A"),
@@ -81,7 +80,7 @@ Deno.test("Graph Branching Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: Annotation.Root({
+          State: {
             aggregate: Annotation<string[]>({
               reducer: (x, y) => x.concat(y),
               default: () => [],
@@ -90,7 +89,7 @@ Deno.test("Graph Branching Circuits", async (t) => {
               reducer: (x, y) => (y ? y : x),
               default: () => "",
             }),
-          }),
+          },
           Neurons: {
             a: {
               BootstrapInput: loadSimpleBootstrap("A"),
@@ -135,7 +134,7 @@ Deno.test("Graph Branching Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: Annotation.Root({
+          State: {
             aggregate: Annotation<string[]>({
               reducer: (x, y) => x.concat(y),
               default: () => [],
@@ -157,7 +156,7 @@ Deno.test("Graph Branching Circuits", async (t) => {
               },
               default: () => [],
             }),
-          }),
+          },
           Neurons: {
             a: {
               BootstrapInput: loadSimpleBootstrap("A"),
@@ -209,7 +208,7 @@ Deno.test("Graph Branching Circuits", async (t) => {
         } as EaCGraphCircuitDetails,
       },
     },
-  } as EverythingAsCodeSynaptic & EverythingAsCodeDatabases;
+  } as EverythingAsCodeSynaptic;
 
   const { ioc } = await buildTestIoC(eac, undefined, false);
 

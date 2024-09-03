@@ -5,7 +5,7 @@ import {
 } from "./SelectEaCFluentMethods.ts";
 import { SelectFluentBuilder } from "./SelectFluentBuilder.ts";
 
-export type EaCAsCodeFluentMethods<
+export type EaCRecordFluentMethods<
   T,
   K extends keyof T,
   TEaC extends EverythingAsCode,

@@ -1,17 +1,11 @@
-import { AnnotationRoot } from 'npm:@langchain/langgraph@0.2.0';
-import { EverythingAsCodeSynaptic } from '../../../../src/eac/.exports.ts';
-import { EaCGraphCircuitDetails } from '../../../../src/eac/EaCGraphCircuitDetails.ts';
-import { eacFluentBuilder } from '../../../../src/fluent/.exports.ts';
-import {
-  Annotation,
-  assert,
-  assertEquals,
-  RunnableLambda,
-} from '../../../tests.deps.ts';
-import { StateDefinition } from '../../../../src/src.deps.ts';
+import { EverythingAsCodeSynaptic } from "../../../../src/eac/.exports.ts";
+import { EaCGraphCircuitDetails } from "../../../../src/eac/EaCGraphCircuitDetails.ts";
+import { eacFluentBuilder } from "../../../../src/fluent/.exports.ts";
+import { Annotation, START } from "../../../tests.deps.ts";
+import { StateDefinition } from "../../../../src/src.deps.ts";
 
-Deno.test('Fluent Branching Circuits', async (t) => {
-  await t.step('Circuit as Code Builder', async () => {
+Deno.test("Fluent Branching Circuits", async (t) => {
+  await t.step("Circuit as Code Builder", async () => {
     const loadSimpleBootstrap = (value: string) => {
       return (state: { aggregate: string[] }) => {
         console.log(`Adding ${value} to ${state.aggregate}`);
@@ -20,11 +14,9 @@ Deno.test('Fluent Branching Circuits', async (t) => {
       };
     };
 
-    const eacBldr = eacFluentBuilder<EverythingAsCodeSynaptic>({
-      Details: {
-        Name: 'AI as Code Builder Test',
-      },
-    });
+    const eacBldr = eacFluentBuilder<EverythingAsCodeSynaptic>();
+
+    eacBldr.Details().Name("AI as Code Builder Test");
 
     const stateDef: StateDefinition = {
       aggregate: Annotation<string[]>({
@@ -33,20 +25,32 @@ Deno.test('Fluent Branching Circuits', async (t) => {
       }),
     };
 
-    const state = Annotation.Root(stateDef);
-
-    assert(state);
-    assertEquals(state.constructor.name, AnnotationRoot.name);
-
     eacBldr
-      .Circuits('fan-out-fan-in')
+      .Circuits("fan-out-fan-in")
       .Details<EaCGraphCircuitDetails>()
-      .Type('Graph')
-      .Name('')
-      .Description('')
-      .State(state)
+      .Type("Graph")
+      .Name("")
+      .Description("")
+      .State(stateDef)
       .With((bldr) => {
-        bldr.Neurons();
+        bldr.Neurons("a").BootstrapInput(loadSimpleBootstrap("A"));
+
+        bldr.Neurons("b").BootstrapInput(loadSimpleBootstrap("B"));
+
+        bldr.Neurons("c").BootstrapInput(loadSimpleBootstrap("C"));
+
+        bldr.Neurons("d").BootstrapInput(loadSimpleBootstrap("D"));
+      })
+      .With((bldr) => {
+        bldr.Edges(START).To("b");
+
+        bldr.Edges("b").To("c");
+
+        bldr.Neurons("b").BootstrapInput(loadSimpleBootstrap("B"));
+
+        bldr.Neurons("c").BootstrapInput(loadSimpleBootstrap("C"));
+
+        bldr.Neurons("d").BootstrapInput(loadSimpleBootstrap("D"));
       });
 
     const ioc = await eacBldr.Compile();

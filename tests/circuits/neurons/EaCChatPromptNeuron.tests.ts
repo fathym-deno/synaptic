@@ -23,6 +23,7 @@ import { InferSynapticState } from "../../../src/utils/types.ts";
 import { EaCDenoKVSaverPersistenceDetails } from "../../../src/eac/EaCDenoKVSaverPersistenceDetails.ts";
 import { EaCAzureOpenAILLMDetails } from "../../../src/eac/EaCAzureOpenAILLMDetails.ts";
 import { EaCLLMNeuron } from "../../../src/eac/neurons/EaCLLMNeuron.ts";
+import { StateDefinition } from "../../../src/src.deps.ts";
 
 export const LovelaceSourceInformationInputSchema = z.object({
   Input: z.string().optional(),
@@ -32,12 +33,12 @@ export type LovelaceSourceInformationInputSchema = z.infer<
   typeof LovelaceSourceInformationInputSchema
 >;
 
-export const LovelaceSourceInformationGraphStateSchema = Annotation.Root({
+export const LovelaceSourceInformationGraphStateSchema: StateDefinition = {
   Messages: Annotation<BaseMessage[]>({
     reducer: (x, y) => x.concat(y),
     default: () => [],
   }),
-});
+};
 
 export type LovelaceSourceInformationGraphStateSchema = InferSynapticState<
   typeof LovelaceSourceInformationGraphStateSchema
