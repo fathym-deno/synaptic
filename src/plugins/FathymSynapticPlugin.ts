@@ -18,6 +18,7 @@ import {
   Embeddings,
   formatToOpenAIFunction,
   formatToOpenAITool,
+  getPackageLoggerSync,
   HNSWLib,
   HtmlToTextTransformer,
   importDFSTypescriptModule,
@@ -600,6 +601,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer,
   ): void {
+    const logger = getPackageLoggerSync();
+  
     const aiLookups = Object.keys(eac!.AIs || {});
 
     aiLookups.forEach((aiLookup) => {
@@ -616,15 +619,21 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
           (acc, next) => {
             const nextPersonality = ai.Personalities![next]!;
 
-            return mergeWithArrays(
-              {
-                SystemMessages: nextPersonality.Details!.SystemMessages ?? [],
-                Instructions: nextPersonality.Details!.Instructions ?? [],
-                Messages: nextPersonality.Details!.Messages ?? [],
-                NewMessages: nextPersonality.Details!.NewMessages ?? [],
-              } as EaCPersonalityDetails,
-              acc,
-            );
+            try {
+              return mergeWithArrays(
+                {
+                  SystemMessages: nextPersonality.Details!.SystemMessages ?? [],
+                  Instructions: nextPersonality.Details!.Instructions ?? [],
+                  Messages: nextPersonality.Details!.Messages ?? [],
+                  NewMessages: nextPersonality.Details!.NewMessages ?? [],
+                } as EaCPersonalityDetails,
+                acc,
+              );
+            } catch (err) {
+              logger.error(`There was an error merging the '${next}' personality onto the current.`);
+              
+              throw new Error(err);
+            }
           },
           {
             SystemMessages: details.SystemMessages ?? [],
