@@ -1,5 +1,5 @@
 import { EaCFluentTag } from "../fluent/types/SelectEaCFluentMethods.ts";
-import { RunnableConfig, StateDefinition } from "../src.deps.ts";
+import { RunnableConfig } from "../src.deps.ts";
 import { EaCCircuitDetails, isEaCCircuitDetails } from "./EaCCircuitDetails.ts";
 
 export type EaCGraphCircuitEdge = {
