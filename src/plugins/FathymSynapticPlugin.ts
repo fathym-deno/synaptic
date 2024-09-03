@@ -7,11 +7,10 @@ import {
   BaseLanguageModel,
   CheerioWebBaseLoader,
   DFSFileHandlerResolver,
-  Document,
   DynamicStructuredTool,
   DynamicTool,
-  EaCJSRDistributedFileSystem,
-  EaCLocalDistributedFileSystem,
+  EaCJSRDistributedFileSystemDetails,
+  EaCLocalDistributedFileSystemDetails,
   EaCRuntimeConfig,
   EaCRuntimePlugin,
   EaCRuntimePluginConfig,
@@ -27,6 +26,7 @@ import {
   MemorySaver,
   MemoryVectorStore,
   mergeWithArrays,
+  PDFLoader,
   RecursiveCharacterTextSplitter,
   RemoteRunnable,
   Runnable,
@@ -37,8 +37,8 @@ import {
   StructuredToolInterface,
   TavilySearchResults,
   TextSplitter,
+  toBlob,
   Toolkit,
-  toText,
   VectorStore,
   WatsonxAI,
   z,
@@ -486,7 +486,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             () => {
               return {
                 load: async () => {
-                  const dfs = eac.DFS![details.DFSLookup]!;
+                  const dfs = eac.DFSs![details.DFSLookup]!.Details!;
 
                   const dfsHandler = await this.dfsHandlerResolver!.Resolve(
                     ioc,
@@ -497,18 +497,42 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                     details.Documents.map(async (doc) => {
                       const file = await dfsHandler?.GetFileInfo(doc, 0);
 
-                      return file
-                        ? ({
-                          pageContent: await toText(file?.Contents!),
+                      let innerLoader: BaseDocumentLoader = undefined;
+
+                      if (file) {
+                        if (doc.endsWith(".pdf")) {
+                          innerLoader = new PDFLoader(
+                            await toBlob(file.Contents),
+                          );
+                        }
+                      }
+
+                      const docs = innerLoader ? await innerLoader.load() : [];
+
+                      return docs.map((d) => {
+                        return {
+                          ...d,
                           metadata: {
+                            ...(d.metadata || {}),
                             source: `${details.DFSLookup}://${doc}`,
                           },
-                        } as Document)
-                        : undefined;
+                        };
+                      });
+                      // return file
+                      //   ? ({
+                      //       pageContent: await toText(file?.Contents!),
+                      //       metadata: {
+                      //         source: `${details.DFSLookup}://${doc}`,
+                      //       },
+                      //     } as Document)
+                      //   : undefined;
                     }),
                   );
 
-                  return loadedDocs.filter((ld) => ld);
+                  return loadedDocs
+                    .filter((ld) => ld)
+                    .flatMap((ld) => ld)
+                    .filter((ld) => ld);
                 },
               };
             },
@@ -610,40 +634,52 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
       const personalityLookups = Object.keys(ai.Personalities || {});
 
-      personalityLookups.forEach((personalityLookup) => {
-        const personality = ai.Personalities![personalityLookup]!;
+      const attachPersonality = (
+        resultDetails: EaCPersonalityDetails,
+        lookup: string,
+      ): EaCPersonalityDetails => {
+        let [personalityAILookup, personalityLookup] = lookup.split("|");
 
-        let details = personality.Details!;
+        if (!personalityLookup) {
+          personalityLookup = personalityAILookup;
 
-        details = [...(personality.PersonalityLookups || [])].reverse().reduce(
-          (acc, next) => {
-            const nextPersonality = ai.Personalities![next]!;
+          personalityAILookup = "";
+        }
 
-            try {
-              return mergeWithArrays(
-                {
-                  SystemMessages: nextPersonality.Details!.SystemMessages ?? [],
-                  Instructions: nextPersonality.Details!.Instructions ?? [],
-                  Messages: nextPersonality.Details!.Messages ?? [],
-                  NewMessages: nextPersonality.Details!.NewMessages ?? [],
-                } as EaCPersonalityDetails,
-                acc,
-              );
-            } catch (err) {
-              logger.error(`There was an error merging the '${next}' personality onto the current.`);
-              
-              throw new Error(err);
-            }
-          },
+        const personality = (
+          !personalityAILookup ? ai : eac!.AIs![personalityAILookup]
+        )!.Personalities![personalityLookup]!;
+
+        let details: EaCPersonalityDetails = mergeWithArrays(
           {
-            SystemMessages: details.SystemMessages ?? [],
-            Instructions: details.Instructions ?? [],
-            Messages: details.Messages ?? [],
-            NewMessages: details.NewMessages ?? [],
+            SystemMessages: personality.Details?.SystemMessages ?? [],
+            Instructions: personality.Details?.Instructions ?? [],
+            Messages: personality.Details?.Messages ?? [],
+            NewMessages: personality.Details?.NewMessages ?? [],
           } as EaCPersonalityDetails,
+          resultDetails,
         );
 
-        ioc.Register(() => details, {
+        details = [...(personality.PersonalityLookups || [])]
+          .reverse()
+          .reduce((acc, next) => {
+            return attachPersonality(acc, next);
+          }, details);
+
+        return details;
+      };
+
+      personalityLookups.forEach((personalityLookup) => {
+        let resultDetails: EaCPersonalityDetails = {
+          SystemMessages: [],
+          Instructions: [],
+          Messages: [],
+          NewMessages: [],
+        };
+
+        resultDetails = attachPersonality(resultDetails, personalityLookup);
+
+        ioc.Register(() => resultDetails, {
           Lazy: false,
           Name: `${aiLookup}|${personalityLookup}`,
           Type: ioc.Symbol("Personality"),
@@ -995,7 +1031,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                   WorkerPath: import.meta.resolve(
                     "@fathym/eac-runtime/workers/local",
                   ),
-                } as EaCLocalDistributedFileSystem)
+                } as EaCLocalDistributedFileSystemDetails)
                 : ({
                   Type: "JSR",
                   Package: "@fathym/synaptic",
@@ -1003,8 +1039,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                   WorkerPath: import.meta.resolve(
                     "@fathym/eac-runtime/workers/jsr",
                   ),
-                } as EaCJSRDistributedFileSystem)
-              : eac.DFS![dfsLookup]!;
+                } as EaCJSRDistributedFileSystemDetails)
+              : eac.DFSs![dfsLookup]!.Details!;
 
             const dfsHandler = await this.dfsHandlerResolver!.Resolve(ioc, dfs);
 

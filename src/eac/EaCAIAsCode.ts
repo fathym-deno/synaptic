@@ -13,27 +13,27 @@ import { EaCToolAsCode } from "./EaCToolAsCode.ts";
 import { EaCVectorStoreAsCode } from "./EaCVectorStoreAsCode.ts";
 
 export type EaCAIAsCode = {
-  ChatHistories?: Record<string, EaCChatHistoryAsCode | null>;
+  ChatHistories?: Record<string, EaCChatHistoryAsCode>;
 
-  Embeddings?: Record<string, EaCEmbeddingsAsCode | null>;
+  Embeddings?: Record<string, EaCEmbeddingsAsCode>;
 
-  Indexers?: Record<string, EaCIndexerAsCode | null>;
+  Indexers?: Record<string, EaCIndexerAsCode>;
 
-  LLMs?: Record<string, EaCLLMAsCode | null>;
+  LLMs?: Record<string, EaCLLMAsCode>;
 
-  Loaders?: Record<string, EaCDocumentLoaderAsCode | null>;
+  Loaders?: Record<string, EaCDocumentLoaderAsCode>;
 
-  Persistence?: Record<string, EaCPersistenceAsCode | null>;
+  Persistence?: Record<string, EaCPersistenceAsCode>;
 
-  Personalities?: Record<string, EaCPersonalityAsCode | null>;
+  Personalities?: Record<string, EaCPersonalityAsCode>;
 
-  Retrievers?: Record<string, EaCRetrieverAsCode | null>;
+  Retrievers?: Record<string, EaCRetrieverAsCode>;
 
-  TextSplitters?: Record<string, EaCTextSplitterAsCode | null>;
+  TextSplitters?: Record<string, EaCTextSplitterAsCode>;
 
-  Tools?: Record<string, EaCToolAsCode | null>;
+  Tools?: Record<string, EaCToolAsCode>;
 
-  VectorStores?: Record<string, EaCVectorStoreAsCode | null>;
+  VectorStores?: Record<string, EaCVectorStoreAsCode>;
 } & EaCDetails<EaCAIDetails>;
 
 export function isEaCAIAsCode(eac: unknown): eac is EaCAIAsCode {

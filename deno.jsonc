@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "exports": {
     ".": "./mod.ts",
+    "./fluent": "./src/fluent/.exports.ts",
     "./fresh": "./fresh.ts"
   },
   "tasks": {
@@ -13,7 +14,7 @@
     "deploy": "deno task build && ftm git",
     "publish:check": "deno publish --dry-run --allow-dirty",
     "test": "npx rimraf cov && deno test -A ./tests/tests.ts --coverage=cov",
-    "version": "deno run -A jsr:@fathym/common@0.0.211/version"
+    "version": "deno run -A jsr:@fathym/common@0/build/version"
   },
   "imports": {
     "preact": "npm:preact@10.20.1",
