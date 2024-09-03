@@ -17,6 +17,7 @@ import {
   Embeddings,
   formatToOpenAIFunction,
   formatToOpenAITool,
+  getPackageLoggerSync,
   HNSWLib,
   HtmlToTextTransformer,
   importDFSTypescriptModule,
@@ -624,6 +625,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer,
   ): void {
+    const logger = getPackageLoggerSync();
+  
     const aiLookups = Object.keys(eac!.AIs || {});
 
     aiLookups.forEach((aiLookup) => {
