@@ -20,7 +20,7 @@ export type EaCGraphCircuitEdgeLike =
   | EaCGraphCircuitEdge
   | (string | EaCGraphCircuitEdge)[];
 
-export type EaCGraphCircuitDetails<TState extends StateDefinition> = {
+export type EaCGraphCircuitDetails = {
   Edges: Record<string, EaCGraphCircuitEdgeLike>;
 
   Interrupts?: {
@@ -31,14 +31,19 @@ export type EaCGraphCircuitDetails<TState extends StateDefinition> = {
 
   PersistenceLookup?: string;
 
-  // State?: Partial<StateGraphArgs<unknown>["channels"]>;
-  State?: AnnotationRoot<TState> & EaCFluentTag<'FluentMethods', 'AsCode'>;
+  State?: ExtractStateDefinition<AnnotationRoot<any>> &
+    EaCFluentTag<'FluentMethods', 'Property'>;
 } & EaCCircuitDetails<'Graph'>;
 
-export function isEaCGraphCircuitDetails<TState extends StateDefinition>(
+type ExtractStateDefinition<T> = T extends AnnotationRoot<infer SD>
+  ? SD
+  : never;
+type x = AnnotationRoot<any> & EaCFluentTag<'FluentMethods', 'Property'>;
+
+export function isEaCGraphCircuitDetails(
   details: unknown
-): details is EaCGraphCircuitDetails<TState> {
-  const x = details as EaCGraphCircuitDetails<TState>;
+): details is EaCGraphCircuitDetails {
+  const x = details as EaCGraphCircuitDetails;
 
   return isEaCCircuitDetails('Graph', x) && x.Edges !== undefined;
 }

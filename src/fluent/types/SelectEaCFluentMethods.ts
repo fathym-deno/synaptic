@@ -1,6 +1,6 @@
+// deno-lint-ignore-file no-explicit-any
 import {
   EaCCircuitAsCode,
-  EaCCircuitDetails,
   EaCGraphCircuitDetails,
   EverythingAsCode,
   ExcludeKeysByPrefix,
@@ -31,46 +31,10 @@ export type DetermineEaCFluentMethods<
     ? EaCDetailsFluentMethods<T, K, TEaC>
     : MethodType extends ExtractExact<EaCFluentMethodsTags, 'Object'>
     ? EaCObjectFluentMethods<T, K, TEaC>
-    : MethodType extends ExtractExact<EaCFluentMethodsTags, 'AsCode'>
+    : MethodType extends ExtractExact<EaCFluentMethodsTags, 'Record'>
     ? EaCAsCodeFluentMethods<T, K, TEaC>
     : EaCPropertyFluentMethods<T, K, TEaC>
   : EaCPropertyFluentMethods<T, K, TEaC>;
-
-// K extends 'Details'
-//   ? EaCDetailsFluentMethods<T, K, TEaC>
-//   : HasDetailsProperty<T> extends true
-//   ? IsObject<T[K]> extends true
-//     ? SelectEaCValueTypeMethods<T, K, TEaC>
-//     : EaCPropertyFluentMethods<T, K, TEaC>
-//   : IsObject<T[K]> extends true
-//   ? EaCObjectFluentMethods<T, K, TEaC>
-//   : EaCPropertyFluentMethods<T, K, TEaC>;
-
-//   export type DetermineEaCFluentMethods<
-//   T,
-//   K extends keyof T,
-//   TEaC extends EverythingAsCode
-// > = K extends 'Details'
-//   ? EaCDetailsFluentMethods<T, K, TEaC>
-//   : HasDetailsProperty<T> extends true
-//   ? IsObject<T[K]> extends true
-//     ? SelectEaCValueTypeMethods<T, K, TEaC>
-//     : EaCPropertyFluentMethods<T, K, TEaC>
-//   : IsObject<T[K]> extends true
-//   ? EaCObjectFluentMethods<T, K, TEaC>
-//   : EaCPropertyFluentMethods<T, K, TEaC>;
-
-type tag = DetermineEaCFluentMethodsType<EaCCircuitAsCode, 'Details'>;
-
-type xxx = DetermineEaCFluentMethods<
-  EaCGraphCircuitDetails<any>,
-  'State',
-  EverythingAsCode
->;
-
-const c: xxx = {};
-
-c().State();
 
 export type SelectEaCValueTypeMethods<
   T,
@@ -91,7 +55,7 @@ export type DetermineEaCFluentMethodsType<
       ? HasDetailsProperty<
           ValueType<ExcludeKeysByPrefix<T[K], '$'>>
         > extends true
-        ? ExtractExact<EaCFluentMethodsTags, 'AsCode'>
+        ? ExtractExact<EaCFluentMethodsTags, 'Record'>
         : ExtractExact<EaCFluentMethodsTags, 'Object'>
       : ExtractExact<EaCFluentMethodsTags, 'Property'>
     : IsObject<T[K]> extends true
@@ -107,7 +71,7 @@ export type SelectEaCFluentMethodsTag<T> = EaCFluentTagValue<
   : never;
 
 export type EaCFluentTagTypes = 'FluentMethods';
-export type EaCFluentMethodsTags = 'AsCode' | 'Details' | 'Object' | 'Property';
+export type EaCFluentMethodsTags = 'Record' | 'Details' | 'Object' | 'Property';
 export type EaCFluentTags<TType extends EaCFluentTagTypes> =
   TType extends 'FluentMethods' ? EaCFluentMethodsTags : never;
 
@@ -121,12 +85,6 @@ export type EaCFluentTagValue<T, TType extends EaCFluentTagTypes> = EaCTagValue<
   TType
 >;
 
-type test =
-  | string
-  | boolean
-  | complex
-  | EaCFluentTag<'FluentMethods', 'Object'>;
-
 type ExtractExact<T, Tag extends T> = Extract<Tag, T>;
 
 type HasTypeCheck<T, U> = T extends U ? true : false;
@@ -139,15 +97,26 @@ type EaCTagValue<T, TType extends string> = T extends EaCTag<
   : never;
 type HasEaCTag<T, TTag> = true extends HasTypeCheck<T, TTag> ? true : false;
 
-type complex = { Hello: string };
+/**
+ * Utility type to remove EaCFluentTag from a single property
+ */
+type StripEaCTag<T> = T extends EaCTag<string, any>
+  ? Exclude<T, EaCTag<string, any>>
+  : T;
 
-type isString = HasEaCTag<test, string>;
+/**
+ * Recursive utility type to apply StripEaCFluentTag across an entire object tree, including tuples and arrays
+ */
+type DeepStripEaCTag<T> = T extends (infer U)[]
+  ? DeepStripEaCTag<U>[] // Handle arrays
+  : T extends [...infer U]
+  ? { [K in keyof U]: DeepStripEaCTag<U[K]> } // Handle tuples
+  : T extends object
+  ? { [K in keyof T]: DeepStripEaCTag<StripEaCTag<T[K]>> }
+  : StripEaCTag<T>;
 
-type isBoolean = HasEaCTag<test, boolean>;
-
-type isNumber = HasEaCTag<test, number>;
-
-type isTag = HasEaCTag<test, EaCFluentTag<'FluentMethods', 'Object'>>;
+type CleanedEaCCircuitAsCode = DeepStripEaCTag<EaCCircuitAsCode>;
+type hasTag = HasEaCTag<EaCGraphCircuitDetails['State'], 'fluentMethods'>;
 
 // type c = IsUndefined<EaCAIDetails['Name']>;
 // type cc = IsRequiredProperty<EaCAIDetails, 'Name'>;

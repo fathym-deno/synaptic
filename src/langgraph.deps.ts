@@ -15,7 +15,7 @@ export {
   type ToolInvocationInterface,
   ToolNode,
 } from 'npm:@langchain/langgraph@0.1.4-rc.1/prebuilt';
-export type { StateDefinition } from 'npm:@langchain/langgraph@0.1.4-rc.1/state';
+export type { StateDefinition } from 'npm:@langchain/langgraph@0.1.4-rc.1/_types';
 
 export type {
   CheckpointListOptions,

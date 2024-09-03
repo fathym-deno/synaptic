@@ -8,6 +8,7 @@ import {
   assertEquals,
   RunnableLambda,
 } from '../../../tests.deps.ts';
+import { StateDefinition } from '../../../../src/src.deps.ts';
 
 Deno.test('Fluent Branching Circuits', async (t) => {
   await t.step('Circuit as Code Builder', async () => {
@@ -25,12 +26,14 @@ Deno.test('Fluent Branching Circuits', async (t) => {
       },
     });
 
-    const state = Annotation.Root({
+    const stateDef: StateDefinition = {
       aggregate: Annotation<string[]>({
         reducer: (x, y) => x.concat(y),
         default: () => [],
       }),
-    });
+    };
+
+    const state = Annotation.Root(stateDef);
 
     assert(state);
     assertEquals(state.constructor.name, AnnotationRoot.name);
