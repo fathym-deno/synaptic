@@ -28,7 +28,7 @@ export {
   type EaCRuntimePlugin,
   FathymDFSFileHandlerPlugin,
   FathymEaCServicesPlugin,
-} from "jsr:@fathym/eac-runtime@0.1.20";
+} from "jsr:@fathym/eac-runtime@0.1.21";
 
 export { IoCContainer } from "jsr:@fathym/ioc@0.0.12";
 

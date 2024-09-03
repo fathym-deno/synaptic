@@ -23,6 +23,7 @@ export function eacFluentBuilder<
 export class EaCFluentBuilder<
   TEaC extends EverythingAsCode,
 > extends EaCFluentBuilderProxy<TEaC> {
+  // @ts-ignore Purposefully return super, but this breaks super call for derived classes
   constructor(keyDepth?: string[], eac?: TEaC) {
     const check = super(keyDepth, eac) as unknown as this;
 

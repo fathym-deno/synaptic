@@ -94,9 +94,10 @@ export type EaCFluentTag<
  * Recursive utility type to apply StripEaCFluentTag across an entire object tree, including tuples and arrays
  */
 export type HasEaCFluentTag<
+  T,
   TType extends EaCFluentTagTypes = EaCFluentTagTypes,
   TTag extends EaCFluentMethodsTags = EaCFluentMethodsTags,
-> = HasEaCTag<TType, TTag>;
+> = HasEaCTag<T, EaCTag<TType, TTag>>;
 
 export type StripEaCFluentTag<
   T,

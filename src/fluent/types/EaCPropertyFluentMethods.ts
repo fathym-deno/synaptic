@@ -10,7 +10,7 @@ export type EaCPropertyFluentMethods<
   K extends keyof T,
   TEaC extends EverythingAsCode,
 > = (
-  input: StripEaCFluentTag<T[K]>,
+  input: T[K], //HasEaCFluentTag<> extends true ? StripEaCFluentTag<T[K]> : T[K],
 ) =>
   & SelectFluentBuilder<StripEaCFluentTag<T[K]>, TEaC>
   & SelectEaCFluentMethods<Omit<RemoveIndexSignature<T>, K>, TEaC>;

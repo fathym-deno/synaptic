@@ -1,8 +1,5 @@
 import { EverythingAsCode, ExcludeKeysByPrefix, ValueType } from "../.deps.ts";
-import {
-  SelectEaCFluentMethods,
-  StripEaCFluentTag,
-} from "./SelectEaCFluentMethods.ts";
+import { SelectEaCFluentMethods } from "./SelectEaCFluentMethods.ts";
 import { SelectFluentBuilder } from "./SelectFluentBuilder.ts";
 
 export type EaCAsCodeFluentMethods<
@@ -12,11 +9,5 @@ export type EaCAsCodeFluentMethods<
 > = (
   lookup: string,
 ) =>
-  & SelectFluentBuilder<
-    ValueType<ExcludeKeysByPrefix<StripEaCFluentTag<T[K]>, "$">>,
-    TEaC
-  >
-  & SelectEaCFluentMethods<
-    ValueType<ExcludeKeysByPrefix<StripEaCFluentTag<T[K]>, "$">>,
-    TEaC
-  >;
+  & SelectFluentBuilder<ValueType<ExcludeKeysByPrefix<T[K], "$">>, TEaC>
+  & SelectEaCFluentMethods<ValueType<ExcludeKeysByPrefix<T[K], "$">>, TEaC>;
