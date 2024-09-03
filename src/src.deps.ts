@@ -1,6 +1,7 @@
 import "jsr:@std/dotenv@0.225.0/load";
 import "npm:cheerio@1.0.0";
 import "npm:html-to-text@9.0.5";
+import "npm:pdf-parse@1.1.1";
 
 export { delay } from "jsr:@std/async@1.0.3/delay";
 export {
@@ -15,17 +16,17 @@ export * from "jsr:@fathym/common@0.2.50/log";
 export * from "jsr:@fathym/common@0.2.50/types";
 
 // export * from '../../everything-as-code/mod.ts';
-export * from "jsr:@fathym/eac@0.1.37";
-export * from "jsr:@fathym/eac@0.1.37/applications";
-export * from "jsr:@fathym/eac@0.1.37/databases";
+export * from "jsr:@fathym/eac@0.1.38";
+export * from "jsr:@fathym/eac@0.1.38/applications";
+export * from "jsr:@fathym/eac@0.1.38/databases";
 export type {
   EaCJSRDistributedFileSystemDetails,
   EaCLocalDistributedFileSystemDetails,
   EverythingAsCodeDFS,
-} from "jsr:@fathym/eac@0.1.37/dfs";
+} from "jsr:@fathym/eac@0.1.38/dfs";
 
 // export * from "../../eac-runtime/mod.ts";
-export * from "jsr:@fathym/eac-runtime@0.1.20";
+export * from "jsr:@fathym/eac-runtime@0.1.21";
 
 export { IoCContainer } from "jsr:@fathym/ioc@0.0.12";
 
