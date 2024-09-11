@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { EaCFluentTag } from "../fluent/types/SelectEaCFluentMethods.ts";
+import { $FluentTag } from "../fluent/.deps.ts";
 import {
   EaCVertexDetails,
   Runnable,
@@ -8,52 +8,51 @@ import {
 } from "../src.deps.ts";
 import { EaCNeuronLike } from "./EaCNeuron.ts";
 
-export type EaCCircuitDetails<TType = unknown> = {
-  Bootstrap?: (
-    runnable: Runnable,
-    circuitDetails: EaCCircuitDetails<TType>,
-  ) => Runnable | Promise<Runnable>;
+export type EaCCircuitDetails<TType extends string | unknown = unknown> =
+  & {
+    Bootstrap?: (
+      runnable: Runnable,
+      circuitDetails: EaCCircuitDetails<TType>,
+    ) => Runnable | Promise<Runnable>;
 
-  BootstrapInput?: <TIn, TOut>(
-    input: TIn,
-    circuitDetails: EaCCircuitDetails<TType>,
-    options?:
-      | ({
-        config?: RunnableConfig;
-      } & RunnableConfig)
-      | Record<string, any>
-      | (Record<string, any> & {
-        config: RunnableConfig;
-      } & RunnableConfig),
-  ) => TOut | Promise<TOut>;
+    BootstrapInput?: <TIn, TOut>(
+      input: TIn,
+      circuitDetails: EaCCircuitDetails<TType>,
+      options?:
+        | ({
+          config?: RunnableConfig;
+        } & RunnableConfig)
+        | Record<string, any>
+        | (Record<string, any> & {
+          config: RunnableConfig;
+        } & RunnableConfig),
+    ) => TOut | Promise<TOut>;
 
-  BootstrapOutput?: <TIn, TOut>(
-    input: TIn,
-    circuitDetails: EaCCircuitDetails<TType>,
-    options?:
-      | ({
-        config?: RunnableConfig;
-      } & RunnableConfig)
-      | Record<string, any>
-      | (Record<string, any> & {
-        config: RunnableConfig;
-      } & RunnableConfig),
-  ) => TOut | Promise<TOut>;
+    BootstrapOutput?: <TIn, TOut>(
+      input: TIn,
+      circuitDetails: EaCCircuitDetails<TType>,
+      options?:
+        | ({
+          config?: RunnableConfig;
+        } & RunnableConfig)
+        | Record<string, any>
+        | (Record<string, any> & {
+          config: RunnableConfig;
+        } & RunnableConfig),
+    ) => TOut | Promise<TOut>;
 
-  InputSchema?: ZodType<any>;
+    InputSchema?: ZodType<any>;
 
-  Neurons?:
-    & Record<string, EaCNeuronLike>
-    & EaCFluentTag<"FluentMethods", "Record">;
+    Neurons?: Record<string, EaCNeuronLike> & $FluentTag<"Methods", "Record">;
 
-  Synapses?:
-    & Record<string, EaCNeuronLike>
-    & EaCFluentTag<"FluentMethods", "Record">;
+    Synapses?: Record<string, EaCNeuronLike> & $FluentTag<"Methods", "Record">;
 
-  Type: TType;
-} & EaCVertexDetails;
+    Type: TType;
+  }
+  & EaCVertexDetails
+  & $FluentTag<"Methods", never, "generic", { generic: true }>;
 
-export function isEaCCircuitDetails<TType = unknown>(
+export function isEaCCircuitDetails<TType extends string | unknown = unknown>(
   type: TType,
   details: unknown,
 ): details is EaCCircuitDetails {

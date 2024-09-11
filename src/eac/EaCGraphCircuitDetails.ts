@@ -1,4 +1,4 @@
-import { EaCFluentTag } from "../fluent/types/SelectEaCFluentMethods.ts";
+import { $FluentTag } from "../fluent/.deps.ts";
 import { RunnableConfig, StateDefinition } from "../src.deps.ts";
 import { EaCCircuitDetails, isEaCCircuitDetails } from "./EaCCircuitDetails.ts";
 
@@ -18,8 +18,7 @@ export type EaCGraphCircuitEdgeLike =
 
 export type EaCGraphCircuitDetails = {
   Edges:
-    & Record<string, EaCGraphCircuitEdgeLike>
-    & EaCFluentTag<"FluentMethods", "Record">;
+    & Record<string, EaCGraphCircuitEdgeLike>;
 
   Interrupts?: {
     After?: string[];
@@ -29,7 +28,7 @@ export type EaCGraphCircuitDetails = {
 
   PersistenceLookup?: string;
 
-  State?: StateDefinition & EaCFluentTag<"FluentMethods", "Property">;
+  State?: StateDefinition & $FluentTag<"Methods", "Property">;
 } & EaCCircuitDetails<"Graph">;
 
 export function isEaCGraphCircuitDetails(

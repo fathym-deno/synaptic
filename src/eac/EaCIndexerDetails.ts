@@ -1,10 +1,10 @@
 import { EaCVertexDetails } from "../src.deps.ts";
 
-export type EaCIndexerDetails<TType = unknown> = {
+export type EaCIndexerDetails<TType extends string | unknown = unknown> = {
   Type: TType;
 } & EaCVertexDetails;
 
-export function isEaCIndexerDetails<TType = unknown>(
+export function isEaCIndexerDetails<TType extends string | unknown = unknown>(
   type: TType,
   details: unknown,
 ): details is EaCIndexerDetails {

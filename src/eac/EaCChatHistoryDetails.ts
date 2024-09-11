@@ -1,10 +1,10 @@
 import { EaCVertexDetails } from "../src.deps.ts";
 
-export type EaCChatHistoryDetails<TType = unknown> = {
+export type EaCChatHistoryDetails<TType extends string | unknown = unknown> = {
   Type: TType;
 } & EaCVertexDetails;
 
-export function isEaCChatHistoryDetails<TType = unknown>(
+export function isEaCChatHistoryDetails<TType extends string | unknown = unknown>(
   type: TType,
   details: unknown,
 ): details is EaCChatHistoryDetails {

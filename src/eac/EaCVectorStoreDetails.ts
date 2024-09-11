@@ -1,12 +1,12 @@
 import { EaCVertexDetails } from "../src.deps.ts";
 
-export type EaCVectorStoreDetails<TType = unknown> = {
+export type EaCVectorStoreDetails<TType extends string | unknown = unknown> = {
   EmbeddingsLookup: string;
 
   Type: TType;
 } & EaCVertexDetails;
 
-export function isEaCVectorStoreDetails<TType = unknown>(
+export function isEaCVectorStoreDetails<TType extends string | unknown = unknown>(
   type: TType,
   details: unknown,
 ): details is EaCVectorStoreDetails {
