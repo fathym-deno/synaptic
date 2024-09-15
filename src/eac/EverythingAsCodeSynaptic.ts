@@ -11,6 +11,9 @@ export type EverythingAsCodeSynaptic =
   & {
     AIs?: Record<string, EaCAIAsCode>;
 
+    /**
+     * The circuits.
+     */
     Circuits?: {
       $handlers?: Array<string>;
       $neurons?: Record<string, EaCNeuronLike>;

@@ -20,7 +20,8 @@
     "preact": "npm:preact@10.20.1",
     "preact/jsx-runtime": "npm:preact@10.20.1/jsx-runtime",
 
-    "@fathym/eac-runtime": "jsr:@fathym/eac-runtime@0"
+    "@fathym/eac-runtime": "jsr:@fathym/eac-runtime@0",
+    "pdf-parse": "npm:/pdf-parse@1.1.1"
   },
   "lint": {
     "rules": {

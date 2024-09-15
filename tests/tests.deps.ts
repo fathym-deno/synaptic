@@ -1,7 +1,11 @@
 import "jsr:@std/dotenv@0.225.0/load";
 import * as _azureSearch from "npm:@azure/search-documents@12.1.0";
 import * as _htmlToText from "npm:html-to-text@9.0.5";
+<<<<<<< HEAD
 // import * as _parse from "npm:pdf-parse@1.1.1";
+=======
+import "pdf-parse";
+>>>>>>> 8ed65ae4f33581526c61be8ac05214894d386fa4
 
 export * from "jsr:@std/assert@1.0.2";
 export { delay } from "jsr:@std/async@1.0.3/delay";

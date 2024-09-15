@@ -1,7 +1,4 @@
 import "jsr:@std/dotenv@0.225.0/load";
-import "npm:cheerio@1.0.0";
-import "npm:html-to-text@9.0.5";
-import "npm:pdf-parse@1.1.1";
 
 export { delay } from "jsr:@std/async@1.0.3/delay";
 export {

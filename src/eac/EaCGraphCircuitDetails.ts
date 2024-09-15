@@ -1,4 +1,3 @@
-import { $FluentTag } from "../fluent/.deps.ts";
 import { RunnableConfig, StateDefinition } from "../src.deps.ts";
 import { EaCCircuitDetails, isEaCCircuitDetails } from "./EaCCircuitDetails.ts";
 
@@ -27,7 +26,7 @@ export type EaCGraphCircuitDetails = {
 
   PersistenceLookup?: string;
 
-  State?: StateDefinition & $FluentTag<"Methods", "Property">;
+  State?: StateDefinition;
 } & EaCCircuitDetails<"Graph">;
 
 export function isEaCGraphCircuitDetails(
