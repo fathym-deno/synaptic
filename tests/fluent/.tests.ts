@@ -1,2 +1,2 @@
-import './graphs/.tests.ts';
+import "./graphs/.tests.ts";
 import "./overview.ts";

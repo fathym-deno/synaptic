@@ -1,16 +1,16 @@
-import { EverythingAsCodeSynaptic } from '../../src/eac/.exports.ts';
-import { EaCAzureOpenAIEmbeddingsDetails } from '../../src/eac/EaCAzureOpenAIEmbeddingsDetails.ts';
-import { synapticFluentBuilder } from '../../src/fluent/.exports.ts';
-import { assert, assertEquals, assertFalse } from '../tests.deps.ts';
+import { EverythingAsCodeSynaptic } from "../../src/eac/.exports.ts";
+import { EaCAzureOpenAIEmbeddingsDetails } from "../../src/eac/EaCAzureOpenAIEmbeddingsDetails.ts";
+import { synapticFluentBuilder } from "../../src/fluent/.exports.ts";
+import { assert, assertEquals, assertFalse } from "../tests.deps.ts";
 
-Deno.test('Overview Bench', async (t) => {
-  await t.step('AI as Code Builder', async () => {
-    const aiLookup = 'SynapticAIAsCodeBuilderTest';
+Deno.test("Overview Bench", async (t) => {
+  await t.step("AI as Code Builder", async () => {
+    const aiLookup = "SynapticAIAsCodeBuilderTest";
 
-    const aiName = 'The test AIs config';
-    const aiDesc = 'Used for testing the AIs configuration.';
+    const aiName = "The test AIs config";
+    const aiDesc = "Used for testing the AIs configuration.";
 
-    const eacName = 'AI as Code Builder Test';
+    const eacName = "AI as Code Builder Test";
 
     const eacBldr = synapticFluentBuilder<EverythingAsCodeSynaptic>({
       Details: {
@@ -22,14 +22,14 @@ Deno.test('Overview Bench', async (t) => {
       bldr.Details().Name(aiName).Description(aiDesc);
 
       bldr
-        .Embeddings('TestEmbedding', true)
+        .Embeddings("TestEmbedding", true)
         .Details<EaCAzureOpenAIEmbeddingsDetails>()
-        .Type('AzureOpenAI')
-        .Name('SynapticAIAsCodeBuilderTest')
-        .Description('A test AI')
-        .APIKey(Deno.env.get('AZURE_OPENAI_KEY')!)
-        .Instance(Deno.env.get('AZURE_OPENAI_INSTANCE')!)
-        .DeploymentName('text-embedding-ada-002');
+        .Type("AzureOpenAI")
+        .Name("SynapticAIAsCodeBuilderTest")
+        .Description("A test AI")
+        .APIKey(Deno.env.get("AZURE_OPENAI_KEY")!)
+        .Instance(Deno.env.get("AZURE_OPENAI_INSTANCE")!)
+        .DeploymentName("text-embedding-ada-002");
 
       // bldr
       //   .LLMs("")
@@ -91,14 +91,14 @@ Deno.test('Overview Bench', async (t) => {
     // console.log(ioc);
   });
 
-  await t.step('Circuit as Code Builder', () => {
+  await t.step("Circuit as Code Builder", () => {
     const eacBldr = synapticFluentBuilder<EverythingAsCodeSynaptic>({
       Details: {
-        Name: 'AI as Code Builder Test',
+        Name: "AI as Code Builder Test",
       },
     }).Root();
 
-    eacBldr.Circuits('Test', true);
+    eacBldr.Circuits("Test", true);
 
     // const ioc = await eacBldr.Compile();
 

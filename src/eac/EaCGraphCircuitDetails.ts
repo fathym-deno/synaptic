@@ -17,8 +17,7 @@ export type EaCGraphCircuitEdgeLike =
   | (string | EaCGraphCircuitEdge)[];
 
 export type EaCGraphCircuitDetails = {
-  Edges:
-    & Record<string, EaCGraphCircuitEdgeLike>;
+  Edges: Record<string, EaCGraphCircuitEdgeLike>;
 
   Interrupts?: {
     After?: string[];

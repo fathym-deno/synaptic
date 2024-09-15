@@ -1,5 +1,5 @@
 import {
-  $FluentTag,
+  // $FluentTag,
   configureEaCIoC,
   eacFluentBuilder,
   EaCRuntimePlugin,
@@ -13,22 +13,26 @@ import {
   FluentBuilderRoot,
   IoCContainer,
   SelectFluentMethods,
-} from './.deps.ts';
+} from "./.deps.ts";
 import { EverythingAsCodeSynapticTags } from "./EverythingAsCodeSynapticTags.ts";
 
-type BuilderType<TEaC> = FluentBuilder<TEaC> &
-  SelectFluentMethods<FluentBuilderRoot<EverythingAsCodeSynapticTags<EverythingAsCodeTags<TEaC>>>, TEaC>;
+type BuilderType<TEaC> =
+  & FluentBuilder<TEaC>
+  & SelectFluentMethods<
+    FluentBuilderRoot<EverythingAsCodeSynapticTags<EverythingAsCodeTags<TEaC>>>,
+    TEaC
+  >;
 
 export function synapticFluentBuilder<TEaC extends EverythingAsCodeSynaptic>(
   model?: TEaC,
-  handlers?: FluentBuilderMethodsHandlers
+  handlers?: FluentBuilderMethodsHandlers,
 ): BuilderType<TEaC> {
   handlers = {
     ...(handlers || {}),
     Compile: (async (
+      thisArg?: BuilderType<TEaC>,
       ioc?: IoCContainer,
       plugins?: EaCRuntimePlugin[],
-      thisArg?: BuilderType<TEaC>,
     ): Promise<IoCContainer> => {
       const circsIoC = new IoCContainer();
 
@@ -54,7 +58,7 @@ export function synapticFluentBuilder<TEaC extends EverythingAsCodeSynaptic>(
 
   return eacFluentBuilder<TEaC>(
     model,
-    handlers
+    handlers,
     // TODO(mcgear): Why is this throwing errors on versions?
   ) as unknown as BuilderType<TEaC>;
 }

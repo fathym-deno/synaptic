@@ -1,10 +1,14 @@
 import { EaCVertexDetails } from "../src.deps.ts";
 
-export type EaCDocumentLoaderDetails<TType extends string | unknown = unknown> = {
-  Type: TType;
-} & EaCVertexDetails;
+export type EaCDocumentLoaderDetails<TType extends string | unknown = unknown> =
+  & {
+    Type: TType;
+  }
+  & EaCVertexDetails;
 
-export function isEaCDocumentLoaderDetails<TType extends string | unknown = unknown>(
+export function isEaCDocumentLoaderDetails<
+  TType extends string | unknown = unknown,
+>(
   type: TType,
   details: unknown,
 ): details is EaCDocumentLoaderDetails {

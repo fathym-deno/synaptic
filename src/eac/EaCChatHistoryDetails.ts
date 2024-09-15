@@ -4,7 +4,9 @@ export type EaCChatHistoryDetails<TType extends string | unknown = unknown> = {
   Type: TType;
 } & EaCVertexDetails;
 
-export function isEaCChatHistoryDetails<TType extends string | unknown = unknown>(
+export function isEaCChatHistoryDetails<
+  TType extends string | unknown = unknown,
+>(
   type: TType,
   details: unknown,
 ): details is EaCChatHistoryDetails {

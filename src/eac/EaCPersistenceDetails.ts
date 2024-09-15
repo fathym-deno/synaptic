@@ -4,7 +4,9 @@ export type EaCPersistenceDetails<TType extends string | unknown = unknown> = {
   Type: TType;
 } & EaCVertexDetails;
 
-export function isEaCPersistenceDetails<TType extends string | unknown = unknown>(
+export function isEaCPersistenceDetails<
+  TType extends string | unknown = unknown,
+>(
   type: TType,
   details: unknown,
 ): details is EaCPersistenceDetails {

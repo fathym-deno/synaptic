@@ -6,7 +6,9 @@ export type EaCVectorStoreDetails<TType extends string | unknown = unknown> = {
   Type: TType;
 } & EaCVertexDetails;
 
-export function isEaCVectorStoreDetails<TType extends string | unknown = unknown>(
+export function isEaCVectorStoreDetails<
+  TType extends string | unknown = unknown,
+>(
   type: TType,
   details: unknown,
 ): details is EaCVectorStoreDetails {
