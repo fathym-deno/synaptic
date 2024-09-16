@@ -5,6 +5,7 @@ import {
   EaCRuntimePluginConfig,
   EaCRuntimePluginDef,
   EverythingAsCode,
+  EverythingAsCodeDatabases,
   FathymDFSFileHandlerPlugin,
   FathymEaCServicesPlugin,
   IoCContainer,
@@ -150,7 +151,7 @@ const iocSetup = (
 
 export async function buildEaCTestIoC(
   testEaC: EverythingAsCode,
-  eac: EverythingAsCode,
+  eac: EverythingAsCode & EverythingAsCodeDatabases,
   plugins: EaCRuntimePlugin[],
   useDefaultPlugins: boolean,
 ): Promise<{
