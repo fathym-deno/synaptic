@@ -1,6 +1,6 @@
 import { EaCVertexDetails } from "../src.deps.ts";
 
-export type EaCPersistenceDetails<TType = string> = {
+export type EaCPersistenceDetails<TType = unknown> = {
   Type: TType;
 } & EaCVertexDetails;
 

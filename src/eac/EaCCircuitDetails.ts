@@ -7,7 +7,7 @@ import {
 } from "../src.deps.ts";
 import { EaCNeuronLike } from "./EaCNeuron.ts";
 
-export type EaCCircuitDetails<TType = string> = {
+export type EaCCircuitDetails<TType = unknown> = {
   Bootstrap?: (
     runnable: Runnable,
     circuitDetails: EaCCircuitDetails<TType>,

@@ -1,6 +1,9 @@
 export { merge } from "jsr:@fathym/common@0.2.147/merge";
 export type {
+  ExcludeKeysByPrefix,
+  IsNotUndefined,
   IsObject,
+  IsUndefined,
   NoPropertiesUndefined,
   RemoveIndexSignatures,
   ValueType,

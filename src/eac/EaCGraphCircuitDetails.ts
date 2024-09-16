@@ -1,4 +1,5 @@
-import { Annotation, RunnableConfig } from "../src.deps.ts";
+import { EaCFluentTag } from "../fluent/types/SelectEaCFluentMethods.ts";
+import { RunnableConfig, StateDefinition } from "../src.deps.ts";
 import { EaCCircuitDetails, isEaCCircuitDetails } from "./EaCCircuitDetails.ts";
 
 export type EaCGraphCircuitEdge = {
@@ -26,8 +27,7 @@ export type EaCGraphCircuitDetails = {
 
   PersistenceLookup?: string;
 
-  // State?: Partial<StateGraphArgs<unknown>["channels"]>;
-  State?: ReturnType<(typeof Annotation)["Root"]>;
+  State?: StateDefinition & EaCFluentTag<"FluentMethods", "Property">;
 } & EaCCircuitDetails<"Graph">;
 
 export function isEaCGraphCircuitDetails(

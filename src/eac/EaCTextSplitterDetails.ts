@@ -1,6 +1,6 @@
 import { EaCVertexDetails } from "../src.deps.ts";
 
-export type EaCTextSplitterDetails<TType = string> = {
+export type EaCTextSplitterDetails<TType = unknown> = {
   TransformerLookup?: string;
 
   Type: TType;
