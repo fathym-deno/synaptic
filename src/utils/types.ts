@@ -1,4 +1,4 @@
-import { z } from "../src.deps.ts";
+import { BaseChannel, z } from "../src.deps.ts";
 
 // export type InferSynapticState<T> = {
 //   [K in keyof T]: T[K] extends { value: (arg1: infer P, ...args: any[]) => any }
@@ -13,9 +13,19 @@ import { z } from "../src.deps.ts";
 //     }
 //   : never;
 
-export type InferSynapticState<T> = T extends {
-  State: infer S;
-} ? S
+// export type InferSynapticState<T> = T extends {
+//   State: infer S;
+// } ? S
+//   : never;
+
+export type InferSynapticState<T> = T extends Record<
+  string,
+  BaseChannel<infer U> | (() => BaseChannel<infer U>)
+> ? {
+    [K in keyof T]: T[K] extends BaseChannel<infer U> ? U
+      : T[K] extends () => BaseChannel<infer U> ? U
+      : never;
+  }
   : never;
 
 export type TypeToZod<T> = {

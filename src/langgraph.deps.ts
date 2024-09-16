@@ -1,5 +1,6 @@
 export {
   Annotation,
+  BaseChannel,
   BaseCheckpointSaver,
   type Checkpoint,
   type CheckpointMetadata,
