@@ -36,7 +36,7 @@ import {
   StructuredToolInterface,
   TavilySearchResults,
   TextSplitter,
-  // toBlob,
+  toBlob,
   Toolkit,
   VectorStore,
   WatsonxAI,
@@ -110,7 +110,10 @@ import { loadRetrieverDocs } from "../utils/loadRetrieverDocs.ts";
 export default class FathymSynapticPlugin implements EaCRuntimePlugin {
   protected dfsHandlerResolver: DFSFileHandlerResolver | undefined;
 
-  constructor(protected isLocal = false) {}
+  constructor(
+    protected isLocal = false,
+    protected pdfLoaderFactory?: (contents: Blob) => BaseDocumentLoader,
+  ) {}
 
   public async AfterEaCResolved(
     eac: EverythingAsCodeSynaptic,
@@ -487,29 +490,34 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                 load: async () => {
                   const dfs = eac.DFSs![details.DFSLookup]!.Details!;
 
-                  const _dfsHandler = await this.dfsHandlerResolver!.Resolve(
+                  const dfsHandler = await this.dfsHandlerResolver!.Resolve(
                     ioc,
                     dfs,
                   );
 
                   const loadedDocs = await Promise.all(
-                    details.Documents.map((doc) => {
-                      // const file = await dfsHandler?.GetFileInfo(doc, 0);
+                    details.Documents.map(async (doc) => {
+                      const file = await dfsHandler?.GetFileInfo(doc, 0);
 
-                      // let innerLoader: BaseDocumentLoader | undefined =
-                      //   undefined;
+                      let innerLoader: BaseDocumentLoader | undefined =
+                        undefined;
 
-                      // if (file) {
-                      //   if (doc.endsWith(".pdf")) {
-                      //     innerLoader = new PDFLoader(
-                      //       await toBlob(file.Contents),
-                      //     );
-                      //   }
-                      // }
+                      if (
+                        file &&
+                        this.pdfLoaderFactory &&
+                        doc.endsWith(".pdf")
+                      ) {
+                        innerLoader = this.pdfLoaderFactory(
+                          await toBlob(file.Contents),
+                        );
+                        // innerLoader = new PDFLoader(
+                        //   await toBlob(file.Contents)
+                        // );
+                      }
 
-                      // const docs = innerLoader ? await innerLoader.load() : [];
+                      const docs = innerLoader ? await innerLoader.load() : [];
 
-                      const docs: any[] = [];
+                      // const docs: any[] = [];
 
                       return docs.map((d) => {
                         return {
