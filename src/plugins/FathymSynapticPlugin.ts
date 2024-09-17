@@ -512,14 +512,9 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                       //   }
                       // }
 
-<<<<<<< HEAD
-                      const docs = innerLoader ? await innerLoader.load() : [];
-                      // const docs: any[] = [];
-=======
                       // const docs = innerLoader ? await innerLoader.load() : [];
 
                       const docs: any[] = [];
->>>>>>> 8ed65ae4f33581526c61be8ac05214894d386fa4
 
                       return docs.map((d) => {
                         return {
