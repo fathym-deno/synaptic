@@ -2,8 +2,8 @@ import { SynapticNeuronResolver } from "../SynapticNeuronResolver.ts";
 import { SynapticResolverConfiguration } from "../SynapticResolverConfiguration.ts";
 import { EaCLLMNeuron } from "../../eac/neurons/EaCLLMNeuron.ts";
 import {
-  AzureChatOpenAI,
   BaseLanguageModel,
+  ChatOpenAI,
   formatToOpenAIFunction,
   formatToOpenAITool,
   Runnable,
@@ -22,21 +22,18 @@ export default {
     const llm = (await ioc.Resolve<BaseLanguageModel>(
       ioc.Symbol(BaseLanguageModel.name),
       neuron.LLMLookup,
-    )) as unknown as AzureChatOpenAI;
+    )) as BaseLanguageModel;
 
     if (neuron.ToolLookups?.length) {
       const tools = await resolveTools(neuron.ToolLookups, ioc);
 
-      runnable = llm.bind({
-        functions: neuron.ToolsAsFunctions
+      runnable = (llm as unknown as ChatOpenAI).bindTools(
+        neuron.ToolsAsFunctions
           ? tools.map(formatToOpenAIFunction)
-          : undefined,
-        tools: neuron.ToolsAsFunctions
-          ? undefined
           : tools.map(formatToOpenAITool),
-      }) as unknown as Runnable;
+      );
     } else {
-      runnable = llm as unknown as Runnable;
+      runnable = llm;
     }
 
     return runnable;

@@ -1,4 +1,4 @@
-import { EaCDetails } from "../src.deps.ts";
+import { EaCDetails } from "../../src.deps.ts";
 import { EaCLLMDetails, isEaCLLMDetails } from "./EaCLLMDetails.ts";
 
 export type EaCLLMAsCode = EaCDetails<EaCLLMDetails>;

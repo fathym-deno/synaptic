@@ -16,6 +16,7 @@ export { MemoryVectorStore } from "npm:langchain@0.3.2/vectorstores/memory";
 export {
   AzureChatOpenAI,
   AzureOpenAIEmbeddings,
+  ChatOpenAI,
   formatToOpenAIFunction,
   formatToOpenAITool,
   type OpenAIBaseInput,
@@ -49,6 +50,7 @@ export {
   BaseLanguageModel,
   type LanguageModelLike,
 } from "npm:@langchain/core@0.3.1/language_models/base";
+export { BaseChatModel } from "npm:@langchain/core@0.3.1/language_models/chat_models";
 export { CallbackManagerForToolRun } from "npm:@langchain/core@0.3.1/callbacks/manager";
 export { type ToolDefinition } from "npm:@langchain/core@0.3.1/language_models/base";
 export {
