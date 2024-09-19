@@ -31,7 +31,7 @@ export default {
         neuron.ToolsAsFunctions
           ? tools.map(formatToOpenAIFunction)
           : tools.map(formatToOpenAITool),
-      );
+      ) as unknown as Runnable;
     } else {
       runnable = llm;
     }
