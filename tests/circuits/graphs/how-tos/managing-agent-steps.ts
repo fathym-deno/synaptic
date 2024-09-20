@@ -12,7 +12,7 @@ import {
   z,
 } from "../../../tests.deps.ts";
 import { AI_LOOKUP, buildTestIoC } from "../../../test-eac-setup.ts";
-import { EaCAzureOpenAILLMDetails } from "../../../../src/eac/EaCAzureOpenAILLMDetails.ts";
+import { EaCAzureOpenAILLMDetails } from "../../../../src/eac/llms/EaCAzureOpenAILLMDetails.ts";
 import { EaCDynamicToolDetails } from "../../../../src/eac/tools/EaCDynamicToolDetails.ts";
 import { EaCPassthroughNeuron } from "../../../../src/eac/neurons/EaCPassthroughNeuron.ts";
 import { EaCLLMNeuron } from "../../../../src/eac/neurons/EaCLLMNeuron.ts";
