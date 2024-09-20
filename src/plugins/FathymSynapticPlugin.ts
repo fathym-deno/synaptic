@@ -5,6 +5,7 @@ import {
   AzureOpenAIEmbeddings,
   BaseDocumentLoader,
   BaseLanguageModel,
+  ChatOpenAI,
   CheerioWebBaseLoader,
   DFSFileHandlerResolver,
   DynamicStructuredTool,
@@ -88,11 +89,11 @@ import {
 import {
   EaCAzureOpenAILLMDetails,
   isEaCAzureOpenAILLMDetails,
-} from "../eac/EaCAzureOpenAILLMDetails.ts";
+} from "../eac/llms/EaCAzureOpenAILLMDetails.ts";
 import {
   EaCWatsonXLLMDetails,
   isEaCWatsonXLLMDetails,
-} from "../eac/EaCWatsonXLLMDetails.ts";
+} from "../eac/llms/EaCWatsonXLLMDetails.ts";
 import { SynapticNeuronResolver } from "../resolvers/SynapticNeuronResolver.ts";
 import { SynapticResolverConfiguration } from "../resolvers/SynapticResolverConfiguration.ts";
 import { SynapticCircuitResolver } from "../resolvers/SynapticCircuitResolver.ts";
@@ -106,6 +107,10 @@ import {
 } from "../eac/EaCDFSDocumentLoaderDetails.ts";
 import { EaCPersonalityDetails } from "../eac/EaCPersonalityDetails.ts";
 import { loadRetrieverDocs } from "../utils/loadRetrieverDocs.ts";
+import {
+  EaCOpenAILLMDetails,
+  isEaCOpenAILLMDetails,
+} from "../eac/llms/EaCOpenAILLMDetails.ts";
 
 export default class FathymSynapticPlugin implements EaCRuntimePlugin {
   protected dfsHandlerResolver: DFSFileHandlerResolver | undefined;
@@ -415,14 +420,43 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               if (llmDetails.ToolLookups?.length) {
                 const tools = await resolveTools(llmDetails.ToolLookups!, ioc);
 
-                return llm.bind({
-                  functions: llmDetails.ToolsAsFunctions
+                return llm.bindTools(
+                  llmDetails.ToolsAsFunctions
                     ? tools.map(formatToOpenAIFunction)
-                    : undefined,
-                  tools: llmDetails.ToolsAsFunctions
-                    ? undefined
                     : tools.map(formatToOpenAITool),
-                });
+                );
+              }
+
+              return llm;
+            },
+            {
+              Lazy: false,
+              Name: `${aiLookup}|${llmLookup}`,
+              Type: ioc.Symbol(BaseLanguageModel.name),
+            },
+          );
+        } else if (isEaCOpenAILLMDetails(llm.Details)) {
+          const llmDetails = llm.Details as EaCOpenAILLMDetails;
+
+          ioc.Register(
+            ChatOpenAI,
+            async (ioc) => {
+              const llm = new ChatOpenAI({
+                openAIApiKey: llmDetails.APIKey,
+                modelName: llmDetails.ModelName,
+                temperature: 0.7,
+                streaming: llmDetails.Streaming,
+                ...(llmDetails.InputParams || {}),
+              });
+
+              if (llmDetails.ToolLookups?.length) {
+                const tools = await resolveTools(llmDetails.ToolLookups!, ioc);
+
+                return llm.bindTools(
+                  llmDetails.ToolsAsFunctions
+                    ? tools.map(formatToOpenAIFunction)
+                    : tools.map(formatToOpenAITool),
+                );
               }
 
               return llm;

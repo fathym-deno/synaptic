@@ -1,4 +1,4 @@
-import { OpenAIBaseInput } from "../src.deps.ts";
+import { OpenAIBaseInput } from "../../src.deps.ts";
 import { EaCLLMDetails, isEaCLLMDetails } from "./EaCLLMDetails.ts";
 
 export type EaCAzureOpenAILLMDetails = {

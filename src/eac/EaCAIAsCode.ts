@@ -4,7 +4,7 @@ import { EaCChatHistoryAsCode } from "./EaCChatHistoryAsCode.ts";
 import { EaCDocumentLoaderAsCode } from "./EaCDocumentLoaderAsCode.ts";
 import { EaCEmbeddingsAsCode } from "./EaCEmbeddingsAsCode.ts";
 import { EaCIndexerAsCode } from "./EaCIndexerAsCode.ts";
-import { EaCLLMAsCode } from "./EaCLLMAsCode.ts";
+import { EaCLLMAsCode } from "./llms/EaCLLMAsCode.ts";
 import { EaCPersistenceAsCode } from "./EaCPersistenceAsCode.ts";
 import { EaCPersonalityAsCode } from "./EaCPersonalityAsCode.ts";
 import { EaCRetrieverAsCode } from "./EaCRetrieverAsCode.ts";
