@@ -84,12 +84,12 @@ Deno.test("Graph Stream Tokens Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: Annotation.Root({
+          State: {
             messages: Annotation<BaseMessage[]>({
               reducer: (x, y) => x.concat(y),
               default: () => [],
             }),
-          }),
+          },
           Neurons: {
             agent: [
               "thinky-llm",

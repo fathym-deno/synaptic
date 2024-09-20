@@ -17,7 +17,7 @@ export * from "jsr:@fathym/eac@0.1.63/databases";
 export * from "jsr:@fathym/eac@0.1.63/dfs";
 export * from "jsr:@fathym/eac-api@0.1.7";
 // export * from "../../eac-runtime/mod.ts";
-export * from "jsr:@fathym/eac-runtime@0.1.8";
+export * from "jsr:@fathym/eac-runtime@0.1.24";
 export { IoCContainer } from "jsr:@fathym/ioc@0.0.12";
 
 export { z } from "npm:zod@3.23.8";

@@ -30,7 +30,7 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: Annotation.Root({
+          State: {
             name: Annotation<string>({
               reducer: (x, y) => (y ? y : x),
               default: () => "default",
@@ -51,7 +51,7 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
               },
               default: () => [],
             }),
-          }),
+          },
           Neurons: {
             child_end: {
               BootstrapInput() {
@@ -81,7 +81,7 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: Annotation.Root({
+          State: {
             name: Annotation<string>({
               reducer: (x, y) => (y ? y : x),
               default: () => "default",
@@ -102,7 +102,7 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
               },
               default: () => [],
             }),
-          }),
+          },
           Neurons: {
             child: {
               Type: "Circuit",
@@ -143,7 +143,7 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: Annotation.Root({
+          State: {
             name: Annotation<string>({
               reducer: (x, y) => (y ? y : x),
               default: () => "default",
@@ -191,7 +191,7 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
               },
               default: () => [],
             }),
-          }),
+          },
           Neurons: {
             child_end: {
               BootstrapInput() {
@@ -221,7 +221,7 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: Annotation.Root({
+          State: {
             name: Annotation<string>({
               reducer: (x, y) => (y ? y : x),
               default: () => "default",
@@ -269,7 +269,7 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
               },
               default: () => [],
             }),
-          }),
+          },
           Neurons: {
             child: {
               Type: "Circuit",

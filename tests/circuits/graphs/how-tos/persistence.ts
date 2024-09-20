@@ -98,12 +98,12 @@ Deno.test("Persistence Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: Annotation.Root({
+          State: {
             messages: Annotation<BaseMessage[]>({
               reducer: (x, y) => x.concat(y),
               default: () => [],
             }),
-          }),
+          },
           Neurons: {
             agent: "thinky-agent",
             tools: "thinky-tools",
@@ -136,12 +136,12 @@ Deno.test("Persistence Circuits", async (t) => {
           Type: "Graph",
           Priority: 100,
           PersistenceLookup: `${AI_LOOKUP}|memory`,
-          State: Annotation.Root({
+          State: {
             messages: Annotation<BaseMessage[]>({
               reducer: (x, y) => x.concat(y),
               default: () => [],
             }),
-          }),
+          },
           Neurons: {
             agent: "thinky-agent",
             tools: "thinky-tools",
@@ -174,12 +174,12 @@ Deno.test("Persistence Circuits", async (t) => {
           Type: "Graph",
           Priority: 100,
           PersistenceLookup: `${AI_LOOKUP}|denokv`,
-          State: Annotation.Root({
+          State: {
             messages: Annotation<BaseMessage[]>({
               reducer: (x, y) => x.concat(y),
               default: () => [],
             }),
-          }),
+          },
           Neurons: {
             agent: "thinky-agent",
             tools: "thinky-tools",
@@ -303,6 +303,7 @@ Deno.test("Persistence Circuits", async (t) => {
       {
         configurable: {
           thread_id: "test",
+          checkpoint_ns: "test",
         },
       },
     );
@@ -318,6 +319,7 @@ Deno.test("Persistence Circuits", async (t) => {
       {
         configurable: {
           thread_id: "test",
+          checkpoint_ns: "test",
         },
       },
     );
@@ -342,6 +344,7 @@ Deno.test("Persistence Circuits", async (t) => {
       {
         configurable: {
           thread_id: "test",
+          checkpoint_ns: "test",
         },
       },
     );

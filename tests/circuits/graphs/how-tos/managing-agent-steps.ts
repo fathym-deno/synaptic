@@ -85,12 +85,12 @@ Deno.test("Graph Managing Agent Steps Circuits", async (t) => {
           Type: "Graph",
           Priority: 100,
           PersistenceLookup: `${AI_LOOKUP}|memory`,
-          State: Annotation.Root({
+          State: {
             messages: Annotation<BaseMessage[]>({
               reducer: (x, y) => x.concat(y),
               default: () => [],
             }),
-          }),
+          },
           Neurons: {
             agent: [
               "thinky-llm",

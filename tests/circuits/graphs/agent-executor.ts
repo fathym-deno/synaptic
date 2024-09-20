@@ -52,7 +52,7 @@ Deno.test("Graph Agent Executor Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: Annotation.Root({
+          State: {
             input: Annotation<string>({
               reducer: (_x, y) => y,
               default: () => "",
@@ -65,7 +65,7 @@ Deno.test("Graph Agent Executor Circuits", async (t) => {
               reducer: (_x, y) => y,
               default: () => "",
             }),
-          }),
+          },
           Neurons: {
             agent: {
               Type: "OpenAIFunctionsAgent",

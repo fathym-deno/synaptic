@@ -13,7 +13,7 @@ import {
   AzureAISearchQueryType,
   EaCDatabaseAsCode,
   EaCDenoKVDatabaseDetails,
-  EaCLocalDistributedFileSystem,
+  EaCLocalDistributedFileSystemDetails,
 } from "./tests.deps.ts";
 
 export const eacAIsRoot = {
@@ -163,7 +163,9 @@ export const eacDatabases = {
 } as EaCDatabaseAsCode;
 
 export const eacDFSSynapticResolvers = {
-  Type: "Local",
-  FileRoot: "./src/resolvers/",
-  Extensions: ["resolver.ts"],
-} as EaCLocalDistributedFileSystem;
+  Details: {
+    Type: "Local",
+    FileRoot: "./src/resolvers/",
+    Extensions: ["resolver.ts"],
+  } as EaCLocalDistributedFileSystemDetails,
+};

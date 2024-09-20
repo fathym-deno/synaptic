@@ -32,12 +32,12 @@ export type LovelaceSourceInformationInputSchema = z.infer<
   typeof LovelaceSourceInformationInputSchema
 >;
 
-export const LovelaceSourceInformationGraphStateSchema = Annotation.Root({
+export const LovelaceSourceInformationGraphStateSchema = {
   Messages: Annotation<BaseMessage[]>({
     reducer: (x, y) => x.concat(y),
     default: () => [],
   }),
-});
+};
 
 export type LovelaceSourceInformationGraphStateSchema = InferSynapticState<
   typeof LovelaceSourceInformationGraphStateSchema
