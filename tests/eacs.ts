@@ -1,5 +1,5 @@
 import { EaCAzureOpenAIEmbeddingsDetails } from "../src/eac/EaCAzureOpenAIEmbeddingsDetails.ts";
-import { EaCAzureOpenAILLMDetails } from "../src/eac/EaCAzureOpenAILLMDetails.ts";
+import { EaCAzureOpenAILLMDetails } from "../src/eac/llms/EaCAzureOpenAILLMDetails.ts";
 import { EaCAzureSearchAIVectorStoreDetails } from "../src/eac/EaCAzureSearchAIVectorStoreDetails.ts";
 import { EaCCheerioWebDocumentLoaderDetails } from "../src/eac/EaCCheerioWebDocumentLoaderDetails.ts";
 import { EaCDenoKVChatHistoryDetails } from "../src/eac/EaCDenoKVChatHistoryDetails.ts";

@@ -14,7 +14,7 @@ import {
 } from "../tests.deps.ts";
 import { AI_LOOKUP, buildTestIoC } from "../test-eac-setup.ts";
 import { EaCCircuitToolDetails } from "../../src/eac/tools/EaCCircuitToolDetails.ts";
-import { EaCAzureOpenAILLMDetails } from "../../src/eac/EaCAzureOpenAILLMDetails.ts";
+import { EaCAzureOpenAILLMDetails } from "../../src/eac/llms/EaCAzureOpenAILLMDetails.ts";
 import { EaCPassthroughNeuron } from "../../src/eac/neurons/EaCPassthroughNeuron.ts";
 import { EaCChatHistoryNeuron } from "../../src/eac/neurons/EaCChatHistoryNeuron.ts";
 import { EaCLLMNeuron } from "../../src/eac/neurons/EaCLLMNeuron.ts";

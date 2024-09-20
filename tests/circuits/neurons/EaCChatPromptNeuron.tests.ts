@@ -21,7 +21,7 @@ import {
 import { EaCGraphCircuitDetails } from "../../../src/eac/EaCGraphCircuitDetails.ts";
 import { InferSynapticState } from "../../../src/utils/types.ts";
 import { EaCDenoKVSaverPersistenceDetails } from "../../../src/eac/EaCDenoKVSaverPersistenceDetails.ts";
-import { EaCAzureOpenAILLMDetails } from "../../../src/eac/EaCAzureOpenAILLMDetails.ts";
+import { EaCAzureOpenAILLMDetails } from "../../../src/eac/llms/EaCAzureOpenAILLMDetails.ts";
 import { EaCLLMNeuron } from "../../../src/eac/neurons/EaCLLMNeuron.ts";
 
 export const LovelaceSourceInformationInputSchema = z.object({
