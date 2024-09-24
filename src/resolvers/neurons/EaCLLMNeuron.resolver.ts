@@ -4,8 +4,8 @@ import { EaCLLMNeuron } from "../../eac/neurons/EaCLLMNeuron.ts";
 import {
   BaseLanguageModel,
   ChatOpenAI,
-  formatToOpenAIFunction,
-  formatToOpenAITool,
+  // formatToOpenAIFunction,
+  // formatToOpenAITool,
   Runnable,
 } from "../../src.deps.ts";
 import { resolveTools } from "../../plugins/FathymSynapticPlugin.ts";
@@ -28,9 +28,12 @@ export default {
       const tools = await resolveTools(neuron.ToolLookups, ioc);
 
       runnable = (llm as unknown as ChatOpenAI).bindTools(
-        neuron.ToolsAsFunctions
-          ? tools.map(formatToOpenAIFunction)
-          : tools.map(formatToOpenAITool),
+        tools,
+        // neuron.ToolsAsFunctions
+        //   ?
+        // tools.map(formatToOpenAIFunction)
+        //   :
+        // tools.map(formatToOpenAITool)
       ) as unknown as Runnable;
     } else {
       runnable = llm;

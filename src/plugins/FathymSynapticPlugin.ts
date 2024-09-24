@@ -16,8 +16,8 @@ import {
   EaCRuntimePlugin,
   EaCRuntimePluginConfig,
   Embeddings,
-  formatToOpenAIFunction,
-  formatToOpenAITool,
+  // formatToOpenAIFunction,
+  // formatToOpenAITool,
   HNSWLib,
   HtmlToTextTransformer,
   importDFSTypescriptModule,
@@ -421,9 +421,12 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                 const tools = await resolveTools(llmDetails.ToolLookups!, ioc);
 
                 return llm.bindTools(
-                  llmDetails.ToolsAsFunctions
-                    ? tools.map(formatToOpenAIFunction)
-                    : tools.map(formatToOpenAITool),
+                  tools,
+                  // llmDetails.ToolsAsFunctions
+                  //   ?
+                  // tools.map(formatToOpenAIFunction)
+                  //   :
+                  // tools.map(formatToOpenAITool)
                 );
               }
 
@@ -453,9 +456,12 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                 const tools = await resolveTools(llmDetails.ToolLookups!, ioc);
 
                 return llm.bindTools(
-                  llmDetails.ToolsAsFunctions
-                    ? tools.map(formatToOpenAIFunction)
-                    : tools.map(formatToOpenAITool),
+                  tools,
+                  // llmDetails.ToolsAsFunctions
+                  //   ?
+                  // tools.map(formatToOpenAIFunction)
+                  //   :
+                  // tools.map(formatToOpenAITool)
                 );
               }
 
