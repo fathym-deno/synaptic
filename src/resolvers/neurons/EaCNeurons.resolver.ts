@@ -15,7 +15,7 @@ export const SynapticResolverConfig: SynapticResolverConfiguration = {
 
 export default {
   async Resolve(_neuronLookup, neurons, ioc, eac) {
-    const logger = await getPackageLogger();
+    const logger = await getPackageLogger(import.meta);
 
     let runnable: Runnable | undefined;
 

@@ -20,7 +20,7 @@ export async function resolveEaCNeuronFromLike(
   ioc: IoCContainer,
   eac: EverythingAsCodeSynaptic,
 ): Promise<EaCNeuron | undefined> {
-  const logger = await getPackageLogger();
+  const logger = await getPackageLogger(import.meta);
 
   let neuron: EaCNeuron | undefined;
 
@@ -140,7 +140,7 @@ export async function resolveEaCNeuronFromLike(
 
 export default {
   async Resolve(neuronLookup, neuronLike, ioc, eac) {
-    const logger = await getPackageLogger();
+    const logger = await getPackageLogger(import.meta);
 
     try {
       let runnable: Runnable | undefined;
