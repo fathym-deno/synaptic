@@ -21,7 +21,7 @@ export const loadRetrieverDocs: (
   retriever,
   vectorStore,
 ) => {
-  const logger = await getPackageLogger();
+  const logger = await getPackageLogger(import.meta);
 
   const details = retriever.Details!;
 

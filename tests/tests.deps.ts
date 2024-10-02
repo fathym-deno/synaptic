@@ -11,13 +11,17 @@ export {
 } from "jsr:@std/http@1.0.2/server-sent-event-stream";
 export { toText } from "jsr:@std/streams@1.0.1";
 
-export * from "jsr:@fathym/common@0.2.147";
-export * from "jsr:@fathym/eac@0.1.63";
-export * from "jsr:@fathym/eac@0.1.63/databases";
-export * from "jsr:@fathym/eac@0.1.63/dfs";
-export * from "jsr:@fathym/eac-api@0.1.7";
+export * from "jsr:@fathym/common@0.2.155";
+
+export * from "jsr:@fathym/eac@0.1.66";
+export * from "jsr:@fathym/eac@0.1.66/databases";
+export * from "jsr:@fathym/eac@0.1.66/dfs";
+
+export * from "jsr:@fathym/eac-api@0.1.19";
+
 // export * from "../../eac-runtime/mod.ts";
-export * from "jsr:@fathym/eac-runtime@0.1.24";
+export * from "jsr:@fathym/eac-runtime@0.1.32";
+
 export { IoCContainer } from "jsr:@fathym/ioc@0.0.12";
 
 export { z } from "npm:zod@3.23.8";
