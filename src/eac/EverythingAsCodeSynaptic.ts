@@ -12,7 +12,8 @@ export type EverythingAsCodeSynaptic =
     AIs?: Record<string, EaCAIAsCode>;
 
     Circuits?: {
-      $handlers?: Array<string>;
+      $circuitsDFSLookups?: Array<string>;
+      $resolvers?: Array<string>;
       $neurons?: Record<string, EaCNeuronLike>;
       $remotes?: Record<string, string>;
     } & Record<string, EaCCircuitAsCode>;

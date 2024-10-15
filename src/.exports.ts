@@ -1,3 +1,4 @@
+export * from "./circuits/.exports.ts";
 export * from "./eac/.exports.ts";
 export * from "./indexing/_exports.ts";
 export * from "./memory/_exports.ts";

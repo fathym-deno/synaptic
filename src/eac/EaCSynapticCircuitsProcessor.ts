@@ -1,6 +1,8 @@
 import { EaCProcessor, isEaCProcessor } from "../src.deps.ts";
 
 export type EaCSynapticCircuitsProcessor = {
+  IsCodeDriven?: boolean;
+
   Excludes?: string[];
 
   Includes?: string[];

@@ -41,6 +41,8 @@ export type EaCCircuitDetails<TType = unknown> = {
 
   InputSchema?: ZodType<any>;
 
+  IsCallable?: boolean;
+
   Neurons?: Record<string, EaCNeuronLike>;
 
   Synapses?: Record<string, EaCNeuronLike>;

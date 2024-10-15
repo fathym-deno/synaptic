@@ -111,6 +111,9 @@ import {
   EaCOpenAILLMDetails,
   isEaCOpenAILLMDetails,
 } from "../eac/llms/EaCOpenAILLMDetails.ts";
+import { CircuitConfiguration } from "../circuits/CircuitConfiguration.ts";
+import { CircuitContext } from "../circuits/CircuitContext.ts";
+import { EaCCircuitNeuron } from "../eac/neurons/EaCCircuitNeuron.ts";
 
 export default class FathymSynapticPlugin implements EaCRuntimePlugin {
   protected dfsHandlerResolver: DFSFileHandlerResolver | undefined;
@@ -124,10 +127,129 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer,
   ): Promise<void> {
+    await this.configureEaCSynaptic(eac, ioc);
+  }
+
+  public async Build(
+    eac: EverythingAsCodeSynaptic,
+    ioc: IoCContainer,
+    _pluginCfg?: EaCRuntimePluginConfig<EverythingAsCodeSynaptic>,
+  ): Promise<void> {
     this.dfsHandlerResolver = await ioc.Resolve<DFSFileHandlerResolver>(
       ioc.Symbol("DFSFileHandler"),
     );
-    await this.configureEaCSynaptic(eac, ioc);
+    const circuitDFSLookups = eac.Circuits?.$circuitsDFSLookups ?? [];
+
+    const circuits = (
+      await Promise.all(
+        circuitDFSLookups.map(async (dfsLookup) => {
+          const dfs = eac.DFSs?.[dfsLookup]?.Details;
+
+          if (dfs) {
+            const dfsHandler = await this.dfsHandlerResolver!.Resolve(ioc, dfs);
+
+            return {
+              dfsLookup,
+              dfs,
+              fileHandler: dfsHandler,
+              paths: await dfsHandler?.LoadAllPaths(Date.now()),
+            };
+          } else {
+            return {};
+          }
+        }),
+      )
+    )
+      .filter((s) => !!s?.fileHandler)
+      .map((s) => {
+        return {
+          dfsLookup: s.dfsLookup!,
+          dfs: s.dfs!,
+          fileHandler: s.fileHandler!,
+          paths: s.paths ?? [],
+        };
+      });
+
+    await Promise.all(
+      circuits.map(async ({ dfsLookup, dfs, fileHandler, paths }) => {
+        const fileModules = (
+          await Promise.all(
+            paths
+              // TODO(mcgear): Make extensions configurable... Maybe all DFSs should have an extensions options to trim them down
+              ?.filter((p) => p.endsWith("ts") || p.endsWith("tsx"))
+              .map(async (path) => {
+                const module = await importDFSTypescriptModule(
+                  undefined,
+                  fileHandler,
+                  path,
+                  dfs,
+                  dfsLookup,
+                  "ts",
+                );
+
+                return { module, path };
+              }) || [],
+          )
+        )
+          .filter((m) => !!m?.module?.module?.Configure)
+          .map(({ module, path }) => ({ module: module!, path }));
+
+        if (!eac.Circuits) {
+          eac.Circuits = {};
+        }
+
+        if (!eac.Circuits.$neurons) {
+          eac.Circuits.$neurons = {};
+        }
+
+        fileModules.forEach(({ module, path }) => {
+          const configure: CircuitConfiguration<"Graph" | "Linear"> =
+            module.module.Configure;
+
+          if (typeof configure === "function") {
+            let circuitLookup = path.slice(2, -3);
+
+            if (circuitLookup.endsWith("/index")) {
+              circuitLookup = circuitLookup.slice(0, -6);
+            }
+
+            circuitLookup = circuitLookup.replace("/", ":");
+
+            const ctx: CircuitContext = {
+              AIaCLookup(lookup, scope) {
+                return `${scope ?? circuitLookup}|${lookup}`;
+              },
+              CircuitLookup: circuitLookup,
+            };
+
+            const result = configure(ctx);
+
+            const { AIaC, $neurons, ...circuitDetails } = result;
+
+            eac.Circuits![circuitLookup] = {
+              Details: circuitDetails,
+            };
+
+            eac.Circuits!.$neurons = {
+              ...eac.Circuits!.$neurons,
+              [circuitLookup]: {
+                Type: "Circuit",
+                CircuitLookup: circuitLookup,
+              } as EaCCircuitNeuron,
+              ...Object.keys($neurons ?? {}).reduce((acc, next) => {
+                acc[`${circuitLookup}|${next}`];
+
+                return acc;
+              }, {} as Record<string, EaCNeuronLike>),
+            };
+
+            eac.AIs![circuitLookup] = AIaC || {};
+          } else {
+            // TODO(mcgear): What to do if this isn't the case? If anything
+          }
+        });
+      }),
+    );
   }
 
   public Setup(_config: EaCRuntimeConfig): Promise<EaCRuntimePluginConfig> {
@@ -193,7 +315,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     ioc: IoCContainer,
   ): Promise<void> {
     const {
-      $handlers: _$h,
+      $circuitsDFSLookups: _$c,
+      $resolvers: _$r,
       $neurons: _$n,
       $remotes,
       ...circuits
@@ -1061,16 +1184,16 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     ioc: IoCContainer,
   ): Promise<void> {
     if (eac.Circuits) {
-      const handlerDFSLookups = eac.Circuits.$handlers || [];
+      const handlerDFSLookups = eac.Circuits.$resolvers || [];
 
-      if (!eac.Circuits?.$handlers?.length) {
-        handlerDFSLookups.push("$handlers");
+      if (!eac.Circuits?.$resolvers?.length) {
+        handlerDFSLookups.push("$resolvers");
       }
 
       const dfsFilePaths = (
         await Promise.all(
           handlerDFSLookups?.map(async (dfsLookup) => {
-            const dfs = dfsLookup === "$handlers"
+            const dfs = dfsLookup === "$resolvers"
               ? this.isLocal
                 ? ({
                   Type: "Local",
@@ -1098,7 +1221,6 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               fileHandler: dfsHandler,
               paths: await dfsHandler?.LoadAllPaths(Date.now()),
             };
-            // TODO(mcgear): List all files from dfs
           }),
         )
       )
@@ -1157,8 +1279,6 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               });
             }
           });
-
-          return;
         }),
       );
     }

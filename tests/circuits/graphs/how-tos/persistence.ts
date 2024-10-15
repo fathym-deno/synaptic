@@ -61,7 +61,7 @@ Deno.test("Persistence Circuits", async (t) => {
       },
     },
     Circuits: {
-      // $handlers: ['esm:fathym-synaptic-resolvers'],
+      // $resolvers: ['esm:fathym-synaptic-resolvers'],
       $neurons: {
         $pass: {
           Type: "Passthrough",

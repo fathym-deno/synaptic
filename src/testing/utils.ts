@@ -80,7 +80,7 @@ export async function finalizePlugins(
           Server: {},
         } as EaCRuntimeConfig);
 
-        await plugin.Build?.(eac, ioc, pluginCfg);
+        eac = merge(eac, pluginCfg.EaC ?? {});
 
         return [plugin, pluginCfg] as [typeof plugin, typeof pluginCfg];
       }),
@@ -90,6 +90,16 @@ export async function finalizePlugins(
 
     return acc;
   }, new Map<EaCRuntimePlugin, EaCRuntimePluginConfig>());
+
+  await Promise.all(
+    Array.from(plugins?.values() || []).map(async (plugin) => {
+      const pluginCfg = pluginConfigs.get(plugin)!;
+
+      await plugin.Build?.(eac, ioc, pluginCfg);
+
+      return [plugin, pluginCfg] as [typeof plugin, typeof pluginCfg];
+    }),
+  );
 
   for (const plugin of plugins || []) {
     await plugin.AfterEaCResolved?.(eac, ioc);

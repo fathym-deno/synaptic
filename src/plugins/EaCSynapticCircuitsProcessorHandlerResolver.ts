@@ -36,7 +36,12 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
         );
       }
 
-      const skipCircuits = ["$handlers", "$neurons", "$remotes"];
+      const skipCircuits = [
+        "$circuitsDFSLookups",
+        "$resolvers",
+        "$neurons",
+        "$remotes",
+      ];
 
       const eacCircuits = Object.keys(eac.Circuits || {}).reduce((acc, key) => {
         if (!skipCircuits.includes(key)) {
@@ -44,16 +49,20 @@ export const EaCSynapticCircuitsProcessorHandlerResolver:
 
           let addCircuit = false;
 
-          if (processor.Includes) {
-            if (processor.Includes.includes(key)) {
-              addCircuit = true;
-            }
-          } else if (processor.Excludes) {
-            if (!processor.Excludes.includes(key)) {
-              addCircuit = true;
-            }
+          if (processor.IsCodeDriven) {
+            addCircuit = !!eacCircuit.Details!.IsCallable;
           } else {
-            addCircuit = true;
+            if (processor.Includes) {
+              if (processor.Includes.includes(key)) {
+                addCircuit = true;
+              }
+            } else if (processor.Excludes) {
+              if (!processor.Excludes.includes(key)) {
+                addCircuit = true;
+              }
+            } else {
+              addCircuit = true;
+            }
           }
 
           if (addCircuit) {

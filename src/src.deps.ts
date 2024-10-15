@@ -29,7 +29,13 @@ export * from "jsr:@fathym/eac-runtime@0.1.45";
 
 export { IoCContainer } from "jsr:@fathym/ioc@0.0.12";
 
-export { z, ZodObject, type ZodRawShape, type ZodType } from "npm:zod@3.23.8";
+export {
+  z,
+  ZodObject,
+  type ZodRawShape,
+  type ZodType,
+  ZodUnknown,
+} from "npm:zod@3.23.8";
 export { zodToJsonSchema } from "npm:zod-to-json-schema@3.23.2";
 export { jsonSchemaToZod } from "npm:json-schema-to-zod@2.4.0";
 
