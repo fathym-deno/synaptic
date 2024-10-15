@@ -213,7 +213,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               circuitLookup = circuitLookup.slice(0, -6);
             }
 
-            circuitLookup = circuitLookup.replace("/", ":");
+            circuitLookup = circuitLookup.replaceAll("/", ":");
 
             const ctx: CircuitContext = {
               AIaCLookup(lookup, scope) {
