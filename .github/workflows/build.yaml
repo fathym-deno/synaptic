@@ -42,7 +42,7 @@ jobs:
       - name: Deno Setup
         uses: denoland/setup-deno@v1
         with:
-          deno-version: vx.x.x
+          deno-version: v1.x.x
 
       - name: Deno Build
         run: deno task build
