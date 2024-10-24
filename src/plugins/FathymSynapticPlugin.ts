@@ -237,7 +237,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                 CircuitLookup: circuitLookup,
               } as EaCCircuitNeuron,
               ...Object.keys($neurons ?? {}).reduce((acc, next) => {
-                acc[`${circuitLookup}|${next}`] = $neurons![next];
+                acc[`${next}`] = $neurons![next];
 
                 return acc;
               }, {} as Record<string, EaCNeuronLike>),
