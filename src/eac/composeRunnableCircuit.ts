@@ -5,7 +5,7 @@ import { EaCNeuron } from "./EaCNeuron.ts";
 
 export function composeRunnableCircuit(
   runnable: Runnable,
-  circuitCgf: Partial<EaCLinearCircuitDetails>,
+  circuitCgf?: Partial<EaCLinearCircuitDetails>,
 ): CircuitConfigurationResult<"Linear"> {
   return {
     Type: "Linear",
@@ -19,7 +19,7 @@ export function composeRunnableCircuit(
 
 export function composeRunnableNeuron(
   runnable: Runnable,
-  neuron: Partial<EaCNeuron>,
+  neuron?: Partial<EaCNeuron>,
 ): EaCNeuron {
   return {
     Bootstrap: (r) => {
