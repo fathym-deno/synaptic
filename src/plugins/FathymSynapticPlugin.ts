@@ -220,6 +220,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                 return `${scope ?? circuitLookup}|${lookup}`;
               },
               CircuitLookup: circuitLookup,
+              EaC: eac,
+              IoC: ioc,
             };
 
             const result = configure(ctx);
