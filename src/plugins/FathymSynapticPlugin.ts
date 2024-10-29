@@ -202,7 +202,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
           eac.Circuits.$neurons = {};
         }
 
-        fileModules.forEach(({ module, path }) => {
+        for (const { module, path } of fileModules) {
           const configure: CircuitConfiguration<"Graph" | "Linear"> =
             module.module.Configure;
 
@@ -224,7 +224,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               IoC: ioc,
             };
 
-            const result = configure(ctx);
+            const result = await configure(ctx);
 
             const { AIaC, $neurons, ...circuitDetails } = result;
 
@@ -249,7 +249,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
           } else {
             // TODO(mcgear): What to do if this isn't the case? If anything
           }
-        });
+        }
       }),
     );
   }
