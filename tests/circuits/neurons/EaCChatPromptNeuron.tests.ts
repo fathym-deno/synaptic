@@ -10,7 +10,7 @@ import {
   assertEquals,
   BaseMessage,
   delay,
-  EaCDenoKVDatabaseDetails,
+  EaCDenoKVDetails,
   END,
   HumanMessage,
   MessagesPlaceholder,
@@ -92,7 +92,7 @@ Deno.test("EaCChatPromptNeuron Tests", async (t) => {
           Name: "Thinky",
           Description: "The Deno KV database to use for thinky",
           DenoKVPath: Deno.env.get("THINKY_DENO_KV_PATH") || undefined,
-        } as EaCDenoKVDatabaseDetails,
+        } as EaCDenoKVDetails,
       },
     },
     Circuits: {

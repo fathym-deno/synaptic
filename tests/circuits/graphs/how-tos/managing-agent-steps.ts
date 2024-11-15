@@ -4,7 +4,7 @@ import {
   assert,
   BaseMessage,
   END,
-  EverythingAsCodeDatabases,
+  EverythingAsCodeDenoKV,
   HumanMessage,
   Runnable,
   START,
@@ -147,7 +147,7 @@ Deno.test("Graph Managing Agent Steps Circuits", async (t) => {
         } as EaCGraphCircuitDetails,
       },
     },
-  } as EverythingAsCodeSynaptic & EverythingAsCodeDatabases;
+  } as EverythingAsCodeSynaptic & EverythingAsCodeDenoKV;
 
   const { ioc, kvCleanup } = await buildTestIoC(eac);
 

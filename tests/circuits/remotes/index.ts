@@ -1,8 +1,4 @@
-import {
-  assert,
-  EverythingAsCodeDatabases,
-  Runnable,
-} from "../../tests.deps.ts";
+import { assert, EverythingAsCodeDenoKV, Runnable } from "../../tests.deps.ts";
 import { buildTestIoC } from "../../test-eac-setup.ts";
 import { EaCCircuitNeuron } from "../../../src/eac/neurons/EaCCircuitNeuron.ts";
 import { EverythingAsCodeSynaptic } from "../../../src/eac/EverythingAsCodeSynaptic.ts";
@@ -39,7 +35,7 @@ Deno.test("Circuits", async (t) => {
         },
       },
     },
-  } as EverythingAsCodeSynaptic & EverythingAsCodeDatabases;
+  } as EverythingAsCodeSynaptic & EverythingAsCodeDenoKV;
 
   const { ioc, kvCleanup } = await buildTestIoC(eac, undefined, false);
 

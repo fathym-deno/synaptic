@@ -5,7 +5,7 @@ import {
   assertStringIncludes,
   BaseMessage,
   END,
-  EverythingAsCodeDatabases,
+  EverythingAsCodeDenoKV,
   HumanMessage,
   Runnable,
   START,
@@ -208,7 +208,7 @@ Deno.test("Persistence Circuits", async (t) => {
         } as EaCGraphCircuitDetails,
       },
     },
-  } as EverythingAsCodeDatabases;
+  } as EverythingAsCodeDenoKV;
 
   const { ioc, kvCleanup } = await buildTestIoC(eac);
 

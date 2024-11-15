@@ -2,7 +2,7 @@ import { EaCCircuitAsCode } from "../eac/EaCCircuitAsCode.ts";
 import { isEaCSynapticCircuitsProcessor } from "../eac/EaCSynapticCircuitsProcessor.ts";
 import { EverythingAsCodeSynaptic } from "../eac/EverythingAsCodeSynaptic.ts";
 import {
-  EaCRuntimeEaC,
+  EverythingAsCode,
   ProcessorHandlerResolver,
   Runnable,
   RunnableConfig,
@@ -25,7 +25,7 @@ export type SynapticCircuitsExecuteRequest = {
 
 export const EaCSynapticCircuitsProcessorHandlerResolver:
   ProcessorHandlerResolver<
-    EaCRuntimeEaC & EverythingAsCodeSynaptic
+    EverythingAsCode & EverythingAsCodeSynaptic
   > = {
     async Resolve(ioc, appProcCfg, eac) {
       const processor = appProcCfg.Application.Processor;

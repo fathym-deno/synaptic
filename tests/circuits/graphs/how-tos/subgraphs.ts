@@ -3,7 +3,7 @@ import {
   assert,
   assertEquals,
   END,
-  EverythingAsCodeDatabases,
+  EverythingAsCodeDenoKV,
   Runnable,
   START,
 } from "../../../tests.deps.ts";
@@ -307,7 +307,7 @@ Deno.test("Graph Subgraphs Circuits", async (t) => {
         } as EaCGraphCircuitDetails,
       },
     },
-  } as EverythingAsCodeSynaptic & EverythingAsCodeDatabases;
+  } as EverythingAsCodeSynaptic & EverythingAsCodeDenoKV;
 
   const { ioc, kvCleanup } = await buildTestIoC(eac);
 

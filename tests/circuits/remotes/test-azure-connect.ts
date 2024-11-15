@@ -2,7 +2,7 @@ import {
   assert,
   EaCStatus,
   EaCStatusProcessingTypes,
-  EverythingAsCodeDatabases,
+  EverythingAsCodeDenoKV,
   Runnable,
 } from "../../tests.deps.ts";
 import { buildTestIoC } from "../../test-eac-setup.ts";
@@ -83,7 +83,7 @@ Deno.test("Circuits", async (t) => {
         },
       },
     },
-  } as EverythingAsCodeSynaptic & EverythingAsCodeDatabases;
+  } as EverythingAsCodeSynaptic & EverythingAsCodeDenoKV;
 
   const { ioc, kvCleanup } = await buildTestIoC(eac, undefined, false);
 

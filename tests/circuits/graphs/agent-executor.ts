@@ -7,7 +7,7 @@ import {
   assertStringIncludes,
   BaseMessage,
   END,
-  EverythingAsCodeDatabases,
+  EverythingAsCodeDenoKV,
   HumanMessage,
   Runnable,
   RunnableLambda,
@@ -105,7 +105,7 @@ Deno.test("Graph Agent Executor Circuits", async (t) => {
         } as EaCGraphCircuitDetails,
       },
     },
-  } as EverythingAsCodeSynaptic & EverythingAsCodeDatabases;
+  } as EverythingAsCodeSynaptic & EverythingAsCodeDenoKV;
 
   const { ioc, kvCleanup } = await buildTestIoC(eac);
 

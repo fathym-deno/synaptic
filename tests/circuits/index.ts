@@ -5,7 +5,7 @@ import {
   BaseMessage,
   BaseMessagePromptTemplateLike,
   END,
-  EverythingAsCodeDatabases,
+  EverythingAsCodeDenoKV,
   HumanMessage,
   MessagesPlaceholder,
   Runnable,
@@ -550,7 +550,7 @@ Answer:`,
         } as EaCGraphCircuitDetails,
       },
     },
-  } as EverythingAsCodeSynaptic & EverythingAsCodeDatabases;
+  } as EverythingAsCodeSynaptic & EverythingAsCodeDenoKV;
 
   const { ioc, kvCleanup } = await buildTestIoC(eac);
 

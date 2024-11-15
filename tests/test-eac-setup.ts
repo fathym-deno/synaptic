@@ -5,7 +5,7 @@ import { buildEaCTestIoC } from "../src/testing/utils.ts";
 import { eacAIsRoot, eacDatabases } from "./eacs.ts";
 import {
   EaCRuntimePlugin,
-  EverythingAsCodeDatabases,
+  EverythingAsCodeDenoKV,
   FathymEaCServicesPlugin,
 } from "./tests.deps.ts";
 
@@ -27,10 +27,10 @@ const testEaC = {
   //     ...eacDFSSynapticResolvers,
   //   },
   // },
-} as EverythingAsCodeSynaptic & EverythingAsCodeDatabases;
+} as EverythingAsCodeSynaptic & EverythingAsCodeDenoKV;
 
 export async function buildTestIoC(
-  eac: EverythingAsCodeSynaptic & EverythingAsCodeDatabases,
+  eac: EverythingAsCodeSynaptic & EverythingAsCodeDenoKV,
   plugins: EaCRuntimePlugin[] = [
     new FathymEaCServicesPlugin(),
     new FathymSynapticPlugin(true),

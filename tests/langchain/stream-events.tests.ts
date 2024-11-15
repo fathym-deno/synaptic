@@ -7,7 +7,7 @@ import {
   Annotation,
   dispatchCustomEvent,
   END,
-  EverythingAsCodeDatabases,
+  EverythingAsCodeDenoKV,
   RunnableLambda,
   START,
 } from "../tests.deps.ts";
@@ -220,7 +220,7 @@ Deno.test("Stream Events Tests", async (t) => {
         } as EaCGraphCircuitDetails,
       },
     },
-  } as EverythingAsCodeSynaptic & EverythingAsCodeDatabases;
+  } as EverythingAsCodeSynaptic & EverythingAsCodeDenoKV;
 
   // const { ioc } = await buildTestIoC(eac);
 

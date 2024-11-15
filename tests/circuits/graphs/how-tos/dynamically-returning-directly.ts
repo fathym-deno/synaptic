@@ -5,7 +5,7 @@ import {
   assertEquals,
   BaseMessage,
   END,
-  EverythingAsCodeDatabases,
+  EverythingAsCodeDenoKV,
   HumanMessage,
   Runnable,
   START,
@@ -145,7 +145,7 @@ Deno.test("Graph Dynamically Returning Directly Circuits", async (t) => {
         } as EaCGraphCircuitDetails,
       },
     },
-  } as EverythingAsCodeSynaptic & EverythingAsCodeDatabases;
+  } as EverythingAsCodeSynaptic & EverythingAsCodeDenoKV;
 
   const { ioc, kvCleanup } = await buildTestIoC(eac);
 

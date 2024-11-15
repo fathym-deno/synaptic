@@ -5,7 +5,7 @@ import {
   BaseMessage,
   BaseMessagePromptTemplateLike,
   END,
-  EverythingAsCodeDatabases,
+  EverythingAsCodeDenoKV,
   HumanMessage,
   MessagesPlaceholder,
   Runnable,
@@ -111,7 +111,7 @@ Deno.test("Graph Configuration Circuits", async (t) => {
         } as EaCGraphCircuitDetails,
       },
     },
-  } as EverythingAsCodeSynaptic & EverythingAsCodeDatabases;
+  } as EverythingAsCodeSynaptic & EverythingAsCodeDenoKV;
 
   const { ioc, kvCleanup } = await buildTestIoC(eac);
 

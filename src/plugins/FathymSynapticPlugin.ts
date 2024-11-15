@@ -23,6 +23,7 @@ import {
   importDFSTypescriptModule,
   IoCContainer,
   jsonSchemaToZod,
+  LoggingProvider,
   MemorySaver,
   MemoryVectorStore,
   mergeWithArrays,
@@ -138,7 +139,10 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     this.dfsHandlerResolver = await ioc.Resolve<DFSFileHandlerResolver>(
       ioc.Symbol("DFSFileHandler"),
     );
+
     const circuitDFSLookups = eac.Circuits?.$circuitsDFSLookups ?? [];
+
+    const logger = await ioc.Resolve(LoggingProvider);
 
     const circuits = (
       await Promise.all(
@@ -152,7 +156,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               dfsLookup,
               dfs,
               fileHandler: dfsHandler,
-              paths: await dfsHandler?.LoadAllPaths(Date.now()),
+              paths: await dfsHandler?.LoadAllPaths(Date.now().toString()),
             };
           } else {
             return {};
@@ -179,7 +183,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               ?.filter((p) => p.endsWith("ts") || p.endsWith("tsx"))
               .map(async (path) => {
                 const module = await importDFSTypescriptModule(
-                  undefined,
+                  logger.Package,
                   fileHandler,
                   path,
                   dfs,
@@ -662,7 +666,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
                   const loadedDocs = await Promise.all(
                     details.Documents.map(async (doc) => {
-                      const file = await dfsHandler?.GetFileInfo(doc, 0);
+                      const file = await dfsHandler?.GetFileInfo(doc, "0");
 
                       let innerLoader: BaseDocumentLoader | undefined =
                         undefined;
@@ -1192,6 +1196,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
         handlerDFSLookups.push("$resolvers");
       }
 
+      const logger = await ioc.Resolve(LoggingProvider);
+
       const dfsFilePaths = (
         await Promise.all(
           handlerDFSLookups?.map(async (dfsLookup) => {
@@ -1202,7 +1208,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                   FileRoot: "./src/resolvers/",
                   Extensions: ["resolver.ts"],
                   WorkerPath: import.meta.resolve(
-                    "@fathym/eac-runtime/workers/local",
+                    "@fathym/eac-dfs/workers/local",
                   ),
                 } as EaCLocalDistributedFileSystemDetails)
                 : ({
@@ -1210,7 +1216,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                   Package: "@fathym/synaptic",
                   Version: "",
                   WorkerPath: import.meta.resolve(
-                    "@fathym/eac-runtime/workers/jsr",
+                    "@fathym/eac-dfs/workers/jsr",
                   ),
                 } as EaCJSRDistributedFileSystemDetails)
               : eac.DFSs![dfsLookup]!.Details!;
@@ -1221,7 +1227,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               dfsLookup,
               dfs,
               fileHandler: dfsHandler,
-              paths: await dfsHandler?.LoadAllPaths(Date.now()),
+              paths: await dfsHandler?.LoadAllPaths(Date.now().toString()),
             };
           }),
         )
@@ -1245,7 +1251,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                 ?.filter((p) => p.endsWith("ts") || p.endsWith("tsx"))
                 .map(async (path) => {
                   const module = await importDFSTypescriptModule(
-                    undefined,
+                    logger.Package,
                     fileHandler,
                     path,
                     dfs,
@@ -1325,7 +1331,7 @@ export class RemoteCircuitsToolkit extends Toolkit {
     this.tools = [];
   }
 
-  public getTools(): ReturnType<Toolkit["getTools"]> {
+  public override getTools(): ReturnType<Toolkit["getTools"]> {
     return Object.keys(this.circuits).map((circuitLookup) => {
       const circuitDef = this.circuits[circuitLookup];
 
