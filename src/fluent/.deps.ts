@@ -27,12 +27,6 @@ export type {
   // RequiredProperties,
 } from "jsr:@fathym/eac@0.2.17/types";
 
-export {
-  type EaCRuntimePlugin,
-  FathymDFSFileHandlerPlugin,
-  FathymEaCServicesPlugin,
-} from "jsr:@fathym/eac-runtime@0.1.21";
-
 export { IoCContainer } from "jsr:@fathym/ioc@0.0.12";
 
 export * from "../.exports.ts";
