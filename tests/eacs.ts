@@ -11,8 +11,8 @@ import { EaCSERPToolDetails } from "../src/eac/tools/EaCSERPToolDetails.ts";
 import { EaCTavilySearchResultsToolDetails } from "../src/eac/tools/EaCTavilySearchResultsToolDetails.ts";
 import {
   AzureAISearchQueryType,
-  EaCDatabaseAsCode,
-  EaCDenoKVDatabaseDetails,
+  EaCDenoKVAsCode,
+  EaCDenoKVDetails,
   EaCLocalDistributedFileSystemDetails,
 } from "./tests.deps.ts";
 
@@ -153,14 +153,14 @@ export const eacAIsRoot = {
   },
 };
 
-export const eacDatabases = {
+export const eacDenoKVs = {
   Details: {
     Type: "DenoKV",
     Name: "Thinky",
     Description: "The Deno KV database to use for thinky",
     DenoKVPath: Deno.env.get("THINKY_DENO_KV_PATH") || undefined,
-  } as EaCDenoKVDatabaseDetails,
-} as EaCDatabaseAsCode;
+  } as EaCDenoKVDetails,
+} as EaCDenoKVAsCode;
 
 export const eacDFSSynapticResolvers = {
   Details: {

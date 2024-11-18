@@ -3,7 +3,7 @@ import {
   assert,
   assertEquals,
   END,
-  EverythingAsCodeDatabases,
+  EverythingAsCodeDenoKV,
   Runnable,
   START,
 } from "../../../tests.deps.ts";
@@ -209,7 +209,7 @@ Deno.test("Graph Branching Circuits", async (t) => {
         } as EaCGraphCircuitDetails,
       },
     },
-  } as EverythingAsCodeSynaptic & EverythingAsCodeDatabases;
+  } as EverythingAsCodeSynaptic & EverythingAsCodeDenoKV;
 
   const { ioc } = await buildTestIoC(eac, undefined, false);
 

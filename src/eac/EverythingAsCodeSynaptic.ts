@@ -1,6 +1,6 @@
 import {
   EverythingAsCode,
-  EverythingAsCodeDatabases,
+  EverythingAsCodeDenoKV,
   EverythingAsCodeDFS,
 } from "../src.deps.ts";
 import { EaCAIAsCode } from "./EaCAIAsCode.ts";
@@ -19,7 +19,7 @@ export type EverythingAsCodeSynaptic =
     } & Record<string, EaCCircuitAsCode>;
   }
   & EverythingAsCode
-  & EverythingAsCodeDatabases
+  & EverythingAsCodeDenoKV
   & EverythingAsCodeDFS;
 
 export function isEverythingAsCodeSynaptic(

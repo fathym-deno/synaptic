@@ -8,7 +8,7 @@ export class JSONPathRunnablePassthrough<
     super();
   }
 
-  async invoke(
+  public override async invoke(
     input: RunInput,
     options?: Partial<RunnableConfig>,
   ): Promise<RunInput> {

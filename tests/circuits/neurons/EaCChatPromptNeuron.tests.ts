@@ -85,7 +85,7 @@ Deno.test("EaCChatPromptNeuron Tests", async (t) => {
         },
       },
     },
-    Databases: {
+    D: {
       thinky: {
         Details: {
           Type: "DenoKV",

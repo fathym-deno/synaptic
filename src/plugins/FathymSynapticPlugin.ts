@@ -23,6 +23,7 @@ import {
   importDFSTypescriptModule,
   IoCContainer,
   jsonSchemaToZod,
+  LoggingProvider,
   MemorySaver,
   MemoryVectorStore,
   mergeWithArrays,
@@ -135,9 +136,12 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     ioc: IoCContainer,
     _pluginCfg?: EaCRuntimePluginConfig<EverythingAsCodeSynaptic>,
   ): Promise<void> {
+    const logger = await ioc.Resolve(LoggingProvider);
+
     this.dfsHandlerResolver = await ioc.Resolve<DFSFileHandlerResolver>(
       ioc.Symbol("DFSFileHandler"),
     );
+
     const circuitDFSLookups = eac.Circuits?.$circuitsDFSLookups ?? [];
 
     const circuits = (
@@ -152,7 +156,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               dfsLookup,
               dfs,
               fileHandler: dfsHandler,
-              paths: await dfsHandler?.LoadAllPaths(Date.now()),
+              paths: await dfsHandler?.LoadAllPaths(Date.now().toString()),
             };
           } else {
             return {};
@@ -179,7 +183,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               ?.filter((p) => p.endsWith("ts") || p.endsWith("tsx"))
               .map(async (path) => {
                 const module = await importDFSTypescriptModule(
-                  undefined,
+                  logger.Package,
                   fileHandler,
                   path,
                   dfs,
@@ -662,7 +666,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
                   const loadedDocs = await Promise.all(
                     details.Documents.map(async (doc) => {
-                      const file = await dfsHandler?.GetFileInfo(doc, 0);
+                      const file = await dfsHandler?.GetFileInfo(doc, "0");
 
                       let innerLoader: BaseDocumentLoader | undefined =
                         undefined;
@@ -1185,6 +1189,8 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer,
   ): Promise<void> {
+    const logger = await ioc.Resolve(LoggingProvider);
+
     if (eac.Circuits) {
       const handlerDFSLookups = eac.Circuits.$resolvers || [];
 
@@ -1221,7 +1227,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               dfsLookup,
               dfs,
               fileHandler: dfsHandler,
-              paths: await dfsHandler?.LoadAllPaths(Date.now()),
+              paths: await dfsHandler?.LoadAllPaths(Date.now().toString()),
             };
           }),
         )
@@ -1245,7 +1251,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                 ?.filter((p) => p.endsWith("ts") || p.endsWith("tsx"))
                 .map(async (path) => {
                   const module = await importDFSTypescriptModule(
-                    undefined,
+                    logger.Package,
                     fileHandler,
                     path,
                     dfs,
@@ -1325,7 +1331,7 @@ export class RemoteCircuitsToolkit extends Toolkit {
     this.tools = [];
   }
 
-  public getTools(): ReturnType<Toolkit["getTools"]> {
+  public override getTools(): ReturnType<Toolkit["getTools"]> {
     return Object.keys(this.circuits).map((circuitLookup) => {
       const circuitDef = this.circuits[circuitLookup];
 

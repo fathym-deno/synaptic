@@ -43,7 +43,7 @@ export class DenoKVChatMessageHistory extends BaseListChatMessageHistory {
     await this.addMessages([message]);
   }
 
-  public async addMessages(messages: BaseMessage[]): Promise<void> {
+  public override async addMessages(messages: BaseMessage[]): Promise<void> {
     const serializedMessages = mapChatMessagesToStoredMessages(messages);
 
     let op = this.config.KV.atomic();
@@ -57,7 +57,7 @@ export class DenoKVChatMessageHistory extends BaseListChatMessageHistory {
     await op.commit();
   }
 
-  public async clear(): Promise<void> {
+  public override async clear(): Promise<void> {
     const messages = this.config.KV.list<StoredMessage>({
       prefix: this.buildKey([this.sessionId]),
     });

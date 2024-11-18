@@ -5,7 +5,7 @@ import {
   EaCRuntimePluginConfig,
   EaCRuntimePluginDef,
   EverythingAsCode,
-  EverythingAsCodeDatabases,
+  EverythingAsCodeDenoKV,
   FathymDFSFileHandlerPlugin,
   FathymEaCServicesPlugin,
   IoCContainer,
@@ -161,7 +161,7 @@ const iocSetup = (
 
 export async function buildEaCTestIoC(
   testEaC: EverythingAsCode,
-  eac: EverythingAsCode & EverythingAsCodeDatabases,
+  eac: EverythingAsCode & EverythingAsCodeDenoKV,
   plugins: EaCRuntimePlugin[],
   useDefaultPlugins: boolean,
 ): Promise<{
@@ -201,7 +201,7 @@ export async function buildEaCTestIoC(
     eac,
     ioc: testIoC,
     kvCleanup: async () => {
-      const databaseLookups = Object.keys(eac.Databases || {});
+      const databaseLookups = Object.keys(eac.DenoKVs || {});
 
       const kvs = await Promise.all(
         databaseLookups.map(async (dbLookup) => {

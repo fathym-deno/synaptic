@@ -1,4 +1,4 @@
-export { merge } from "jsr:@fathym/common@0.2.160/merge";
+export { merge } from "jsr:@fathym/common@0.2.167/merge";
 export type {
   ExcludeKeysByPrefix,
   IsNotUndefined,
@@ -7,22 +7,25 @@ export type {
   NoPropertiesUndefined,
   RemoveIndexSignatures,
   ValueType,
-} from "jsr:@fathym/common@0.2.160/types";
+} from "jsr:@fathym/common@0.2.167/types";
 
 export type {
   EaCDetails,
   EaCVertexDetails,
   EverythingAsCode,
-} from "jsr:@fathym/eac@0.1.71";
-export type { EaCDatabaseAsCode } from "jsr:@fathym/eac@0.1.71/databases";
-export type { EaCDistributedFileSystemDetails } from "jsr:@fathym/eac@0.1.71/dfs";
+} from "jsr:@fathym/eac@0.2.13";
+
+export type { EaCDenoKVAsCode } from "jsr:@fathym/eac-deno-kv@0.0.4";
+
+export type { EaCDistributedFileSystemDetails } from "jsr:@fathym/eac-dfs@0.0.15";
+
 export type {
   EaCAsCodeDetails,
   HasDetailsProperty,
   IsRequiredProperty,
   OptionalProperties,
-  RequiredProperties,
-} from "jsr:@fathym/eac@0.1.71/types";
+  // RequiredProperties,
+} from "jsr:@fathym/eac@0.2.13/types";
 
 export {
   type EaCRuntimePlugin,

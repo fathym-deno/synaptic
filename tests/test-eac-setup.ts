@@ -2,10 +2,10 @@
 import { EverythingAsCodeSynaptic } from "../src/eac/EverythingAsCodeSynaptic.ts";
 import FathymSynapticPlugin from "../src/plugins/FathymSynapticPlugin.ts";
 import { buildEaCTestIoC } from "../src/testing/utils.ts";
-import { eacAIsRoot, eacDatabases } from "./eacs.ts";
+import { eacAIsRoot, eacDenoKVs } from "./eacs.ts";
 import {
   EaCRuntimePlugin,
-  EverythingAsCodeDatabases,
+  EverythingAsCodeDenoKV,
   FathymEaCServicesPlugin,
 } from "./tests.deps.ts";
 
@@ -17,9 +17,9 @@ const testEaC = {
       ...eacAIsRoot,
     },
   },
-  Databases: {
+  DenoKVs: {
     [AI_LOOKUP]: {
-      ...eacDatabases,
+      ...eacDenoKVs,
     },
   },
   // DFS: {
@@ -27,10 +27,10 @@ const testEaC = {
   //     ...eacDFSSynapticResolvers,
   //   },
   // },
-} as EverythingAsCodeSynaptic & EverythingAsCodeDatabases;
+} as EverythingAsCodeSynaptic & EverythingAsCodeDenoKV;
 
 export async function buildTestIoC(
-  eac: EverythingAsCodeSynaptic & EverythingAsCodeDatabases,
+  eac: EverythingAsCodeSynaptic & EverythingAsCodeDenoKV,
   plugins: EaCRuntimePlugin[] = [
     new FathymEaCServicesPlugin(),
     new FathymSynapticPlugin(true),
