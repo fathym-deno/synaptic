@@ -4,7 +4,7 @@
 //   EaCRuntimePlugin,
 //   EverythingAsCode,
 //   FathymDFSFileHandlerPlugin,
-//   FathymEaCServicesPlugin,
+//   FathymEaCDenoKVPlugin,
 //   FathymSynapticPlugin,
 //   IoCContainer,
 //   ValueType,
@@ -50,7 +50,7 @@
 
 //     plugins.push(new FathymDFSFileHandlerPlugin());
 
-//     plugins.push(new FathymEaCServicesPlugin());
+//     plugins.push(new FathymEaCDenoKVPlugin());
 
 //     await configureEaCIoC(circsIoC, this.Export(), plugins);
 

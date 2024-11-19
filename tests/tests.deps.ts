@@ -13,12 +13,12 @@ export { toText } from "jsr:@std/streams@1.0.1";
 
 export * from "jsr:@fathym/common@0.2.168";
 
-export * from "jsr:@fathym/eac@0.2.17";
-export * from "jsr:@fathym/eac@0.2.17/runtime/plugins";
+export * from "jsr:@fathym/eac@0.2.26";
+export * from "jsr:@fathym/eac@0.2.26/runtime/plugins";
 
 export * from "jsr:@fathym/eac-deno-kv@0.0.4";
 
-export * from "jsr:@fathym/eac-dfs@0.0.15";
+export * from "jsr:@fathym/eac-dfs@0.0.21";
 
 export * from "jsr:@fathym/eac-api@0.1.19";
 

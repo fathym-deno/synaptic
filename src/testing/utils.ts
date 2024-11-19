@@ -7,7 +7,7 @@ import {
   EverythingAsCode,
   EverythingAsCodeDenoKV,
   FathymDFSFileHandlerPlugin,
-  FathymEaCServicesPlugin,
+  FathymEaCDenoKVPlugin,
   IoCContainer,
   merge,
 } from "../src.deps.ts";
@@ -73,12 +73,14 @@ export async function finalizePlugins(
   eac: EverythingAsCode,
   plugins: EaCRuntimePlugin[],
 ): Promise<EverythingAsCode> {
+  const cfg = {
+    Server: {},
+  } as EaCRuntimeConfig;
+
   const pluginConfigs = (
     await Promise.all(
       Array.from(plugins?.values() || []).map(async (plugin) => {
-        const pluginCfg = await plugin.Setup({
-          Server: {},
-        } as EaCRuntimeConfig);
+        const pluginCfg = await plugin.Setup(cfg);
 
         eac = merge(eac, pluginCfg.EaC ?? {});
 
@@ -102,7 +104,7 @@ export async function finalizePlugins(
   );
 
   for (const plugin of plugins || []) {
-    await plugin.AfterEaCResolved?.(eac, ioc);
+    await plugin.AfterEaCResolved?.(eac, ioc, cfg);
   }
 
   for (const [_plugin, pluginCfg] of pluginConfigs || []) {
@@ -174,8 +176,8 @@ export async function buildEaCTestIoC(
   }
 
   if (useDefaultPlugins) {
-    if (!plugins.some((p) => p instanceof FathymEaCServicesPlugin)) {
-      plugins.unshift(new FathymEaCServicesPlugin());
+    if (!plugins.some((p) => p instanceof FathymEaCDenoKVPlugin)) {
+      plugins.unshift(new FathymEaCDenoKVPlugin());
     }
 
     if (!plugins.some((p) => p instanceof FathymDFSFileHandlerPlugin)) {

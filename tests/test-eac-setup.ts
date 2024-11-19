@@ -6,7 +6,7 @@ import { eacAIsRoot, eacDenoKVs } from "./eacs.ts";
 import {
   EaCRuntimePlugin,
   EverythingAsCodeDenoKV,
-  FathymEaCServicesPlugin,
+  FathymEaCDenoKVPlugin,
 } from "./tests.deps.ts";
 
 export const AI_LOOKUP = "thinky";
@@ -32,7 +32,7 @@ const testEaC = {
 export async function buildTestIoC(
   eac: EverythingAsCodeSynaptic & EverythingAsCodeDenoKV,
   plugins: EaCRuntimePlugin[] = [
-    new FathymEaCServicesPlugin(),
+    new FathymEaCDenoKVPlugin(),
     new FathymSynapticPlugin(true),
   ],
   useDefault = true,
