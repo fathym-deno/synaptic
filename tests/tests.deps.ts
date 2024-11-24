@@ -29,11 +29,11 @@ export { IoCContainer } from "jsr:@fathym/ioc@0.0.13";
 export { z } from "npm:zod@3.23.8";
 export { zodToJsonSchema } from "npm:zod-to-json-schema@3.23.2";
 
-export { AzureAISearchQueryType } from "npm:@langchain/community@0.3.0/vectorstores/azure_aisearch";
-export { type AgentAction } from "npm:@langchain/core@0.3.1/agents";
-export { dispatchCustomEvent } from "npm:@langchain/core@0.3.1/callbacks/dispatch";
-export { BaseListChatMessageHistory } from "npm:@langchain/core@0.3.1/chat_history";
-export { BaseLanguageModel } from "npm:@langchain/core@0.3.1/language_models/base";
+export { AzureAISearchQueryType } from "npm:@langchain/community@0.3.15/vectorstores/azure_aisearch";
+export { type AgentAction } from "npm:@langchain/core@0.3.18/agents";
+export { dispatchCustomEvent } from "npm:@langchain/core@0.3.18/callbacks/dispatch";
+export { BaseListChatMessageHistory } from "npm:@langchain/core@0.3.18/chat_history";
+export { BaseLanguageModel } from "npm:@langchain/core@0.3.18/language_models/base";
 export {
   AIMessage,
   AIMessageChunk,
@@ -41,15 +41,15 @@ export {
   FunctionMessage,
   HumanMessage,
   ToolMessage,
-} from "npm:@langchain/core@0.3.1/messages";
+} from "npm:@langchain/core@0.3.18/messages";
 export { ChatPromptValue } from "npm:@langchain/core/prompt_values";
 export {
   type BaseMessagePromptTemplateLike,
   ChatPromptTemplate,
   MessagesPlaceholder,
-} from "npm:@langchain/core@0.3.1/prompts";
-export { Runnable, RunnableLambda } from "npm:@langchain/core@0.3.1/runnables";
-export { StructuredTool } from "npm:@langchain/core@0.3.1/tools";
+} from "npm:@langchain/core@0.3.18/prompts";
+export { Runnable, RunnableLambda } from "npm:@langchain/core@0.3.18/runnables";
+export { StructuredTool } from "npm:@langchain/core@0.3.18/tools";
 export {
   Annotation,
   END,
