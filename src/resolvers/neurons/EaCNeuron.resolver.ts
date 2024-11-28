@@ -72,6 +72,7 @@ export async function resolveEaCNeuronFromLike(
         BootstrapInput: neuron?.BootstrapInput,
         BootstrapOutput: neuron?.BootstrapOutput,
         Bootstrap: neuron?.Bootstrap,
+        Configure: neuron?.Configure,
       };
 
       if (neuronOverride.BootstrapInput) {
@@ -120,6 +121,25 @@ export async function resolveEaCNeuronFromLike(
           : neuronOverride.Bootstrap;
       }
 
+      if (neuronOverride.Configure) {
+        logger.debug(`Merging Configure override for '${neuronKeyLookup}'`);
+
+        const boot = bootstraps.Configure;
+
+        bootstraps.Configure = boot
+          ? async (runnable, input, neuron, cfg) => {
+            runnable = await neuronOverride.Configure!(
+              runnable,
+              input,
+              neuron,
+              cfg,
+            );
+
+            return await boot(runnable, input, neuron, cfg);
+          }
+          : neuronOverride.Configure;
+      }
+
       logger.debug(
         `Merging neuron override for '${neuronKeyLookup}' with bootstraps`,
       );
@@ -158,14 +178,14 @@ export default {
           SynapticNeuronResolver<Record<string, EaCNeuronLike> | undefined>
         >(ioc.Symbol("SynapticNeuronResolver"), "$neurons");
 
-        const configureName = (runnable: Runnable, runName?: string) => {
-          if ("withConfig" in runnable) {
-            runnable = runnable.withConfig({
+        const configureName = (rnbl: Runnable, runName?: string) => {
+          if ("withConfig" in rnbl) {
+            rnbl = rnbl.withConfig({
               ...(runName ? { runName } : {}),
             });
           }
 
-          return runnable;
+          return rnbl;
         };
 
         if (neuron.Type) {
@@ -191,6 +211,24 @@ export default {
 
         if (neuronType) {
           baseName += ` - ${neuronType}`;
+        }
+
+        if (neuron.Configure) {
+          logger.debug(`Bootstraping EaC Neuron input for '${neuronLookup}'`);
+
+          const bsCfg = configureName(
+            RunnableLambda.from(async (s, cfg) => {
+              return await (neuron as EaCNeuron).Configure!(
+                runnable!,
+                s,
+                neuron as EaCNeuron,
+                cfg,
+              );
+            }),
+            `Configure: ${baseName}`,
+          );
+
+          runnable = bsCfg.pipe(runnable);
         }
 
         runnable = configureName(runnable, baseName || undefined);

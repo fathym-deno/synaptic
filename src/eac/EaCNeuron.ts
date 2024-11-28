@@ -40,6 +40,20 @@ export type EaCNeuron<TType = unknown> = {
       } & RunnableConfig),
   ) => TOut | Promise<TOut>;
 
+  Configure?: <TIn>(
+    runnable: Runnable,
+    input: TIn,
+    neuron: EaCNeuron<TType>,
+    options?:
+      | ({
+        config?: RunnableConfig;
+      } & RunnableConfig)
+      | Record<string, any>
+      | (Record<string, any> & {
+        config: RunnableConfig;
+      } & RunnableConfig),
+  ) => Runnable | Promise<Runnable>;
+
   Neurons?: Record<string, EaCNeuronLike>;
 
   Synapses?: Record<string, EaCNeuronLike>;
