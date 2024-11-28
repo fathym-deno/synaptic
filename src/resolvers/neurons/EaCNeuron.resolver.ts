@@ -216,19 +216,14 @@ export default {
         if (neuron.Configure) {
           logger.debug(`Bootstraping EaC Neuron input for '${neuronLookup}'`);
 
-          const bsCfg = configureName(
-            RunnableLambda.from(async (s, cfg) => {
-              return await (neuron as EaCNeuron).Configure!(
-                runnable!,
-                s,
-                neuron as EaCNeuron,
-                cfg,
-              );
-            }),
-            `Configure: ${baseName}`,
-          );
-
-          runnable = bsCfg.pipe(runnable);
+          runnable = RunnableLambda.from(async (s, cfg) => {
+            return await (neuron as EaCNeuron).Configure!(
+              runnable!,
+              s,
+              neuron as EaCNeuron,
+              cfg,
+            );
+          });
         }
 
         runnable = configureName(runnable, baseName || undefined);
