@@ -50,3 +50,20 @@ export function lastMessagesOfType(
 
   return lastMsgs;
 }
+
+export function extractToolArgs<T>(msg: AIMessage): T | null {
+  if (msg) {
+    // if (msg.tool_calls?.length) {
+    //   const tool = msg.tool_calls[0].args;
+    //   return JSON.parse(tool.arguments) as T;
+    // } else
+    if (msg.additional_kwargs.tool_calls?.length) {
+      const tool = msg.additional_kwargs.tool_calls[0].function;
+      return JSON.parse(tool.arguments) as T;
+    } else if (msg.additional_kwargs.function_call) {
+      const tool = msg.additional_kwargs.function_call;
+      return JSON.parse(tool.arguments) as T;
+    }
+  }
+  return null;
+}
