@@ -217,8 +217,10 @@ export default {
           logger.debug(`Bootstraping EaC Neuron input for '${neuronLookup}'`);
 
           runnable = RunnableLambda.from(async (s, cfg) => {
+            const r = runnable;
+
             return await (neuron as EaCNeuron).Configure!(
-              runnable!,
+              r!,
               s,
               neuron as EaCNeuron,
               cfg,
