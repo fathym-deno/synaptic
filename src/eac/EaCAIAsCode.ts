@@ -1,16 +1,16 @@
 import { EaCDetails } from "../src.deps.ts";
 import { EaCAIDetails, isEaCAIDetails } from "./EaCAIDetails.ts";
-import { EaCChatHistoryAsCode } from "./EaCChatHistoryAsCode.ts";
-import { EaCDocumentLoaderAsCode } from "./EaCDocumentLoaderAsCode.ts";
-import { EaCEmbeddingsAsCode } from "./EaCEmbeddingsAsCode.ts";
-import { EaCIndexerAsCode } from "./EaCIndexerAsCode.ts";
+import { EaCChatHistoryAsCode } from "./history/EaCChatHistoryAsCode.ts";
+import { EaCDocumentLoaderAsCode } from "./loaders/EaCDocumentLoaderAsCode.ts";
+import { EaCEmbeddingsAsCode } from "./embeddings/EaCEmbeddingsAsCode.ts";
+import { EaCIndexerAsCode } from "./indexers/EaCIndexerAsCode.ts";
 import { EaCLLMAsCode } from "./llms/EaCLLMAsCode.ts";
-import { EaCPersistenceAsCode } from "./EaCPersistenceAsCode.ts";
-import { EaCPersonalityAsCode } from "./EaCPersonalityAsCode.ts";
-import { EaCRetrieverAsCode } from "./EaCRetrieverAsCode.ts";
-import { EaCTextSplitterAsCode } from "./EaCTextSplitterAsCode.ts";
-import { EaCToolAsCode } from "./EaCToolAsCode.ts";
-import { EaCVectorStoreAsCode } from "./EaCVectorStoreAsCode.ts";
+import { EaCPersistenceAsCode } from "./persistence/EaCPersistenceAsCode.ts";
+import { EaCPersonalityAsCode } from "./personalities/EaCPersonalityAsCode.ts";
+import { EaCRetrieverAsCode } from "./retrievers/EaCRetrieverAsCode.ts";
+import { EaCTextSplitterAsCode } from "./text-splitters/EaCTextSplitterAsCode.ts";
+import { EaCToolAsCode } from "./tools/EaCToolAsCode.ts";
+import { EaCVectorStoreAsCode } from "./vector-stores/EaCVectorStoreAsCode.ts";
 
 export type EaCAIAsCode = {
   ChatHistories?: Record<string, EaCChatHistoryAsCode>;

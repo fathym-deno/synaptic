@@ -1,0 +1,111 @@
+# Project Setup Tutorial
+
+## Installation
+
+To set up the EaC Runtime for Web UX, API, and Synaptic development, follow these steps:
+
+1. **Run the Installation Command:**
+   ```bash
+   deno run -A -r https://install.fathym.com/deno --template=sink-empty
+   ```
+   This command installs the entire runtime environment.
+
+## Customizing the Project
+
+After installation, replace placeholders in the project:
+
+- **Organization Name:** Replace all instances of `aaa_bbb_ccc` with your organization name (e.g., `fathym`).
+- **Project Name:** Replace all instances of `www_xxx_yyy_zzz` with your project name (e.g., `web-runtime`).
+- **Rename Files:** Update the following files to replace `Company` with your organization name (e.g., `Fathym`):
+  - `apps/islands/organisms/CompanyThinky.tsx`
+  - `src/state/CompanyAPIState.ts`
+  - `src/state/CompanyWebState.ts`
+
+You can use a text editor's global search and replace functionality to update these strings quickly.
+
+## Setting Up Environment Variables and Configuration Files
+
+These steps must be completed regardless of whether you run the project in Docker or not:
+
+1. **Create Environment Variable Files:**
+   Create two files:
+
+   - `.env`
+   - `.env.docker`
+
+   Add the following entry to both files, replacing `xxx` with your desired port (default is 8000):
+
+   ```env
+   PORT=xxx
+   ```
+
+2. **Update Configuration Files:**
+
+   - Modify `deno.jsonc` to reflect the port specified in the `.env` files, and update any references to port `3000` to match the chosen port.
+   - Update the `DOCKERFILE` to replace any references to port `3000` with your chosen port.
+
+## Starting the Development Server
+
+To start your project after installation:
+
+1. **Run in Development Mode:**
+
+   ```bash
+   deno task dev
+   ```
+
+   This command initializes the development environment.
+
+2. **Run in Production Mode:**
+
+   ```bash
+   deno task start
+   ```
+
+   Use this command to start the server in production mode.
+
+Once the server starts in either mode, you will receive a URL to visit (e.g., `http://localhost:8000` by default). This will have your site running on port 8000 or the port you configured earlier.
+
+## Setting Up Source Control
+
+We recommend using GitHub or another source control system to manage your project. Follow these steps to initialize a Git repository:
+
+1. **Initialize Git:**
+
+   ```bash
+   git init
+   ```
+
+2. **Add Files:**
+
+   ```bash
+   git add .
+   ```
+
+3. **Commit Initial Changes:**
+
+   ```bash
+   git commit -m "Initial commit"
+   ```
+
+4. **Push to Remote Repository:**
+
+   ```bash
+   git remote add origin <your-repository-url>
+   git branch -M main
+   git push -u origin main
+   ```
+
+## Running in Docker
+
+To deploy your project locally using Docker:
+
+1. **Refresh the Docker Build:**
+   ```bash
+   deno task refresh:docker
+   ```
+
+## Final Steps
+
+After completing these steps, your project should be set up and ready for development. Use `deno task dev` to run the application locally and begin building your project!
+

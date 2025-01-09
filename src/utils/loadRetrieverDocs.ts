@@ -8,7 +8,7 @@ import {
   TextSplitter,
   VectorStore,
 } from "../src.deps.ts";
-import { EaCRetrieverAsCode } from "../eac/EaCRetrieverAsCode.ts";
+import { EaCRetrieverAsCode } from "../eac/retrievers/EaCRetrieverAsCode.ts";
 
 export const loadRetrieverDocs: (
   ioc: IoCContainer,

@@ -20,7 +20,7 @@ import {
 } from "../../tests.deps.ts";
 import { EaCGraphCircuitDetails } from "../../../src/eac/EaCGraphCircuitDetails.ts";
 import { InferSynapticState } from "../../../src/utils/types.ts";
-import { EaCDenoKVSaverPersistenceDetails } from "../../../src/eac/EaCDenoKVSaverPersistenceDetails.ts";
+import { EaCDenoKVSaverPersistenceDetails } from "../../../src/eac/history/EaCDenoKVSaverPersistenceDetails.ts";
 import { EaCAzureOpenAILLMDetails } from "../../../src/eac/llms/EaCAzureOpenAILLMDetails.ts";
 import { EaCLLMNeuron } from "../../../src/eac/neurons/EaCLLMNeuron.ts";
 

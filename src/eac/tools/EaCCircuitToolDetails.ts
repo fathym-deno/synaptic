@@ -1,4 +1,4 @@
-import { EaCToolDetails, isEaCToolDetails } from "../EaCToolDetails.ts";
+import { EaCToolDetails, isEaCToolDetails } from "./EaCToolDetails.ts";
 
 export type EaCCircuitToolDetails = {
   CircuitLookup: string;

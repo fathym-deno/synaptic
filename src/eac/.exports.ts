@@ -1,43 +1,50 @@
 export * from "./neurons/.exports.ts";
 export * from "./llms/.exports.ts";
-export * from "./tools/_exports.ts";
+export * from "./tools/.exports.ts";
+
 export * from "./composeRunnableCircuit.ts";
 export * from "./EaCAIAsCode.ts";
 export * from "./EaCAIDetails.ts";
-export * from "./EaCAzureOpenAIEmbeddingsDetails.ts";
-export * from "./EaCAzureSearchAIVectorStoreDetails.ts";
-export * from "./EaCCheerioWebDocumentLoaderDetails.ts";
-export * from "./EaCChatHistoryAsCode.ts";
-export * from "./EaCChatHistoryDetails.ts";
 export * from "./EaCCircuitAsCode.ts";
 export * from "./EaCCircuitDetails.ts";
-export * from "./EaCCompoundDocumentLoaderDetails.ts";
-export * from "./EaCDenoKVChatHistoryDetails.ts";
-export * from "./EaCDenoKVIndexerDetails.ts";
-export * from "./EaCDenoKVSaverPersistenceDetails.ts";
-export * from "./EaCDFSDocumentLoaderDetails.ts";
-export * from "./EaCDocumentLoaderAsCode.ts";
-export * from "./EaCDocumentLoaderDetails.ts";
-export * from "./EaCEmbeddingsAsCode.ts";
-export * from "./EaCEmbeddingsDetails.ts";
 export * from "./EaCGraphCircuitDetails.ts";
-export * from "./EaCHNSWVectorStoreDetails.ts";
-export * from "./EaCIndexerAsCode.ts";
-export * from "./EaCIndexerDetails.ts";
-export * from "./EaCLinearCircuitDetails.ts";
-export * from "./EaCMemorySaverPersistenceDetails.ts";
-export * from "./EaCMemoryVectorStoreDetails.ts";
-export * from "./EaCNeuron.ts";
-export * from "./EaCPersistenceAsCode.ts";
-export * from "./EaCPersistenceDetails.ts";
-export * from "./EaCRecursiveCharacterTextSplitterDetails.ts";
-export * from "./EaCRetrieverAsCode.ts";
-export * from "./EaCRetrieverDetails.ts";
-export * from "./EaCSynapticCircuitsProcessor.ts";
-export * from "./EaCTextSplitterAsCode.ts";
-export * from "./EaCTextSplitterDetails.ts";
-export * from "./EaCToolAsCode.ts";
-export * from "./EaCToolDetails.ts";
-export * from "./EaCVectorStoreAsCode.ts";
-export * from "./EaCVectorStoreDetails.ts";
 export * from "./EverythingAsCodeSynaptic.ts";
+export * from "./EaCLinearCircuitDetails.ts";
+export * from "./EaCNeuron.ts";
+export * from "./EaCSynapticCircuitsProcessor.ts";
+
+export * from "./embeddings/EaCEmbeddingsAsCode.ts";
+export * from "./embeddings/EaCEmbeddingsDetails.ts";
+export * from "./embeddings/EaCAzureOpenAIEmbeddingsDetails.ts";
+
+export * from "./history/EaCChatHistoryAsCode.ts";
+export * from "./history/EaCChatHistoryDetails.ts";
+export * from "./history/EaCDenoKVChatHistoryDetails.ts";
+export * from "./history/EaCDenoKVSaverPersistenceDetails.ts";
+
+export * from "./indexers/EaCDenoKVIndexerDetails.ts";
+export * from "./indexers/EaCIndexerAsCode.ts";
+export * from "./indexers/EaCIndexerDetails.ts";
+
+export * from "./loaders/EaCCheerioWebDocumentLoaderDetails.ts";
+export * from "./loaders/EaCCompoundDocumentLoaderDetails.ts";
+export * from "./loaders/EaCDFSDocumentLoaderDetails.ts";
+export * from "./loaders/EaCDocumentLoaderAsCode.ts";
+export * from "./loaders/EaCDocumentLoaderDetails.ts";
+
+export * from "./persistence/EaCMemorySaverPersistenceDetails.ts";
+export * from "./persistence/EaCPersistenceAsCode.ts";
+export * from "./persistence/EaCPersistenceDetails.ts";
+
+export * from "./retrievers/EaCRetrieverAsCode.ts";
+export * from "./retrievers/EaCRetrieverDetails.ts";
+
+export * from "./text-splitters/EaCRecursiveCharacterTextSplitterDetails.ts";
+export * from "./text-splitters/EaCTextSplitterAsCode.ts";
+export * from "./text-splitters/EaCTextSplitterDetails.ts";
+
+export * from "./vector-stores/EaCAzureSearchAIVectorStoreDetails.ts";
+export * from "./vector-stores/EaCHNSWVectorStoreDetails.ts";
+export * from "./vector-stores/EaCMemoryVectorStoreDetails.ts";
+export * from "./vector-stores/EaCVectorStoreAsCode.ts";
+export * from "./vector-stores/EaCVectorStoreDetails.ts";

@@ -48,33 +48,33 @@ import {
 import {
   EaCHNSWVectorStoreDetails,
   isEaCHNSWVectorStoreDetails,
-} from "../eac/EaCHNSWVectorStoreDetails.ts";
-import { isEaCMemoryVectorStoreDetails } from "../eac/EaCMemoryVectorStoreDetails.ts";
+} from "../eac/vector-stores/EaCHNSWVectorStoreDetails.ts";
+import { isEaCMemoryVectorStoreDetails } from "../eac/vector-stores/EaCMemoryVectorStoreDetails.ts";
 import {
   EaCAzureSearchAIVectorStoreDetails,
   isEaCAzureSearchAIVectorStoreDetails,
-} from "../eac/EaCAzureSearchAIVectorStoreDetails.ts";
+} from "../eac/vector-stores/EaCAzureSearchAIVectorStoreDetails.ts";
 import {
   EaCDenoKVIndexerDetails,
   isEaCDenoKVIndexerDetails,
-} from "../eac/EaCDenoKVIndexerDetails.ts";
+} from "../eac/indexers/EaCDenoKVIndexerDetails.ts";
 import { DenoKVRecordManager } from "../indexing/DenoKVRecordManager.ts";
 import {
   EaCCheerioWebDocumentLoaderDetails,
   isEaCCheerioWebDocumentLoaderDetails,
-} from "../eac/EaCCheerioWebDocumentLoaderDetails.ts";
+} from "../eac/loaders/EaCCheerioWebDocumentLoaderDetails.ts";
 import { EverythingAsCodeSynaptic } from "../eac/EverythingAsCodeSynaptic.ts";
 import { DenoKVChatMessageHistory } from "../memory/DenoKVChatMessageHistory.ts";
 import { EaCNeuron, EaCNeuronLike } from "../eac/EaCNeuron.ts";
 import {
   EaCRecursiveCharacterTextSplitterDetails,
   isEaCRecursiveCharacterTextSplitterDetails,
-} from "../eac/EaCRecursiveCharacterTextSplitterDetails.ts";
+} from "../eac/text-splitters/EaCRecursiveCharacterTextSplitterDetails.ts";
 import { isEaCSERPToolDetails } from "../eac/tools/EaCSERPToolDetails.ts";
 import { isEaCTavilySearchResultsToolDetails } from "../eac/tools/EaCTavilySearchResultsToolDetails.ts";
 import { isEaCDynamicToolDetails } from "../eac/tools/EaCDynamicToolDetails.ts";
-import { isEaCMemorySaverPersistenceDetails } from "../eac/EaCMemorySaverPersistenceDetails.ts";
-import { isEaCDenoKVSaverPersistenceDetails } from "../eac/EaCDenoKVSaverPersistenceDetails.ts";
+import { isEaCMemorySaverPersistenceDetails } from "../eac/persistence/EaCMemorySaverPersistenceDetails.ts";
+import { isEaCDenoKVSaverPersistenceDetails } from "../eac/history/EaCDenoKVSaverPersistenceDetails.ts";
 import { DenoKVSaver } from "../memory/DenoKVSaver.ts";
 import { isEaCCircuitToolDetails } from "../eac/tools/EaCCircuitToolDetails.ts";
 import { EaCSynapticCircuitsProcessorHandlerResolver } from "./EaCSynapticCircuitsProcessorHandlerResolver.ts";
@@ -82,11 +82,11 @@ import { isEaCRemoteCircuitsToolDetails } from "../eac/tools/EaCRemoteCircuitsTo
 import {
   EaCDenoKVChatHistoryDetails,
   isEaCDenoKVChatHistoryDetails,
-} from "../eac/EaCDenoKVChatHistoryDetails.ts";
+} from "../eac/history/EaCDenoKVChatHistoryDetails.ts";
 import {
   EaCAzureOpenAIEmbeddingsDetails,
   isEaCAzureOpenAIEmbeddingsDetails,
-} from "../eac/EaCAzureOpenAIEmbeddingsDetails.ts";
+} from "../eac/embeddings/EaCAzureOpenAIEmbeddingsDetails.ts";
 import {
   EaCAzureOpenAILLMDetails,
   isEaCAzureOpenAILLMDetails,
@@ -101,12 +101,12 @@ import { SynapticCircuitResolver } from "../resolvers/SynapticCircuitResolver.ts
 import {
   EaCCompoundDocumentLoaderDetails,
   isEaCCompoundDocumentLoaderDetails,
-} from "../eac/EaCCompoundDocumentLoaderDetails.ts";
+} from "../eac/loaders/EaCCompoundDocumentLoaderDetails.ts";
 import {
   EaCDFSDocumentLoaderDetails,
   isEaCDFSDocumentLoaderDetails,
-} from "../eac/EaCDFSDocumentLoaderDetails.ts";
-import { EaCPersonalityDetails } from "../eac/EaCPersonalityDetails.ts";
+} from "../eac/loaders/EaCDFSDocumentLoaderDetails.ts";
+import { EaCPersonalityDetails } from "../eac/personalities/EaCPersonalityDetails.ts";
 import { loadRetrieverDocs } from "../utils/loadRetrieverDocs.ts";
 import {
   EaCOpenAILLMDetails,

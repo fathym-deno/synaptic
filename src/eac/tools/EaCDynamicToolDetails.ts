@@ -4,7 +4,7 @@ import {
   RunnableConfig,
   z,
 } from "../../src.deps.ts";
-import { EaCToolDetails, isEaCToolDetails } from "../EaCToolDetails.ts";
+import { EaCToolDetails, isEaCToolDetails } from "./EaCToolDetails.ts";
 
 export type EaCDynamicToolDetails<T extends z.ZodType<any> = z.ZodType<any>> = {
   Action?: (

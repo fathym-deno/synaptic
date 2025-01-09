@@ -6,7 +6,7 @@ import {
   ChatPromptTemplate,
   mergeWithArrays,
 } from "../../src.deps.ts";
-import { EaCPersonalityDetails } from "../../eac/EaCPersonalityDetails.ts";
+import { EaCPersonalityDetails } from "../../eac/personalities/EaCPersonalityDetails.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",

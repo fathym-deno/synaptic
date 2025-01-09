@@ -10,12 +10,12 @@ export {
   StateGraph,
   type StateGraphArgs,
   type StateType,
-} from "npm:@langchain/langgraph@0.2.3";
+} from "npm:@langchain/langgraph@0.2.39";
 export {
   ToolExecutor,
   type ToolInvocationInterface,
   ToolNode,
-} from "npm:@langchain/langgraph@0.2.3/prebuilt";
+} from "npm:@langchain/langgraph@0.2.39/prebuilt";
 
 export type {
   CheckpointListOptions,
@@ -23,4 +23,4 @@ export type {
   CheckpointTuple,
   PendingWrite,
   SerializerProtocol,
-} from "npm:@langchain/langgraph-checkpoint@0.0.6";
+} from "npm:@langchain/langgraph-checkpoint@0.0.13";

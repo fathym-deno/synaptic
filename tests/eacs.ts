@@ -1,12 +1,12 @@
-import { EaCAzureOpenAIEmbeddingsDetails } from "../src/eac/EaCAzureOpenAIEmbeddingsDetails.ts";
+import { EaCAzureOpenAIEmbeddingsDetails } from "../src/eac/embeddings/EaCAzureOpenAIEmbeddingsDetails.ts";
 import { EaCAzureOpenAILLMDetails } from "../src/eac/llms/EaCAzureOpenAILLMDetails.ts";
-import { EaCAzureSearchAIVectorStoreDetails } from "../src/eac/EaCAzureSearchAIVectorStoreDetails.ts";
-import { EaCCheerioWebDocumentLoaderDetails } from "../src/eac/EaCCheerioWebDocumentLoaderDetails.ts";
-import { EaCDenoKVChatHistoryDetails } from "../src/eac/EaCDenoKVChatHistoryDetails.ts";
-import { EaCDenoKVIndexerDetails } from "../src/eac/EaCDenoKVIndexerDetails.ts";
-import { EaCDenoKVSaverPersistenceDetails } from "../src/eac/EaCDenoKVSaverPersistenceDetails.ts";
-import { EaCMemorySaverPersistenceDetails } from "../src/eac/EaCMemorySaverPersistenceDetails.ts";
-import { EaCRecursiveCharacterTextSplitterDetails } from "../src/eac/EaCRecursiveCharacterTextSplitterDetails.ts";
+import { EaCAzureSearchAIVectorStoreDetails } from "../src/eac/vector-stores/EaCAzureSearchAIVectorStoreDetails.ts";
+import { EaCCheerioWebDocumentLoaderDetails } from "../src/eac/loaders/EaCCheerioWebDocumentLoaderDetails.ts";
+import { EaCDenoKVChatHistoryDetails } from "../src/eac/history/EaCDenoKVChatHistoryDetails.ts";
+import { EaCDenoKVIndexerDetails } from "../src/eac/indexers/EaCDenoKVIndexerDetails.ts";
+import { EaCDenoKVSaverPersistenceDetails } from "../src/eac/history/EaCDenoKVSaverPersistenceDetails.ts";
+import { EaCMemorySaverPersistenceDetails } from "../src/eac/persistence/EaCMemorySaverPersistenceDetails.ts";
+import { EaCRecursiveCharacterTextSplitterDetails } from "../src/eac/text-splitters/EaCRecursiveCharacterTextSplitterDetails.ts";
 import { EaCSERPToolDetails } from "../src/eac/tools/EaCSERPToolDetails.ts";
 import { EaCTavilySearchResultsToolDetails } from "../src/eac/tools/EaCTavilySearchResultsToolDetails.ts";
 import {
