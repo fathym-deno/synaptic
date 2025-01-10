@@ -8,9 +8,8 @@ export * from "./EaCAIDetails.ts";
 export * from "./EaCCircuitAsCode.ts";
 export * from "./EaCCircuitDetails.ts";
 export * from "./EaCGraphCircuitDetails.ts";
-export * from "./EverythingAsCodeSynaptic.ts";
 export * from "./EaCLinearCircuitDetails.ts";
-export * from "./EaCNeuron.ts";
+export * from "../synaptic/EaCNeuron.ts";
 export * from "./EaCSynapticCircuitsProcessor.ts";
 
 export * from "./embeddings/EaCEmbeddingsAsCode.ts";

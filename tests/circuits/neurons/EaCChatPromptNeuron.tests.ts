@@ -1,5 +1,5 @@
 import { EaCLinearCircuitDetails } from "../../../src/eac/EaCLinearCircuitDetails.ts";
-import { EverythingAsCodeSynaptic } from "../../../src/eac/EverythingAsCodeSynaptic.ts";
+import { EverythingAsCodeSynaptic } from "../../../src/synaptic/EverythingAsCodeSynaptic.ts";
 import { EaCChatPromptNeuron } from "../../../src/eac/neurons/EaCChatPromptNeuron.ts";
 import FathymSynapticPlugin from "../../../src/plugins/FathymSynapticPlugin.ts";
 import { buildTestIoC } from "../../test-eac-setup.ts";

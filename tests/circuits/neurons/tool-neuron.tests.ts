@@ -1,6 +1,6 @@
 import { EaCLinearCircuitDetails } from "../../../src/eac/EaCLinearCircuitDetails.ts";
-import { EaCNeuron } from "../../../src/eac/EaCNeuron.ts";
-import { EverythingAsCodeSynaptic } from "../../../src/eac/EverythingAsCodeSynaptic.ts";
+import { EaCNeuron } from "../../../src/synaptic/EaCNeuron.ts";
+import { EverythingAsCodeSynaptic } from "../../../src/synaptic/EverythingAsCodeSynaptic.ts";
 import { EaCToolNeuron } from "../../../src/eac/neurons/EaCToolNeuron.ts";
 import { EaCDynamicToolDetails } from "../../../src/eac/tools/EaCDynamicToolDetails.ts";
 import FathymSynapticPlugin from "../../../src/plugins/FathymSynapticPlugin.ts";

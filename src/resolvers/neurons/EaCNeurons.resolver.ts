@@ -6,7 +6,7 @@ import {
   RunnableLambda,
   RunnableMap,
 } from "../../src.deps.ts";
-import { EaCNeuronLike } from "../../eac/EaCNeuron.ts";
+import { EaCNeuronLike } from "../../synaptic/EaCNeuron.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",

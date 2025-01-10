@@ -1,7 +1,7 @@
 import { EaCCircuitAsCode } from "../eac/EaCCircuitAsCode.ts";
 import { EaCCircuitDetails } from "../eac/EaCCircuitDetails.ts";
-import { EaCNeuron } from "../eac/EaCNeuron.ts";
-import { EverythingAsCodeSynaptic } from "../eac/EverythingAsCodeSynaptic.ts";
+import { EaCNeuron } from "../synaptic/EaCNeuron.ts";
+import { EverythingAsCodeSynaptic } from "../synaptic/EverythingAsCodeSynaptic.ts";
 import { IoCContainer } from "../src.deps.ts";
 
 export type SynapticCircuitResolver<TDetails = EaCCircuitDetails> = {

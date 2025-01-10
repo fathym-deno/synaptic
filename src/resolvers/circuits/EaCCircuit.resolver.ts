@@ -1,6 +1,6 @@
 import { SynapticCircuitResolver } from "../SynapticCircuitResolver.ts";
 import { SynapticResolverConfiguration } from "../SynapticResolverConfiguration.ts";
-import { EaCNeuron } from "../../eac/EaCNeuron.ts";
+import { EaCNeuron } from "../../synaptic/EaCNeuron.ts";
 import { isEaCCircuitDetails } from "../../eac/EaCCircuitDetails.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {

@@ -1,4 +1,4 @@
-import { EaCNeuron, isEaCNeuron } from "../EaCNeuron.ts";
+import { EaCNeuron, isEaCNeuron } from "../../synaptic/EaCNeuron.ts";
 
 export type EaCPullChatPromptNeuron = {
   Template: string;

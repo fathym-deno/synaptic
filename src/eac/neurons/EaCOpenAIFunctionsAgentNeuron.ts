@@ -1,4 +1,4 @@
-import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from "../EaCNeuron.ts";
+import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from "../../synaptic/EaCNeuron.ts";
 
 export type EaCOpenAIFunctionsAgentNeuron = {
   LLM: EaCNeuronLike;

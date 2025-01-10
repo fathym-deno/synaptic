@@ -8,8 +8,8 @@ import {
   RunnableLambda,
   RunnablePassthrough,
 } from "../../src.deps.ts";
-import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from "../../eac/EaCNeuron.ts";
-import { EverythingAsCodeSynaptic } from "../../eac/EverythingAsCodeSynaptic.ts";
+import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from "../../synaptic/EaCNeuron.ts";
+import { EverythingAsCodeSynaptic } from "../../synaptic/EverythingAsCodeSynaptic.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",

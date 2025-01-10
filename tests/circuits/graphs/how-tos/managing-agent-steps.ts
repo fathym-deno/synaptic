@@ -17,9 +17,9 @@ import { EaCDynamicToolDetails } from "../../../../src/eac/tools/EaCDynamicToolD
 import { EaCPassthroughNeuron } from "../../../../src/eac/neurons/EaCPassthroughNeuron.ts";
 import { EaCLLMNeuron } from "../../../../src/eac/neurons/EaCLLMNeuron.ts";
 import { EaCToolExecutorNeuron } from "../../../../src/eac/neurons/EaCToolExecutorNeuron.ts";
-import { EaCNeuron } from "../../../../src/eac/EaCNeuron.ts";
+import { EaCNeuron } from "../../../../src/synaptic/EaCNeuron.ts";
 import { EaCGraphCircuitDetails } from "../../../../src/eac/EaCGraphCircuitDetails.ts";
-import { EverythingAsCodeSynaptic } from "../../../../src/eac/EverythingAsCodeSynaptic.ts";
+import { EverythingAsCodeSynaptic } from "../../../../src/synaptic/EverythingAsCodeSynaptic.ts";
 
 // https://github.com/langchain-ai/langgraphjs/blob/main/examples/how-tos/managing-agent-steps.ipynb
 

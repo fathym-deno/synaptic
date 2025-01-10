@@ -1,6 +1,6 @@
 import { EaCCircuitAsCode } from "../eac/EaCCircuitAsCode.ts";
 import { isEaCSynapticCircuitsProcessor } from "../eac/EaCSynapticCircuitsProcessor.ts";
-import { EverythingAsCodeSynaptic } from "../eac/EverythingAsCodeSynaptic.ts";
+import { EverythingAsCodeSynaptic } from "../synaptic/EverythingAsCodeSynaptic.ts";
 import {
   EverythingAsCode,
   ProcessorHandlerResolver,

@@ -1,4 +1,4 @@
-import { EverythingAsCodeSynaptic } from "../eac/EverythingAsCodeSynaptic.ts";
+import { EverythingAsCodeSynaptic } from "../synaptic/EverythingAsCodeSynaptic.ts";
 import { EverythingAsCode, IoCContainer } from "../src.deps.ts";
 
 export type CircuitContext = {

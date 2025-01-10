@@ -18,7 +18,7 @@ import { EaCLLMNeuron } from "../../../src/eac/neurons/EaCLLMNeuron.ts";
 import { EaCToolExecutorNeuron } from "../../../src/eac/neurons/EaCToolExecutorNeuron.ts";
 import { EaCPullChatPromptNeuron } from "../../../src/eac/neurons/EaCPullChatPromptNeuron.ts";
 import { EaCGraphCircuitDetails } from "../../../src/eac/EaCGraphCircuitDetails.ts";
-import { EverythingAsCodeSynaptic } from "../../../src/eac/EverythingAsCodeSynaptic.ts";
+import { EverythingAsCodeSynaptic } from "../../../src/synaptic/EverythingAsCodeSynaptic.ts";
 import { EaCOpenAIFunctionsAgentNeuron } from "../../../src/eac/neurons/EaCOpenAIFunctionsAgentNeuron.ts";
 
 // https://github.com/langchain-ai/langgraphjs/blob/main/examples/how-tos/human-in-the-loop.ipynb

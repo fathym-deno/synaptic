@@ -9,10 +9,10 @@ import {
 } from "../../../tests.deps.ts";
 import { buildTestIoC } from "../../../test-eac-setup.ts";
 import { EaCPassthroughNeuron } from "../../../../src/eac/neurons/EaCPassthroughNeuron.ts";
-import { EaCNeuron } from "../../../../src/eac/EaCNeuron.ts";
+import { EaCNeuron } from "../../../../src/synaptic/EaCNeuron.ts";
 import { EaCGraphCircuitDetails } from "../../../../src/eac/EaCGraphCircuitDetails.ts";
 import { EaCCircuitNeuron } from "../../../../src/eac/neurons/EaCCircuitNeuron.ts";
-import { EverythingAsCodeSynaptic } from "../../../../src/eac/EverythingAsCodeSynaptic.ts";
+import { EverythingAsCodeSynaptic } from "../../../../src/synaptic/EverythingAsCodeSynaptic.ts";
 
 // https://github.com/langchain-ai/langgraphjs/blob/main/examples/how-tos/subgraph.ipynb
 

@@ -16,7 +16,7 @@ import { EaCAzureOpenAILLMDetails } from "../../../../src/eac/llms/EaCAzureOpenA
 import { EaCDynamicToolDetails } from "../../../../src/eac/tools/EaCDynamicToolDetails.ts";
 import { EaCPassthroughNeuron } from "../../../../src/eac/neurons/EaCPassthroughNeuron.ts";
 import { EaCLLMNeuron } from "../../../../src/eac/neurons/EaCLLMNeuron.ts";
-import { EaCNeuron } from "../../../../src/eac/EaCNeuron.ts";
+import { EaCNeuron } from "../../../../src/synaptic/EaCNeuron.ts";
 import { EaCToolExecutorNeuron } from "../../../../src/eac/neurons/EaCToolExecutorNeuron.ts";
 import { EaCGraphCircuitDetails } from "../../../../src/eac/EaCGraphCircuitDetails.ts";
 

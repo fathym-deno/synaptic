@@ -1,7 +1,7 @@
 import { CircuitConfigurationResult } from "../circuits/CircuitConfigurationResult.ts";
 import { Runnable } from "../langchain.deps.ts";
 import { EaCLinearCircuitDetails } from "./EaCLinearCircuitDetails.ts";
-import { EaCNeuron } from "./EaCNeuron.ts";
+import { EaCNeuron } from "../synaptic/EaCNeuron.ts";
 
 export function composeRunnableCircuit(
   runnable: Runnable,

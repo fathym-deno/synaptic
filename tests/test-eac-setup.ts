@@ -1,5 +1,5 @@
 // TODO(ttrichar): MOVE TO @fathym/eac/runtim ref after EaCRuntimePluginDef export bug is fixed
-import { EverythingAsCodeSynaptic } from "../src/eac/EverythingAsCodeSynaptic.ts";
+import { EverythingAsCodeSynaptic } from "../src/synaptic/EverythingAsCodeSynaptic.ts";
 import FathymSynapticPlugin from "../src/plugins/FathymSynapticPlugin.ts";
 import { buildEaCTestIoC } from "../src/testing/utils.ts";
 import { eacAIsRoot, eacDenoKVs } from "./eacs.ts";

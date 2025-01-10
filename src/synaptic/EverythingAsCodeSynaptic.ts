@@ -3,8 +3,8 @@ import {
   EverythingAsCodeDenoKV,
   EverythingAsCodeDFS,
 } from "../src.deps.ts";
-import { EaCAIAsCode } from "./EaCAIAsCode.ts";
-import { EaCCircuitAsCode } from "./EaCCircuitAsCode.ts";
+import { EaCAIAsCode } from "../eac/EaCAIAsCode.ts";
+import { EaCCircuitAsCode } from "../eac/EaCCircuitAsCode.ts";
 import { EaCNeuronLike } from "./EaCNeuron.ts";
 
 export type EverythingAsCodeSynaptic =

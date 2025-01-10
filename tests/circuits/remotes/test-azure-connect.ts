@@ -7,7 +7,7 @@ import {
 } from "../../tests.deps.ts";
 import { buildTestIoC } from "../../test-eac-setup.ts";
 import { EaCCircuitNeuron } from "../../../src/eac/neurons/EaCCircuitNeuron.ts";
-import { EverythingAsCodeSynaptic } from "../../../src/eac/EverythingAsCodeSynaptic.ts";
+import { EverythingAsCodeSynaptic } from "../../../src/synaptic/EverythingAsCodeSynaptic.ts";
 
 // class SynapticRemoteRunnableRemoteRunnable<
 //   RunInput,

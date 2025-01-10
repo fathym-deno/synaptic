@@ -3,7 +3,7 @@ import { EaCAIAsCode } from "../eac/EaCAIAsCode.ts";
 import { EaCCircuitDetails } from "../eac/EaCCircuitDetails.ts";
 import { EaCGraphCircuitDetails } from "../eac/EaCGraphCircuitDetails.ts";
 import { EaCLinearCircuitDetails } from "../eac/EaCLinearCircuitDetails.ts";
-import { EaCNeuronLike } from "../eac/EaCNeuron.ts";
+import { EaCNeuronLike } from "../synaptic/EaCNeuron.ts";
 import { Runnable, RunnableConfig } from "../src.deps.ts";
 
 export type CircuitState<TType extends "Graph" | "Linear"> = TType extends

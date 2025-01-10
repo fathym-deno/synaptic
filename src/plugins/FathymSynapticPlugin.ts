@@ -63,9 +63,9 @@ import {
   EaCCheerioWebDocumentLoaderDetails,
   isEaCCheerioWebDocumentLoaderDetails,
 } from "../eac/loaders/EaCCheerioWebDocumentLoaderDetails.ts";
-import { EverythingAsCodeSynaptic } from "../eac/EverythingAsCodeSynaptic.ts";
+import { EverythingAsCodeSynaptic } from "../synaptic/EverythingAsCodeSynaptic.ts";
 import { DenoKVChatMessageHistory } from "../memory/DenoKVChatMessageHistory.ts";
-import { EaCNeuron, EaCNeuronLike } from "../eac/EaCNeuron.ts";
+import { EaCNeuron, EaCNeuronLike } from "../synaptic/EaCNeuron.ts";
 import {
   EaCRecursiveCharacterTextSplitterDetails,
   isEaCRecursiveCharacterTextSplitterDetails,

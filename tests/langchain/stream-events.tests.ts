@@ -1,6 +1,6 @@
 import { EaCGraphCircuitDetails } from "../../src/eac/EaCGraphCircuitDetails.ts";
-import { EaCNeuron } from "../../src/eac/EaCNeuron.ts";
-import { EverythingAsCodeSynaptic } from "../../src/eac/EverythingAsCodeSynaptic.ts";
+import { EaCNeuron } from "../../src/synaptic/EaCNeuron.ts";
+import { EverythingAsCodeSynaptic } from "../../src/synaptic/EverythingAsCodeSynaptic.ts";
 import { EaCCircuitNeuron } from "../../src/eac/neurons/EaCCircuitNeuron.ts";
 import { EaCPassthroughNeuron } from "../../src/eac/neurons/EaCPassthroughNeuron.ts";
 import {

@@ -7,7 +7,7 @@ export {
   // createToolCallingAgent,
   // createXmlAgent,
   Toolkit,
-} from "npm:langchain@0.3.9/agents";
+} from "npm:langchain@0.3.9";
 export { createStuffDocumentsChain } from "npm:langchain@0.3.9/chains/combine_documents";
 export { pull } from "npm:langchain@0.3.9/hub";
 export { formatDocumentsAsString } from "npm:langchain@0.3.9/util/document";

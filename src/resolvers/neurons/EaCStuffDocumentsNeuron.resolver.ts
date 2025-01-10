@@ -2,7 +2,7 @@ import { SynapticNeuronResolver } from "../SynapticNeuronResolver.ts";
 import { SynapticResolverConfiguration } from "../SynapticResolverConfiguration.ts";
 import { EaCStuffDocumentsNeuron } from "../../eac/neurons/EaCStuffDocumentsNeuron.ts";
 import { createStuffDocumentsChain, Runnable } from "../../src.deps.ts";
-import { EaCNeuronLike } from "../../eac/EaCNeuron.ts";
+import { EaCNeuronLike } from "../../synaptic/EaCNeuron.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
   Type: "neuron",

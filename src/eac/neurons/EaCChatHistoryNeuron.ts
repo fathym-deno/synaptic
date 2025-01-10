@@ -1,5 +1,5 @@
 import { BaseMessage } from "../../src.deps.ts";
-import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from "../EaCNeuron.ts";
+import { EaCNeuron, EaCNeuronLike, isEaCNeuron } from "../../synaptic/EaCNeuron.ts";
 
 export type EaCChatHistoryNeuron = {
   ChatHistoryLookup: string;
