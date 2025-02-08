@@ -15,26 +15,25 @@ export * from "jsr:@fathym/common@0.2.173/log";
 export * from "jsr:@fathym/common@0.2.173/types";
 
 // export * from '../../everything-as-code/mod.ts';
-export * from "jsr:@fathym/eac@0.2.28";
-export * from "jsr:@fathym/eac@0.2.28/runtime";
-export * from "jsr:@fathym/eac@0.2.28/runtime/config";
-export * from "jsr:@fathym/eac@0.2.28/runtime/plugins";
-export * from "jsr:@fathym/eac@0.2.28/runtime/pipelines";
-
-export * from "jsr:@fathym/eac-applications@0.0.45";
-export * from "jsr:@fathym/eac-applications@0.0.45/processors";
-export * from "jsr:@fathym/eac-applications@0.0.45/runtime/plugins";
-export type { ProcessorHandlerResolver } from "jsr:@fathym/eac-applications@0.0.45/runtime/processors";
-
-export * from "jsr:@fathym/eac-deno-kv@0.0.4";
-
+export * from "jsr:@fathym/eac@0.2.31";
 export type {
   EaCJSRDistributedFileSystemDetails,
   EaCLocalDistributedFileSystemDetails,
   EverythingAsCodeDFS,
-} from "jsr:@fathym/eac-dfs@0.0.28";
-export type { DFSFileHandlerResolver } from "jsr:@fathym/eac-dfs@0.0.28/handlers";
-export { importDFSTypescriptModule } from "jsr:@fathym/eac-dfs@0.0.28/utils";
+} from "jsr:@fathym/eac@0.2.31/dfs";
+export type { DFSFileHandlerResolver } from "jsr:@fathym/eac@0.2.31/dfs/handlers";
+export { importDFSTypescriptModule } from "jsr:@fathym/eac@0.2.31/dfs/utils";
+export * from "jsr:@fathym/eac@0.2.31/runtime";
+export * from "jsr:@fathym/eac@0.2.31/runtime/config";
+export * from "jsr:@fathym/eac@0.2.31/runtime/plugins";
+export * from "jsr:@fathym/eac@0.2.31/runtime/pipelines";
+
+export * from "jsr:@fathym/eac-applications@0.0.50";
+export * from "jsr:@fathym/eac-applications@0.0.50/processors";
+export * from "jsr:@fathym/eac-applications@0.0.50/runtime/plugins";
+export type { ProcessorHandlerResolver } from "jsr:@fathym/eac-applications@0.0.50/runtime/processors";
+
+export * from "jsr:@fathym/eac-deno-kv@0.0.6";
 
 export { IoCContainer } from "jsr:@fathym/ioc@0.0.13";
 
