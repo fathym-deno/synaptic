@@ -1208,7 +1208,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                   FileRoot: "./src/resolvers/",
                   Extensions: ["resolver.ts"],
                   WorkerPath: import.meta.resolve(
-                    "@fathym/eac-dfs/workers/local",
+                    "@fathym/eac/dfs/workers/local",
                   ),
                 } as EaCLocalDistributedFileSystemDetails)
                 : ({
@@ -1216,7 +1216,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                   Package: "@fathym/synaptic",
                   Version: "",
                   WorkerPath: import.meta.resolve(
-                    "@fathym/eac-dfs/workers/jsr",
+                    "@fathym/eac/dfs/workers/jsr",
                   ),
                 } as EaCJSRDistributedFileSystemDetails)
               : eac.DFSs![dfsLookup]!.Details!;
