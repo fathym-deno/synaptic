@@ -10,30 +10,30 @@ export {
 export { Buffer, toReadableStream } from "jsr:@std/io@0.224.4";
 export { toBlob, toText } from "jsr:@std/streams@1.0.1";
 
-export * from "jsr:@fathym/common@0.2.173";
-export * from "jsr:@fathym/common@0.2.173/log";
-export * from "jsr:@fathym/common@0.2.173/types";
+export * from "jsr:@fathym/common@0.2.175";
+export * from "jsr:@fathym/common@0.2.175/log";
+export * from "jsr:@fathym/common@0.2.175/types";
 
 // export * from '../../everything-as-code/mod.ts';
-export * from "jsr:@fathym/eac@0.2.31";
+export * from "jsr:@fathym/eac@0.2.36";
 export type {
   EaCJSRDistributedFileSystemDetails,
   EaCLocalDistributedFileSystemDetails,
   EverythingAsCodeDFS,
-} from "jsr:@fathym/eac@0.2.31/dfs";
-export type { DFSFileHandlerResolver } from "jsr:@fathym/eac@0.2.31/dfs/handlers";
-export { importDFSTypescriptModule } from "jsr:@fathym/eac@0.2.31/dfs/utils";
-export * from "jsr:@fathym/eac@0.2.31/runtime";
-export * from "jsr:@fathym/eac@0.2.31/runtime/config";
-export * from "jsr:@fathym/eac@0.2.31/runtime/plugins";
-export * from "jsr:@fathym/eac@0.2.31/runtime/pipelines";
+} from "jsr:@fathym/eac@0.2.36/dfs";
+export type { DFSFileHandlerResolver } from "jsr:@fathym/eac@0.2.36/dfs/handlers";
+export { importDFSTypescriptModule } from "jsr:@fathym/eac@0.2.36/dfs/utils";
+export * from "jsr:@fathym/eac@0.2.36/runtime";
+export * from "jsr:@fathym/eac@0.2.36/runtime/config";
+export * from "jsr:@fathym/eac@0.2.36/runtime/plugins";
+export * from "jsr:@fathym/eac@0.2.36/runtime/pipelines";
 
-export * from "jsr:@fathym/eac-applications@0.0.50";
-export * from "jsr:@fathym/eac-applications@0.0.50/processors";
-export * from "jsr:@fathym/eac-applications@0.0.50/runtime/plugins";
-export type { ProcessorHandlerResolver } from "jsr:@fathym/eac-applications@0.0.50/runtime/processors";
+export * from "jsr:@fathym/eac-applications@0.0.54";
+export * from "jsr:@fathym/eac-applications@0.0.54/processors";
+export * from "jsr:@fathym/eac-applications@0.0.54/runtime/plugins";
+export type { ProcessorHandlerResolver } from "jsr:@fathym/eac-applications@0.0.54/runtime/processors";
 
-export * from "jsr:@fathym/eac-deno-kv@0.0.6";
+export * from "jsr:@fathym/eac-deno-kv@0.0.7";
 
 export { IoCContainer } from "jsr:@fathym/ioc@0.0.13";
 

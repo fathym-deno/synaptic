@@ -11,18 +11,18 @@ export {
 } from "jsr:@std/http@1.0.2/server-sent-event-stream";
 export { toText } from "jsr:@std/streams@1.0.1";
 
-export * from "jsr:@fathym/common@0.2.173";
+export * from "jsr:@fathym/common@0.2.175";
 
-export * from "jsr:@fathym/eac@0.2.31";
-export * from "jsr:@fathym/eac@0.2.31/runtime/plugins";
+export * from "jsr:@fathym/eac@0.2.36";
+export * from "jsr:@fathym/eac@0.2.36/runtime/plugins";
 
 export * from "jsr:@fathym/eac-deno-kv@0.0.4";
 
-export * from "jsr:@fathym/eac@0.2.31/dfs";
+export * from "jsr:@fathym/eac@0.2.36/dfs";
 
 export * from "jsr:@fathym/eac-api@0.1.19";
 
-export { FathymEaCDenoKVPlugin } from "jsr:@fathym/eac-applications@0.0.50/runtime/plugins";
+export { FathymEaCDenoKVPlugin } from "jsr:@fathym/eac-applications@0.0.54/runtime/plugins";
 
 export { IoCContainer } from "jsr:@fathym/ioc@0.0.13";
 
