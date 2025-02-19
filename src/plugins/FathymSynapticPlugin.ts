@@ -13,6 +13,7 @@ import {
   EaCJSRDistributedFileSystemDetails,
   EaCLocalDistributedFileSystemDetails,
   EaCRuntimeConfig,
+  EaCRuntimeHandlerRouteGroup,
   EaCRuntimePlugin,
   EaCRuntimePluginConfig,
   Embeddings,
@@ -127,8 +128,10 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
   public async AfterEaCResolved(
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer,
-  ): Promise<void> {
+  ): Promise<EaCRuntimeHandlerRouteGroup[]> {
     await this.configureEaCSynaptic(eac, ioc);
+
+    return [];
   }
 
   public async Build(
