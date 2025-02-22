@@ -153,7 +153,11 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
           const dfs = eac.DFSs?.[dfsLookup]?.Details;
 
           if (dfs) {
-            const dfsHandler = await this.dfsHandlerResolver!.Resolve(ioc, dfs);
+            const dfsHandler = await this.dfsHandlerResolver!.Resolve(
+              ioc,
+              dfsLookup,
+              dfs,
+            );
 
             return {
               dfsLookup,
@@ -664,6 +668,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
                   const dfsHandler = await this.dfsHandlerResolver!.Resolve(
                     ioc,
+                    details.DFSLookup,
                     dfs,
                   );
 
@@ -1224,7 +1229,11 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                 } as EaCJSRDistributedFileSystemDetails)
               : eac.DFSs![dfsLookup]!.Details!;
 
-            const dfsHandler = await this.dfsHandlerResolver!.Resolve(ioc, dfs);
+            const dfsHandler = await this.dfsHandlerResolver!.Resolve(
+              ioc,
+              dfsLookup,
+              dfs,
+            );
 
             return {
               dfsLookup,
