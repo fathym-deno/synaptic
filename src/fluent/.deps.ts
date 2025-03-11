@@ -13,15 +13,15 @@ export type {
   EaCDetails,
   EaCVertexDetails,
   EverythingAsCode,
-} from "jsr:@fathym/eac@0.2.94";
-export type { EaCDistributedFileSystemDetails } from "jsr:@fathym/eac@0.2.94/dfs";
+} from "jsr:@fathym/eac@0.2.96";
+export type { EaCDistributedFileSystemDetails } from "jsr:@fathym/eac@0.2.96/dfs";
 export type {
   EaCAsCodeDetails,
   HasDetailsProperty,
   IsRequiredProperty,
   OptionalProperties,
   // RequiredProperties,
-} from "jsr:@fathym/eac@0.2.94/types";
+} from "jsr:@fathym/eac@0.2.96/types";
 
 export type { EaCDenoKVAsCode } from "jsr:@fathym/eac-deno-kv@0.0.13";
 
