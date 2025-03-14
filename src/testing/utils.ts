@@ -39,7 +39,7 @@ export async function configurePlugins(
     }
 
     const pluginConfig = await pluginDef.Setup({
-      Server: {},
+      Servers: [{ Lookup: "" }],
     } as EaCRuntimeConfig);
 
     if (pluginConfig) {
@@ -74,7 +74,7 @@ export async function finalizePlugins(
   plugins: EaCRuntimePlugin[],
 ): Promise<EverythingAsCode> {
   const cfg = {
-    Server: {},
+    Servers: [{ Lookup: "" }],
   } as EaCRuntimeConfig;
 
   const pluginConfigs = (
