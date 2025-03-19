@@ -93,8 +93,8 @@ export const loadRetrieverDocs: (
     } catch (err) {
       logger.error(
         `There was an issue indexing Retriever '${retrieverLookup}'`,
-        err,
       );
+      logger.error(err);
 
       throw err;
     }

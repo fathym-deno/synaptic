@@ -1,4 +1,5 @@
 export * from "./customStringify.ts";
+export * from "./defineEaCSynapticConfig.ts";
 export * from "./DefaultSynapticProcessorHandlerResolver.ts";
 export * from "./EaCSynapticCircuitsProcessorHandlerResolver.ts";
 

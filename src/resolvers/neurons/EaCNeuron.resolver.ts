@@ -303,9 +303,11 @@ export default {
     } catch (err) {
       logger.error(
         `Unable to configure neuron ${neuronLookup} with configuration:`,
-        err,
       );
-      logger.error("Neuron details", neuronLike);
+      logger.error(err);
+
+      logger.error("Neuron details");
+      logger.error(neuronLike);
 
       throw err;
     }

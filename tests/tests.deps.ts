@@ -13,27 +13,27 @@ export { toText } from "jsr:@std/streams@1.0.1";
 
 export * from "jsr:@fathym/common@0.2.179";
 
-export * from "jsr:@fathym/eac@0.2.101";
-export * from "jsr:@fathym/eac@0.2.101/runtime/plugins";
+export * from "jsr:@fathym/eac@0.2.102";
+export * from "jsr:@fathym/eac@0.2.102/runtime/plugins";
 
 export * from "jsr:@fathym/eac-deno-kv@0.0.4";
 
-export * from "jsr:@fathym/eac@0.2.101/dfs";
+export * from "jsr:@fathym/eac@0.2.102/dfs";
 
 export * from "jsr:@fathym/eac-api@0.1.19";
 
-export { FathymEaCDenoKVPlugin } from "jsr:@fathym/eac-applications@0.0.123/runtime/plugins";
+export { FathymEaCDenoKVPlugin } from "jsr:@fathym/eac-applications@0.0.125/runtime/plugins";
 
 export { IoCContainer } from "jsr:@fathym/ioc@0.0.14";
 
-export { z } from "npm:zod@3.23.8";
+export { z } from "npm:zod@3.24.2";
 export { zodToJsonSchema } from "npm:zod-to-json-schema@3.23.2";
 
-export { AzureAISearchQueryType } from "npm:@langchain/community@0.3.15/vectorstores/azure_aisearch";
-export { type AgentAction } from "npm:@langchain/core@0.3.18/agents";
-export { dispatchCustomEvent } from "npm:@langchain/core@0.3.18/callbacks/dispatch";
-export { BaseListChatMessageHistory } from "npm:@langchain/core@0.3.18/chat_history";
-export { BaseLanguageModel } from "npm:@langchain/core@0.3.18/language_models/base";
+export { AzureAISearchQueryType } from "npm:@langchain/community@0.3.36/vectorstores/azure_aisearch";
+export { type AgentAction } from "npm:@langchain/core@0.3.42/agents";
+export { dispatchCustomEvent } from "npm:@langchain/core@0.3.42/callbacks/dispatch";
+export { BaseListChatMessageHistory } from "npm:@langchain/core@0.3.42/chat_history";
+export { BaseLanguageModel } from "npm:@langchain/core@0.3.42/language_models/base";
 export {
   AIMessage,
   AIMessageChunk,
@@ -41,22 +41,22 @@ export {
   FunctionMessage,
   HumanMessage,
   ToolMessage,
-} from "npm:@langchain/core@0.3.18/messages";
-export { ChatPromptValue } from "npm:@langchain/core/prompt_values";
+} from "npm:@langchain/core@0.3.42/messages";
+export { ChatPromptValue } from "npm:@langchain/core@0.3.42/prompt_values";
 export {
   type BaseMessagePromptTemplateLike,
   ChatPromptTemplate,
   MessagesPlaceholder,
-} from "npm:@langchain/core@0.3.18/prompts";
-export { Runnable, RunnableLambda } from "npm:@langchain/core@0.3.18/runnables";
-export { StructuredTool } from "npm:@langchain/core@0.3.18/tools";
+} from "npm:@langchain/core@0.3.42/prompts";
+export { Runnable, RunnableLambda } from "npm:@langchain/core@0.3.42/runnables";
+export { StructuredTool } from "npm:@langchain/core@0.3.42/tools";
 export {
   Annotation,
   END,
   START,
   StateGraph,
-} from "npm:@langchain/langgraph@0.1.9";
+} from "npm:@langchain/langgraph@0.2.56";
 export {
   ToolExecutor,
   ToolNode,
-} from "npm:@langchain/langgraph@0.1.9/prebuilt";
+} from "npm:@langchain/langgraph@0.2.56/prebuilt";
