@@ -130,7 +130,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer,
   ): Promise<EaCRuntimeHandlerRouteGroup[]> {
-    if (!IS_BUILDING) {
+    if (!Deno.args.includes("publish")) {
       await this.configureEaCSynaptic(eac, ioc);
     }
 
