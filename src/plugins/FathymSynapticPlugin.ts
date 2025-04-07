@@ -23,7 +23,6 @@ import {
   HtmlToTextTransformer,
   importDFSTypescriptModule,
   IoCContainer,
-  IS_BUILDING,
   jsonSchemaToZod,
   LoggingProvider,
   MemorySaver,
