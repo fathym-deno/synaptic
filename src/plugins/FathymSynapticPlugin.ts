@@ -23,6 +23,7 @@ import {
   HtmlToTextTransformer,
   importDFSTypescriptModule,
   IoCContainer,
+  IS_BUILDING,
   jsonSchemaToZod,
   LoggingProvider,
   MemorySaver,
@@ -129,7 +130,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
     eac: EverythingAsCodeSynaptic,
     ioc: IoCContainer,
   ): Promise<EaCRuntimeHandlerRouteGroup[]> {
-    if (!Deno.args.includes("publish")) {
+    if (!IS_BUILDING && !Deno.args.includes("publish")) {
       await this.configureEaCSynaptic(eac, ioc);
     }
 
