@@ -24,6 +24,7 @@ import {
   importDFSTypescriptModule,
   IoCContainer,
   IS_BUILDING,
+  JSONLoader,
   jsonSchemaToZod,
   LoggingProvider,
   MemorySaver,
@@ -117,6 +118,10 @@ import {
 import { CircuitConfiguration } from "../circuits/CircuitConfiguration.ts";
 import { CircuitContext } from "../circuits/CircuitContext.ts";
 import { EaCCircuitNeuron } from "../eac/neurons/EaCCircuitNeuron.ts";
+import {
+  EaCSchemaDocumentLoaderDetails,
+  isEaCSchemaDocumentLoaderDetails,
+} from "../eac/EaCSchemaDocumentLoaderDetails.ts";
 
 export default class FathymSynapticPlugin implements EaCRuntimePlugin {
   protected dfsHandlerResolver: DFSFileHandlerResolver | undefined;
@@ -754,6 +759,50 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                   ).flatMap((l) => l);
 
                   return loadedDocs;
+                },
+              };
+            },
+            {
+              Lazy: false,
+              Name: `${aiLookup}|${loaderLookup}`,
+              Type: ioc.Symbol("DocumentLoader"),
+            },
+          );
+        } else if (isEaCSchemaDocumentLoaderDetails(loader.Details)) {
+          const details = loader.Details as EaCSchemaDocumentLoaderDetails;
+
+          ioc.Register(
+            () => {
+              return {
+                async load() {
+                  // Step 1: Structure in-memory data into an array of JSON objects
+                  const data = Object.entries(details.Schemas).map(
+                    ([name, schema]) => ({
+                      name,
+                      schema,
+                    }),
+                  );
+
+                  // Step 2: Serialize and blobify the JSON array
+                  const jsonText = JSON.stringify(data, null, 2);
+                  const blob = new Blob([jsonText], {
+                    type: "application/json",
+                  });
+
+                  // Step 3: Use JSONLoader with pointer to extract /schema
+                  const loader = new JSONLoader(blob, ["/schema"]);
+
+                  // Step 4: Load the documents
+                  const docs = await loader.load();
+
+                  // Step 5: Add metadata if needed
+                  return docs.map((doc, i) => ({
+                    ...doc,
+                    metadata: {
+                      ...(doc.metadata || {}),
+                      source: `schema://${data[i]?.name ?? "unknown"}`,
+                    },
+                  }));
                 },
               };
             },

@@ -12,6 +12,7 @@ export { createStuffDocumentsChain } from "npm:langchain@0.3.19/chains/combine_d
 export { pull } from "npm:langchain@0.3.19/hub";
 export { formatDocumentsAsString } from "npm:langchain@0.3.19/util/document";
 export { MemoryVectorStore } from "npm:langchain@0.3.19/vectorstores/memory";
+export { JSONLoader } from "npm:langchain@0.3.19/document_loaders/fs/json";
 
 export {
   AzureChatOpenAI,
