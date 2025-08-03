@@ -627,7 +627,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
           const llmDetails = llm.Details as EaCOllamaLLMDetails;
 
           ioc.Register(
-            ChatOpenAI,
+            ChatOllama,
             async (ioc) => {
               const llm = new ChatOllama({
                 baseUrl: llmDetails.Instance,
