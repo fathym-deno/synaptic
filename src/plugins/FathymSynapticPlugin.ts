@@ -5,6 +5,7 @@ import {
   AzureOpenAIEmbeddings,
   BaseDocumentLoader,
   BaseLanguageModel,
+  ChatOllama,
   ChatOpenAI,
   CheerioWebBaseLoader,
   DFSFileHandlerResolver,
@@ -111,6 +112,10 @@ import {
 } from "../eac/EaCDFSDocumentLoaderDetails.ts";
 import { EaCPersonalityDetails } from "../eac/EaCPersonalityDetails.ts";
 import { loadRetrieverDocs } from "../utils/loadRetrieverDocs.ts";
+import {
+  EaCOllamaLLMDetails,
+  isEaCOllamaLLMDetails,
+} from "../eac/llms/EaCOllamaLLMDetails.ts";
 import {
   EaCOpenAILLMDetails,
   isEaCOpenAILLMDetails,
@@ -592,6 +597,41 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               const llm = new ChatOpenAI({
                 openAIApiKey: llmDetails.APIKey,
                 modelName: llmDetails.ModelName,
+                temperature: 0.7,
+                streaming: llmDetails.Streaming,
+                ...(llmDetails.InputParams || {}),
+              });
+
+              if (llmDetails.ToolLookups?.length) {
+                const tools = await resolveTools(llmDetails.ToolLookups!, ioc);
+
+                return llm.bindTools(
+                  tools,
+                  // llmDetails.ToolsAsFunctions
+                  //   ?
+                  // tools.map(formatToOpenAIFunction)
+                  //   :
+                  // tools.map(formatToOpenAITool)
+                );
+              }
+
+              return llm;
+            },
+            {
+              Lazy: false,
+              Name: `${aiLookup}|${llmLookup}`,
+              Type: ioc.Symbol(BaseLanguageModel.name),
+            },
+          );
+        } else if (isEaCOllamaLLMDetails(llm.Details)) {
+          const llmDetails = llm.Details as EaCOllamaLLMDetails;
+
+          ioc.Register(
+            ChatOpenAI,
+            async (ioc) => {
+              const llm = new ChatOllama({
+                baseUrl: llmDetails.Instance,
+                model: llmDetails.ModelName,
                 temperature: 0.7,
                 streaming: llmDetails.Streaming,
                 ...(llmDetails.InputParams || {}),
