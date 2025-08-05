@@ -23,11 +23,11 @@ export {
   type OpenAIBaseInput,
 } from "npm:@langchain/openai@0.4.5";
 
-export {
-  ChatOllama,
-  OllamaEmbeddings,
-  type OllamaInput,
-} from "npm:@langchain/ollama@0.2.3";
+// export {
+//   ChatOllama,
+//   OllamaEmbeddings,
+//   type OllamaInput,
+// } from "npm:@langchain/ollama@0.2.0";
 
 export { CheerioWebBaseLoader } from "npm:@langchain/community@0.3.36/document_loaders/web/cheerio";
 // export { PDFLoader } from "npm:@langchain/community@0.3.36/document_loaders/fs/pdf";
