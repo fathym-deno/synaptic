@@ -13,12 +13,12 @@ Describes the state schema for a circuit.
 
 ### Helper
 
-`buildState(builder: (sb: StateBuilder) => StateBuilder): Record<string, Annotation>` wraps the builder pattern.
+`BuildState(builder: (sb: StateBuilder) => StateBuilder): Record<string, Annotation>` wraps the builder pattern.
 
 ## Example
 
 ```ts
-const state = buildState((s) =>
+const state = BuildState((s) =>
   s.Field("messages", {
     reducer: (x: string[], y: string[]) => x.concat(y),
     default: () => [],

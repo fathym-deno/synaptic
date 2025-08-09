@@ -10,7 +10,7 @@ import {
   PersonalityBuilder,
   ToolBuilder,
 } from "../../src/fluent/resources/index.ts";
-import { buildState } from "../../src/fluent/state/StateBuilder.ts";
+import { BuildState } from "../../src/fluent/state/StateBuilder.ts";
 
 // Define resources
 const llm = new LLMBuilder("thinky-llm", {
@@ -32,7 +32,7 @@ const searchTool = new ToolBuilder("search", {
 });
 
 // Circuit state
-const state = buildState((s) =>
+const state = BuildState((s) =>
   s.Field("messages", {
     reducer: (x: string[], y: string[]) => x.concat(y),
     default: () => [],

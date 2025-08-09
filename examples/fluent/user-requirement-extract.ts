@@ -6,11 +6,11 @@ import {
 } from "../../src/fluent/circuits/_exports.ts";
 import { PersonalityBuilder } from "../../src/fluent/resources/PersonalityBuilder.ts";
 import { ToolBuilder } from "../../src/fluent/resources/ToolBuilder.ts";
-import { buildState } from "../../src/fluent/state/StateBuilder.ts";
+import { BuildState } from "../../src/fluent/state/StateBuilder.ts";
 import { InputBuilder } from "../../src/fluent/state/InputBuilder.ts";
 
 // Define circuit state and typed input
-const state = buildState((s) =>
+const state = BuildState((s) =>
   s.Field("text", {
     reducer: (_x, y: string) => y,
     default: () => "",

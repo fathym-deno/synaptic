@@ -27,7 +27,7 @@ export class StateBuilder<
   }
 }
 
-export function buildState<T>(
+export function BuildState<T>(
   builder: (sb: StateBuilder) => StateBuilder<T>,
 ): Record<string, ReturnType<typeof Annotation>> {
   const sb = builder(new StateBuilder());
