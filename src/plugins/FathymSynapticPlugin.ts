@@ -807,7 +807,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                       details.LoaderLookups.map(async (loaderLookup) => {
                         const loader = await ioc.Resolve<BaseDocumentLoader>(
                           ioc.Symbol("DocumentLoader"),
-                          loaderLookup,
+                          documentLoaderToken(loaderLookup, aiLookup),
                         );
 
                         return await loader.load();
@@ -1001,7 +1001,10 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
             const vectorStore = await ioc.Resolve<VectorStore>(
               ioc.Symbol(VectorStore.name),
-              retriever.Details!.VectorStoreLookup,
+              vectorStoreToken(
+                retriever.Details!.VectorStoreLookup,
+                aiLookup,
+              ),
             );
 
             await ioc.Register(() => vectorStore.asRetriever(), {
@@ -1217,7 +1220,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
           const embeddings = await ioc.Resolve<Embeddings>(
             ioc.Symbol(Embeddings.name),
-            vectorStore.Details!.EmbeddingsLookup,
+            embeddingsToken(vectorStore.Details!.EmbeddingsLookup, aiLookup),
           );
 
           if (isEaCAzureSearchAIVectorStoreDetails(vectorStore.Details)) {
