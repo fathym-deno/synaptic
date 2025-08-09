@@ -11,7 +11,7 @@ export class VectorStoreBuilder<
     super(lookup, details);
   }
 
-  build(): Record<string, EaCVectorStoreAsCode> {
-    return this.buildAs();
+  Build(): Record<string, EaCVectorStoreAsCode> {
+    return this.BuildAs();
   }
 }

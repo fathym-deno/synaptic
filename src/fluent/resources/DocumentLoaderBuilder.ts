@@ -11,7 +11,7 @@ export class DocumentLoaderBuilder<
     super(lookup, details);
   }
 
-  build(): Record<string, EaCDocumentLoaderAsCode> {
-    return this.buildAs();
+  Build(): Record<string, EaCDocumentLoaderAsCode> {
+    return this.BuildAs();
   }
 }

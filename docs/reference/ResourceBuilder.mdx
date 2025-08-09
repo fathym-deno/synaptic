@@ -18,7 +18,7 @@ Creates a builder with an identifier and resource `details`.
 
 ## Methods
 
-- `protected buildAs(): Record<string, TAsCode>` – helper that produces the EverythingAsCode representation used by subclasses.
+- `protected BuildAs(): Record<string, TAsCode>` – helper that produces the EverythingAsCode representation used by subclasses.
 
 ## Example
 
@@ -28,8 +28,8 @@ class MyBuilder extends ResourceBuilder<MyDetails, MyAsCode, "My"> {
     super(lookup, details);
   }
 
-  build() {
-    return this.buildAs();
+  Build() {
+    return this.BuildAs();
   }
 }
 ```

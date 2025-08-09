@@ -11,7 +11,7 @@ export class RetrieverBuilder<
     super(lookup, details);
   }
 
-  build(): Record<string, EaCRetrieverAsCode> {
-    return this.buildAs();
+  Build(): Record<string, EaCRetrieverAsCode> {
+    return this.BuildAs();
   }
 }

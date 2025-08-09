@@ -11,7 +11,7 @@ export class PersistenceBuilder<
     super(lookup, details);
   }
 
-  build(): Record<string, EaCPersistenceAsCode> {
-    return this.buildAs();
+  Build(): Record<string, EaCPersistenceAsCode> {
+    return this.BuildAs();
   }
 }

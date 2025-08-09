@@ -11,7 +11,7 @@ export class EmbeddingsBuilder<
     super(lookup, details);
   }
 
-  build(): Record<string, EaCEmbeddingsAsCode> {
-    return this.buildAs();
+  Build(): Record<string, EaCEmbeddingsAsCode> {
+    return this.BuildAs();
   }
 }

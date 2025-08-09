@@ -39,7 +39,7 @@ const circuit = new GraphCircuitBuilder()
 export const eac = {
   AIs: {
     example: {
-      Personalities: piratePersona.build(),
+      Personalities: piratePersona.Build(),
     },
   },
   Circuits: {

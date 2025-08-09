@@ -11,7 +11,7 @@ export class TextSplitterBuilder<
     super(lookup, details);
   }
 
-  build(): Record<string, EaCTextSplitterAsCode> {
-    return this.buildAs();
+  Build(): Record<string, EaCTextSplitterAsCode> {
+    return this.BuildAs();
   }
 }

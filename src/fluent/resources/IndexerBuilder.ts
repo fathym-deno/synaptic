@@ -11,7 +11,7 @@ export class IndexerBuilder<
     super(lookup, details);
   }
 
-  build(): Record<string, EaCIndexerAsCode> {
-    return this.buildAs();
+  Build(): Record<string, EaCIndexerAsCode> {
+    return this.BuildAs();
   }
 }
