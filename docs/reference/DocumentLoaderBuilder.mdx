@@ -1,0 +1,25 @@
+---
+title: DocumentLoaderBuilder
+---
+
+# DocumentLoaderBuilder
+
+Defines `DocumentLoader` resources for loading raw documents.
+
+## Constructor
+
+`new DocumentLoaderBuilder(lookup: string, details: EaCDocumentLoaderDetails)`
+
+- **lookup** – unique identifier.
+- **details** – `EaCDocumentLoaderDetails` with loader configuration.
+
+## Methods
+
+- `build(): Record<string, EaCDocumentLoaderAsCode>` – EverythingAsCode output.
+
+## Example
+
+```ts
+const loader = new DocumentLoaderBuilder("fs", { /* EaCDocumentLoaderDetails */ });
+const eac = loader.build();
+```

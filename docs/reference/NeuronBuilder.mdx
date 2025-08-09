@@ -1,0 +1,28 @@
+---
+title: NeuronBuilder
+---
+
+# NeuronBuilder
+
+Abstract base for all neuron builders.
+
+## Constructor
+
+`protected constructor(lookup: string, details: EaCNeuronLike)`
+
+- **lookup** – neuron identifier.
+- **details** – configuration describing the neuron.
+
+## Methods
+
+- `build(): Record<string, EaCNeuronLike>` – EverythingAsCode fragment for the neuron.
+
+## Example
+
+```ts
+class MyNeuron extends NeuronBuilder<MyDetails> {
+  constructor(id: string, details: MyDetails) {
+    super(id, details);
+  }
+}
+```

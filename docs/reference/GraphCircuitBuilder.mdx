@@ -1,0 +1,25 @@
+---
+title: GraphCircuitBuilder
+---
+
+# GraphCircuitBuilder
+
+Assembles neurons into an arbitrary graph circuit.
+
+## Methods
+
+- `state(state: StateDefinition): this` – attach a state schema.
+- `neuron(builder: NeuronBuilder): this` – register a neuron by its id.
+- `edge(from).to(target, options?)` – connect neurons with optional `EaCGraphCircuitEdge` options.
+- `build(): EaCGraphCircuitDetails` – create the circuit definition.
+
+## Example
+
+```ts
+const circuit = new GraphCircuitBuilder()
+  .state(state)
+  .neuron(agent)
+  .edge({ id: START } as any).to(agent)
+  .edge(agent).to(END)
+  .build();
+```

@@ -1,0 +1,27 @@
+---
+title: StateBuilder
+---
+
+# StateBuilder
+
+Describes the state schema for a circuit.
+
+## Methods
+
+- `Field(name, { reducer?, default? }): this` – add a state field with optional reducer and default value.
+- `Build(): Record<string, Annotation>` – finalize the state definition.
+
+### Helper
+
+`buildState(builder: (sb: StateBuilder) => StateBuilder): Record<string, Annotation>` wraps the builder pattern.
+
+## Example
+
+```ts
+const state = buildState((s) =>
+  s.Field("messages", {
+    reducer: (x: string[], y: string[]) => x.concat(y),
+    default: () => [],
+  })
+);
+```

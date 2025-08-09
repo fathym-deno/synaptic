@@ -1,0 +1,23 @@
+---
+title: LinearCircuitBuilder
+---
+
+# LinearCircuitBuilder
+
+Creates simple linear sequences of neurons.
+
+## Methods
+
+- `neuron(builder: NeuronBuilder): this` – add a neuron to the circuit.
+- `chain(...nodes: NeuronBuilder[])` – declare the ordered sequence to execute.
+- `build(): EaCLinearCircuitDetails` – output the circuit definition.
+
+## Example
+
+```ts
+const circuit = new LinearCircuitBuilder()
+  .neuron(a)
+  .neuron(b)
+  .chain(a, b)
+  .build();
+```

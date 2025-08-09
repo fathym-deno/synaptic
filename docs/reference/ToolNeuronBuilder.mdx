@@ -1,0 +1,25 @@
+---
+title: ToolNeuronBuilder
+---
+
+# ToolNeuronBuilder
+
+Creates a neuron that invokes a registered tool.
+
+## Constructor
+
+`new ToolNeuronBuilder(id: string, tool: ToolId)`
+
+- **id** – neuron identifier.
+- **tool** – `ToolId` to execute.
+
+## Methods
+
+- `build(): Record<string, EaCToolNeuron>` – EverythingAsCode fragment.
+
+## Example
+
+```ts
+const neuron = new ToolNeuronBuilder("call-search", tool.id);
+const eac = neuron.build();
+```

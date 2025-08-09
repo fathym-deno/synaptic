@@ -1,0 +1,25 @@
+---
+title: VectorStoreBuilder
+---
+
+# VectorStoreBuilder
+
+Creates `VectorStore` resources for embedding storage.
+
+## Constructor
+
+`new VectorStoreBuilder(lookup: string, details: EaCVectorStoreDetails)`
+
+- **lookup** – identifier for the store.
+- **details** – `EaCVectorStoreDetails` describing persistence options.
+
+## Methods
+
+- `build(): Record<string, EaCVectorStoreAsCode>` – EverythingAsCode fragment.
+
+## Example
+
+```ts
+const store = new VectorStoreBuilder("mem", { /* EaCVectorStoreDetails */ });
+const eac = store.build();
+```

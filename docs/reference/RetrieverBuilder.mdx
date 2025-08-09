@@ -1,0 +1,25 @@
+---
+title: RetrieverBuilder
+---
+
+# RetrieverBuilder
+
+Creates `Retriever` resources for fetching relevant documents.
+
+## Constructor
+
+`new RetrieverBuilder(lookup: string, details: EaCRetrieverDetails)`
+
+- **lookup** – unique identifier.
+- **details** – `EaCRetrieverDetails` configuring the retriever.
+
+## Methods
+
+- `build(): Record<string, EaCRetrieverAsCode>` – EverythingAsCode fragment.
+
+## Example
+
+```ts
+const retriever = new RetrieverBuilder("vec", { /* EaCRetrieverDetails */ });
+const eac = retriever.build();
+```

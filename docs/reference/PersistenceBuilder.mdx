@@ -1,0 +1,25 @@
+---
+title: PersistenceBuilder
+---
+
+# PersistenceBuilder
+
+Creates `Persistence` resources for storing state.
+
+## Constructor
+
+`new PersistenceBuilder(lookup: string, details: EaCPersistenceDetails)`
+
+- **lookup** – identifier for the persistence backend.
+- **details** – `EaCPersistenceDetails` describing storage options.
+
+## Methods
+
+- `build(): Record<string, EaCPersistenceAsCode>` – build EverythingAsCode fragment.
+
+## Example
+
+```ts
+const persistence = new PersistenceBuilder("kv", { /* EaCPersistenceDetails */ });
+const eac = persistence.build();
+```

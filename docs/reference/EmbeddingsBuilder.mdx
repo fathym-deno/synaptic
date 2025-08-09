@@ -1,0 +1,25 @@
+---
+title: EmbeddingsBuilder
+---
+
+# EmbeddingsBuilder
+
+Creates `Embeddings` resources used for vector generation.
+
+## Constructor
+
+`new EmbeddingsBuilder(lookup: string, details: EaCEmbeddingsDetails)`
+
+- **lookup** – unique identifier.
+- **details** – `EaCEmbeddingsDetails` options for the embeddings model.
+
+## Methods
+
+- `build(): Record<string, EaCEmbeddingsAsCode>` – produce EverythingAsCode output.
+
+## Example
+
+```ts
+const emb = new EmbeddingsBuilder("openai", { /* EaCEmbeddingsDetails */ });
+const eac = emb.build();
+```
