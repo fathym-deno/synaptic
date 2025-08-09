@@ -15,11 +15,11 @@ Creates a neuron that invokes a registered tool.
 
 ## Methods
 
-- `build(): Record<string, EaCToolNeuron>` – EverythingAsCode fragment.
+- `Build(): Record<string, EaCToolNeuron>` – EverythingAsCode fragment.
 
 ## Example
 
 ```ts
 const neuron = new ToolNeuronBuilder("call-search", tool.id);
-const eac = neuron.build();
+const eac = neuron.Build();
 ```

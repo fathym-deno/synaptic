@@ -56,8 +56,8 @@ const circuit = new LinearCircuitBuilder()
 export const eac = {
   AIs: {
     example: {
-      Personalities: persona.build(),
-      Tools: extractTool.build(),
+      Personalities: persona.Build(),
+      Tools: extractTool.Build(),
     },
   },
   Circuits: {

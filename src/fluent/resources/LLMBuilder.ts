@@ -11,7 +11,7 @@ export class LLMBuilder<
     super(lookup, details);
   }
 
-  build(): Record<string, EaCLLMAsCode> {
-    return this.buildAs();
+  Build(): Record<string, EaCLLMAsCode> {
+    return this.BuildAs();
   }
 }

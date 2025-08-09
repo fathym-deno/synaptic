@@ -11,7 +11,7 @@ export class PersonalityBuilder<
     super(lookup, details);
   }
 
-  build(): Record<string, EaCPersonalityAsCode> {
-    return this.buildAs();
+  Build(): Record<string, EaCPersonalityAsCode> {
+    return this.BuildAs();
   }
 }

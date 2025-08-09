@@ -16,7 +16,7 @@ export abstract class ResourceBuilder<
     this.id = lookup as Brand<string, TBrand>;
   }
 
-  protected buildAs(): Record<string, TAsCode> {
+  protected BuildAs(): Record<string, TAsCode> {
     return { [this.lookup]: { Details: this.details } as TAsCode };
   }
 }

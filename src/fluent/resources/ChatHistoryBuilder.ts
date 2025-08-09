@@ -11,7 +11,7 @@ export class ChatHistoryBuilder<
     super(lookup, details);
   }
 
-  build(): Record<string, EaCChatHistoryAsCode> {
-    return this.buildAs();
+  Build(): Record<string, EaCChatHistoryAsCode> {
+    return this.BuildAs();
   }
 }

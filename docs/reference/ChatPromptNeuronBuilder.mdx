@@ -19,7 +19,7 @@ Builds a neuron that sends chat prompts to an LLM.
 
 ## Methods
 
-- `build(): Record<string, EaCChatPromptNeuron>` – EverythingAsCode fragment for the neuron.
+- `Build(): Record<string, EaCChatPromptNeuron>` – EverythingAsCode fragment for the neuron.
 
 ## Example
 
@@ -28,5 +28,5 @@ const agent = new ChatPromptNeuronBuilder("agent", {
   personality: persona.id,
   newMessages: [["human", "{input}"]],
 });
-const neuron = agent.build();
+const neuron = agent.Build();
 ```

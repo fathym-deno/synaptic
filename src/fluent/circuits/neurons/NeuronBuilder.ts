@@ -10,7 +10,7 @@ export abstract class NeuronBuilder<TDetails extends EaCNeuronLike> {
     this.id = lookup;
   }
 
-  build(): Record<string, TDetails> {
+  Build(): Record<string, TDetails> {
     return { [this.lookup]: this.details };
   }
 }

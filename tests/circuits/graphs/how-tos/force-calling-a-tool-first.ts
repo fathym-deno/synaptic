@@ -57,7 +57,7 @@ Deno.test("Graph Force Calling a Tool First Circuits", async (t) => {
           },
         },
         Tools: {
-          ...testTool.build(),
+          ...testTool.Build(),
         },
       },
     },

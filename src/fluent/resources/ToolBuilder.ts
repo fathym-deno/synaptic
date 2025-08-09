@@ -11,7 +11,7 @@ export class ToolBuilder<
     super(lookup, details);
   }
 
-  build(): Record<string, EaCToolAsCode> {
-    return this.buildAs();
+  Build(): Record<string, EaCToolAsCode> {
+    return this.BuildAs();
   }
 }

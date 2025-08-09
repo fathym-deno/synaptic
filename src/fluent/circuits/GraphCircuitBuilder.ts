@@ -67,7 +67,7 @@ export class GraphCircuitBuilder<
   Build(): EaCGraphCircuitDetails {
     const neurons: Record<string, unknown> = {};
     for (const key in this.#neurons) {
-      Object.assign(neurons, this.#neurons[key].build());
+      Object.assign(neurons, this.#neurons[key].Build());
     }
 
     return {

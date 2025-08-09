@@ -15,11 +15,11 @@ Creates `Personality` resources that influence agent behavior.
 
 ## Methods
 
-- `build(): Record<string, EaCPersonalityAsCode>` – EverythingAsCode output.
+- `Build(): Record<string, EaCPersonalityAsCode>` – EverythingAsCode output.
 
 ## Example
 
 ```ts
 const persona = new PersonalityBuilder("pirate", { Instructions: ["Talk like a pirate"] });
-const eac = persona.build();
+const eac = persona.Build();
 ```

@@ -66,9 +66,9 @@ const circuit = new GraphCircuitBuilder()
 export const eac = {
   AIs: {
     example: {
-      LLMs: llm.build(),
-      Personalities: persona.build(),
-      Tools: searchTool.build(),
+      LLMs: llm.Build(),
+      Personalities: persona.Build(),
+      Tools: searchTool.Build(),
     },
   },
   Circuits: {

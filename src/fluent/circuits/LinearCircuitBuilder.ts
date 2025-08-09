@@ -29,7 +29,7 @@ export class LinearCircuitBuilder<
   Build(): EaCLinearCircuitDetails {
     const neurons: Record<string, any> = {};
     for (const key in this.#neurons) {
-      Object.assign(neurons, this.#neurons[key].build());
+      Object.assign(neurons, this.#neurons[key].Build());
     }
 
     if (this.#sequence.length) {
