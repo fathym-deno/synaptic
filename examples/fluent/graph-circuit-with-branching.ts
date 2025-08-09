@@ -1,4 +1,5 @@
-import { START, END } from "npm:@langchain/langgraph@0.2.56";
+// deno-lint-ignore-file no-explicit-any
+import { END, START } from "npm:@langchain/langgraph@0.2.56";
 import { GraphCircuitBuilder } from "../../src/fluent/circuits/_exports.ts";
 import { NeuronBuilder } from "../../src/fluent/circuits/neurons/NeuronBuilder.ts";
 import { EaCPassthroughNeuron } from "../../src/eac/neurons/EaCPassthroughNeuron.ts";
@@ -34,11 +35,16 @@ const circuit = new GraphCircuitBuilder()
   .Neuron(b)
   .Neuron(c)
   .Neuron(d)
-  .Edge({ id: START } as any).To(a)
-  .Edge(a).To([b, c])
-  .Edge(b).To(d)
-  .Edge(c).To(d)
-  .Edge(d).To(END)
+  .Edge({ id: START } as any)
+  .To(a)
+  .Edge(a)
+  .To([b, c])
+  .Edge(b)
+  .To(d)
+  .Edge(c)
+  .To(d)
+  .Edge(d)
+  .To(END)
   .Build();
 
 export const eac = {

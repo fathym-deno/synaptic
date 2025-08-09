@@ -17,7 +17,8 @@ const extractTool = new ToolBuilder("extract", {
   Name: "extract",
   Description: "Extract user requirements from text",
   Schema: z.object({ text: z.string() }),
-  Action: async (input: { text: string }) => `User requires: ${input.text}`,
+  Action: (input: { text: string }) =>
+    Promise.resolve(`User requires: ${input.text}`),
 });
 
 // Build neurons for the linear flow

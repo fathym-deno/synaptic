@@ -1,4 +1,5 @@
-import { Annotation, START, END } from "npm:@langchain/langgraph@0.2.56";
+// deno-lint-ignore-file no-explicit-any
+import { END, START } from "npm:@langchain/langgraph@0.2.56";
 import {
   ChatPromptNeuronBuilder,
   GraphCircuitBuilder,
@@ -30,9 +31,11 @@ const circuit = new GraphCircuitBuilder()
   .State(state)
   .Neuron(agent)
   // Start -> agent
-  .Edge({ id: START } as any).To(agent)
+  .Edge({ id: START } as any)
+  .To(agent)
   // agent -> END
-  .Edge(agent).To(END)
+  .Edge(agent)
+  .To(END)
   .Build();
 
 // Export an EverythingAsCode fragment representing the circuit

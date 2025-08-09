@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any ban-types
 import {
   EaCGraphCircuitDetails,
   EaCGraphCircuitEdge,
@@ -35,7 +36,7 @@ export class GraphCircuitBuilder<
         Target extends
           | TNeurons[keyof TNeurons]
           | TNeurons[keyof TNeurons][]
-          | Record<string, TNeurons[keyof TNeurons]>
+          | Record<string, TNeurons[keyof TNeurons]>,
       >(
         target: Target,
         options?: Omit<EaCGraphCircuitEdge, "Node">,

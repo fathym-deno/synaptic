@@ -20,7 +20,9 @@ Deno.test("LinearCircuitBuilder builds linear flow", () => {
     .Build();
 
   assertEquals(details.Neurons[""], "agent");
-  const agentDetails = details.Neurons["agent"] as { Neurons: Record<string, string> };
+  const agentDetails = details.Neurons["agent"] as {
+    Neurons: Record<string, string>;
+  };
   assertEquals(agentDetails.Neurons[""], "tool");
   assertEquals(details.Type, "Linear");
 });

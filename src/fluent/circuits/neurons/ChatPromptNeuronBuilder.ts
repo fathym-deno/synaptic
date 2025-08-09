@@ -11,7 +11,8 @@ export type ChatPromptNeuronOptions = {
   systemMessage?: string;
 };
 
-export class ChatPromptNeuronBuilder extends NeuronBuilder<EaCChatPromptNeuron> {
+export class ChatPromptNeuronBuilder
+  extends NeuronBuilder<EaCChatPromptNeuron> {
   constructor(lookup: string, options: ChatPromptNeuronOptions = {}) {
     super(lookup, {
       Type: "ChatPrompt",

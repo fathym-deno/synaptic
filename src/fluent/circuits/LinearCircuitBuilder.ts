@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any ban-types
 import { EaCLinearCircuitDetails } from "../../eac/EaCLinearCircuitDetails.ts";
 import { NeuronBuilder } from "./neurons/NeuronBuilder.ts";
 
@@ -7,14 +8,11 @@ export class LinearCircuitBuilder<
   #neurons: Record<string, NeuronBuilder<any>> = {};
   #sequence: string[] = [];
 
-  Neuron<
-    K extends string,
-    N extends NeuronBuilder<any> & { id: K },
-  >(builder: N): LinearCircuitBuilder<TNeurons & { [P in K]: N }> {
+  Neuron<K extends string, N extends NeuronBuilder<any> & { id: K }>(
+    builder: N,
+  ): LinearCircuitBuilder<TNeurons & { [P in K]: N }> {
     this.#neurons[builder.id] = builder;
-    return this as unknown as LinearCircuitBuilder<
-      TNeurons & { [P in K]: N }
-    >;
+    return this as unknown as LinearCircuitBuilder<TNeurons & { [P in K]: N }>;
   }
 
   Chain<
@@ -48,4 +46,3 @@ export class LinearCircuitBuilder<
     } as EaCLinearCircuitDetails;
   }
 }
-
