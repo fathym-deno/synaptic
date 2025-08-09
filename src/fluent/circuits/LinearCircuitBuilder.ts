@@ -7,7 +7,7 @@ export class LinearCircuitBuilder<
   #neurons: Record<string, NeuronBuilder<any>> = {};
   #sequence: string[] = [];
 
-  neuron<
+  Neuron<
     K extends string,
     N extends NeuronBuilder<any> & { id: K },
   >(builder: N): LinearCircuitBuilder<TNeurons & { [P in K]: N }> {
@@ -17,7 +17,7 @@ export class LinearCircuitBuilder<
     >;
   }
 
-  chain<
+  Chain<
     A extends TNeurons[keyof TNeurons],
     B extends TNeurons[keyof TNeurons],
     Rest extends TNeurons[keyof TNeurons][] = [],
@@ -26,7 +26,7 @@ export class LinearCircuitBuilder<
     return this;
   }
 
-  build(): EaCLinearCircuitDetails {
+  Build(): EaCLinearCircuitDetails {
     const neurons: Record<string, any> = {};
     for (const key in this.#neurons) {
       Object.assign(neurons, this.#neurons[key].build());

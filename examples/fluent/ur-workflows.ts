@@ -49,18 +49,18 @@ const tool = new ToolNeuronBuilder("search-tool", searchTool.id);
 
 // Assemble the graph circuit with typed edges
 const circuit = new GraphCircuitBuilder()
-  .state(state)
-  .neuron(agent)
-  .neuron(tool)
-  .edge({ id: START } as { id: typeof START }).to(agent)
-  .edge(agent).to({ [END]: END, tools: tool }, {
+  .State(state)
+  .Neuron(agent)
+  .Neuron(tool)
+  .Edge({ id: START } as { id: typeof START }).To(agent)
+  .Edge(agent).To({ [END]: END, tools: tool }, {
     Condition: (s: { messages: string[] }) => {
       const last = s.messages.at(-1) ?? "";
       return last.includes("search") ? "tools" : END;
     },
   })
-  .edge(tool).to(agent)
-  .build();
+  .Edge(tool).To(agent)
+  .Build();
 
 // Export EverythingAsCode fragment
 export const eac = {

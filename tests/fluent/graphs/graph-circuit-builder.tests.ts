@@ -14,11 +14,11 @@ Deno.test("GraphCircuitBuilder builds graph", () => {
   const tool = new ToolNeuronBuilder("tool", "t" as ToolId);
 
   const details = new GraphCircuitBuilder()
-    .neuron(agent)
-    .neuron(tool)
-    .edge(agent)
-    .to(tool)
-    .build();
+    .Neuron(agent)
+    .Neuron(tool)
+    .Edge(agent)
+    .To(tool)
+    .Build();
 
   assertEquals(Object.keys(details.Neurons ?? {}), ["agent", "tool"]);
   assertEquals(details.Edges.agent, "tool");
