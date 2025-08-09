@@ -24,3 +24,12 @@ provides the tools and infrastructure you need to bring your ideas to life.
 
 Join us in redefining what bots can do. Welcome to the future of bot building
 with Synaptic.
+
+## Fluent Builder Examples
+
+Synaptic now includes fluent builders for defining circuits directly in
+TypeScript. Check out the [migration guide](docs/fluent/migration-guide.mdx) and
+the [fluent examples](examples/fluent/basic-chat.ts) to get started.
+
+Runtime packages under `*-synaptic-runtimes` also reference these examples to
+encourage adoption.

@@ -1,0 +1,65 @@
+# Migrating to Fluent Builders
+
+Synaptic originally defined circuits using JSON structures. The new fluent builders offer a type-safe and composable way to declare circuits directly in TypeScript.
+
+## Basic Chat Example
+
+### Previous JSON Circuit
+
+```ts
+{
+  "Circuits": {
+    "basic-chat": {
+      "Details": {
+        "Type": "Linear",
+        "Neurons": {
+          "": [
+            "test-chat",
+            {
+              "NewMessages": [["human", "{input}"]]
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+### Fluent Builder Version
+
+```ts
+import { Annotation, START, END } from "npm:@langchain/langgraph@0.2.56";
+import {
+  ChatPromptNeuronBuilder,
+  GraphCircuitBuilder,
+} from "../../src/fluent/circuits/_exports.ts";
+import { PersonalityBuilder } from "../../src/fluent/resources/PersonalityBuilder.ts";
+import { buildState } from "../../src/fluent/state/StateBuilder.ts";
+
+const persona = new PersonalityBuilder("pirate", {
+  Instructions: ["Answer like a pirate"],
+});
+
+const state = buildState((s) =>
+  s.Field("messages", {
+    reducer: (x: string[], y: string[]) => x.concat(y),
+    default: () => [],
+  })
+);
+
+const agent = new ChatPromptNeuronBuilder("agent", {
+  personality: persona.id,
+  newMessages: [["human", "{input}"]],
+});
+
+const circuit = new GraphCircuitBuilder()
+  .state(state)
+  .neuron(agent)
+  .edge({ id: START } as any).to(agent)
+  .edge(agent).to(END)
+  .build();
+```
+
+The fluent version uses builders to define resources, state, and edges in a concise, expressive way. See the full example in [`examples/fluent/basic-chat.ts`](../../examples/fluent/basic-chat.ts).
+
