@@ -16,7 +16,7 @@ export class StateBuilder<
   ): StateBuilder<TState & Record<K, V>> {
     this.schema[name] = Annotation<V>({
       default: options.default,
-      reducer: options.reducer,
+      reducer: options.reducer ?? ((_, update) => update),
     });
 
     return this as unknown as StateBuilder<TState & Record<K, V>>;
@@ -27,7 +27,7 @@ export class StateBuilder<
   }
 }
 
-export function BuildState<T>(
+export function BuildState<T extends Record<string, unknown>>(
   builder: (sb: StateBuilder) => StateBuilder<T>,
 ): Record<string, ReturnType<typeof Annotation>> {
   const sb = builder(new StateBuilder());
