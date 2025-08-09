@@ -25,11 +25,15 @@ provides the tools and infrastructure you need to bring your ideas to life.
 Join us in redefining what bots can do. Welcome to the future of bot building
 with Synaptic.
 
-## Fluent Builder Examples
+## Fluent API
 
-Synaptic now includes fluent builders for defining circuits directly in
-TypeScript. Check out the [migration guide](docs/fluent/migration-guide.mdx) and
-the [fluent examples](examples/fluent/basic-chat.ts) to get started.
+Synaptic's fluent API lets you construct resources, state, and circuits directly
+in TypeScript with strong typing and composability. It removes fragile JSON
+wiring and makes circuits easier to read and maintain.
+
+Start building with the [Fluent Quick Start](docs/fluent/quick-start.mdx) and
+explore the [migration examples](docs/fluent/migration-guide.mdx) for guidance
+on converting existing JSON circuits.
 
 Runtime packages under `*-synaptic-runtimes` also reference these examples to
 encourage adoption.

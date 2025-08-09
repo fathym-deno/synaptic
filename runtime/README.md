@@ -1,6 +1,8 @@
 # Synaptic Runtimes
 
 Runtime packages built on Synaptic can leverage the new fluent circuit builders.
-See the [fluent examples](../examples/fluent/basic-chat.ts) for a
-self-contained circuit and the [migration guide](../docs/fluent/migration-guide.mdx)
-to convert existing JSON circuits.
+
+Get started with the [Fluent Quick Start](../docs/fluent/quick-start.mdx), then
+explore the [fluent examples](../examples/fluent/basic-chat.ts) for a
+self-contained circuit. To convert existing JSON circuits, follow the
+[migration guide](../docs/fluent/migration-guide.mdx).
