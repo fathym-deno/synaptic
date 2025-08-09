@@ -13,12 +13,12 @@ export class GraphCircuitBuilder<
   #neurons: Record<string, NeuronBuilder<any>> = {};
   #edges: Record<string, EaCGraphCircuitEdgeLike> = {};
 
-  state(state: StateDefinition): this {
+  State(state: StateDefinition): this {
     this.#state = state;
     return this;
   }
 
-  neuron<
+  Neuron<
     K extends string,
     N extends NeuronBuilder<any> & { id: K },
   >(builder: N): GraphCircuitBuilder<TNeurons & { [P in K]: N }> {
@@ -28,10 +28,10 @@ export class GraphCircuitBuilder<
     >;
   }
 
-  edge<From extends keyof TNeurons>(from: TNeurons[From]) {
+  Edge<From extends keyof TNeurons>(from: TNeurons[From]) {
     const fromId = from.id;
     return {
-      to: <
+      To: <
         Target extends
           | TNeurons[keyof TNeurons]
           | TNeurons[keyof TNeurons][]
@@ -64,7 +64,7 @@ export class GraphCircuitBuilder<
     };
   }
 
-  build(): EaCGraphCircuitDetails {
+  Build(): EaCGraphCircuitDetails {
     const neurons: Record<string, unknown> = {};
     for (const key in this.#neurons) {
       Object.assign(neurons, this.#neurons[key].build());

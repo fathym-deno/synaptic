@@ -8,18 +8,18 @@ Assembles neurons into an arbitrary graph circuit.
 
 ## Methods
 
-- `state(state: StateDefinition): this` – attach a state schema.
-- `neuron(builder: NeuronBuilder): this` – register a neuron by its id.
-- `edge(from).to(target, options?)` – connect neurons with optional `EaCGraphCircuitEdge` options.
-- `build(): EaCGraphCircuitDetails` – create the circuit definition.
+- `State(state: StateDefinition): this` – attach a state schema.
+- `Neuron(builder: NeuronBuilder): this` – register a neuron by its id.
+- `Edge(from).To(target, options?)` – connect neurons with optional `EaCGraphCircuitEdge` options.
+- `Build(): EaCGraphCircuitDetails` – create the circuit definition.
 
 ## Example
 
 ```ts
 const circuit = new GraphCircuitBuilder()
-  .state(state)
-  .neuron(agent)
-  .edge({ id: START } as any).to(agent)
-  .edge(agent).to(END)
-  .build();
+  .State(state)
+  .Neuron(agent)
+  .Edge({ id: START } as any).To(agent)
+  .Edge(agent).To(END)
+  .Build();
 ```

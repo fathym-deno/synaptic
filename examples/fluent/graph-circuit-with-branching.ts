@@ -29,17 +29,17 @@ const c = new SimpleNeuron("c", "C");
 const d = new SimpleNeuron("d", "D");
 
 const circuit = new GraphCircuitBuilder()
-  .state(state)
-  .neuron(a)
-  .neuron(b)
-  .neuron(c)
-  .neuron(d)
-  .edge({ id: START } as any).to(a)
-  .edge(a).to([b, c])
-  .edge(b).to(d)
-  .edge(c).to(d)
-  .edge(d).to(END)
-  .build();
+  .State(state)
+  .Neuron(a)
+  .Neuron(b)
+  .Neuron(c)
+  .Neuron(d)
+  .Edge({ id: START } as any).To(a)
+  .Edge(a).To([b, c])
+  .Edge(b).To(d)
+  .Edge(c).To(d)
+  .Edge(d).To(END)
+  .Build();
 
 export const eac = {
   Circuits: {

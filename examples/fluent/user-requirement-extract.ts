@@ -47,10 +47,10 @@ const tool = new ToolNeuronBuilder("extract-tool", extractTool.id);
 
 // Assemble the linear circuit
 const circuit = new LinearCircuitBuilder()
-  .neuron(agent)
-  .neuron(tool)
-  .chain(agent, tool)
-  .build();
+  .Neuron(agent)
+  .Neuron(tool)
+  .Chain(agent, tool)
+  .Build();
 
 // Export EverythingAsCode fragment and typed input
 export const eac = {

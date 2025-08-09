@@ -14,10 +14,10 @@ Deno.test("LinearCircuitBuilder builds linear flow", () => {
   const tool = new ToolNeuronBuilder("tool", "t" as ToolId);
 
   const details = new LinearCircuitBuilder()
-    .neuron(agent)
-    .neuron(tool)
-    .chain(agent, tool)
-    .build();
+    .Neuron(agent)
+    .Neuron(tool)
+    .Chain(agent, tool)
+    .Build();
 
   assertEquals(details.Neurons[""], "agent");
   const agentDetails = details.Neurons["agent"] as { Neurons: Record<string, string> };

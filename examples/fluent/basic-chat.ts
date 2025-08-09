@@ -27,13 +27,13 @@ const agent = new ChatPromptNeuronBuilder("agent", {
 
 // Assemble the graph circuit with explicit edges
 const circuit = new GraphCircuitBuilder()
-  .state(state)
-  .neuron(agent)
+  .State(state)
+  .Neuron(agent)
   // Start -> agent
-  .edge({ id: START } as any).to(agent)
+  .Edge({ id: START } as any).To(agent)
   // agent -> END
-  .edge(agent).to(END)
-  .build();
+  .Edge(agent).To(END)
+  .Build();
 
 // Export an EverythingAsCode fragment representing the circuit
 export const eac = {

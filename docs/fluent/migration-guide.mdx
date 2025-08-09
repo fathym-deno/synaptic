@@ -54,11 +54,11 @@ const agent = new ChatPromptNeuronBuilder("agent", {
 });
 
 const circuit = new GraphCircuitBuilder()
-  .state(state)
-  .neuron(agent)
-  .edge({ id: START } as any).to(agent)
-  .edge(agent).to(END)
-  .build();
+  .State(state)
+  .Neuron(agent)
+  .Edge({ id: START } as any).To(agent)
+  .Edge(agent).To(END)
+  .Build();
 ```
 
 The fluent version uses builders to define resources, state, and edges in a concise, expressive way. See the full example in [`examples/fluent/basic-chat.ts`](../../examples/fluent/basic-chat.ts).
@@ -149,10 +149,10 @@ const agent = new ChatPromptNeuronBuilder("agent", {
 const tool = new ToolNeuronBuilder("extract-tool", extractTool.id);
 
 const circuit = new LinearCircuitBuilder()
-  .neuron(agent)
-  .neuron(tool)
-  .chain(agent, tool)
-  .build();
+  .Neuron(agent)
+  .Neuron(tool)
+  .Chain(agent, tool)
+  .Build();
 ```
 
 Using `buildState` and `InputBuilder` provides typed state and inputs, while `persona.id` and `extractTool.id` remove fragile string lookups from the JSON version. See the full example in [`examples/fluent/user-requirement-extract.ts`](../../examples/fluent/user-requirement-extract.ts).
@@ -215,17 +215,17 @@ const c = new SimpleNeuron("c", "C");
 const d = new SimpleNeuron("d", "D");
 
 const circuit = new GraphCircuitBuilder()
-  .state(state)
-  .neuron(a)
-  .neuron(b)
-  .neuron(c)
-  .neuron(d)
-  .edge({ id: START } as any).to(a)
-  .edge(a).to([b, c])
-  .edge(b).to(d)
-  .edge(c).to(d)
-  .edge(d).to(END)
-  .build();
+  .State(state)
+  .Neuron(a)
+  .Neuron(b)
+  .Neuron(c)
+  .Neuron(d)
+  .Edge({ id: START } as any).To(a)
+  .Edge(a).To([b, c])
+  .Edge(b).To(d)
+  .Edge(c).To(d)
+  .Edge(d).To(END)
+  .Build();
 ```
 
 Edges now reference builder instances directly instead of string IDs, eliminating string lookups. See [`examples/fluent/graph-circuit-with-branching.ts`](../../examples/fluent/graph-circuit-with-branching.ts) for the complete example.
@@ -282,16 +282,16 @@ const agent = new ChatPromptNeuronBuilder("agent", {
 const tool = new ToolNeuronBuilder("search-tool", searchTool.id);
 
   const circuit = new GraphCircuitBuilder()
-    .state(state)
-    .neuron(agent)
-    .neuron(tool)
-    .edge({ id: START } as { id: typeof START }).to(agent)
-    .edge(agent).to({ [END]: END, tools: tool }, {
-    Condition: (s: { messages: string[] }) =>
-      s.messages.at(-1)?.includes("search") ? "tools" : END,
-  })
-  .edge(tool).to(agent)
-  .build();
+    .State(state)
+    .Neuron(agent)
+    .Neuron(tool)
+    .Edge({ id: START } as { id: typeof START }).To(agent)
+    .Edge(agent).To({ [END]: END, tools: tool }, {
+      Condition: (s: { messages: string[] }) =>
+        s.messages.at(-1)?.includes("search") ? "tools" : END,
+    })
+  .Edge(tool).To(agent)
+  .Build();
 ```
 
 See [`examples/fluent/ur-workflows.ts`](../../examples/fluent/ur-workflows.ts) for the full example.
