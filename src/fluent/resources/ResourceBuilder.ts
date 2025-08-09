@@ -1,9 +1,9 @@
-import { EaCDetails } from "../../src.deps.ts";
+import { EaCDetails, EaCVertexDetails } from "../../src.deps.ts";
 
 export type Brand<T, B extends string> = T & { __brand: B };
 
 export abstract class ResourceBuilder<
-  TDetails,
+  TDetails extends EaCVertexDetails,
   TAsCode extends EaCDetails<TDetails>,
   TBrand extends string,
 > {
