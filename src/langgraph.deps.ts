@@ -2,6 +2,7 @@ export {
   Annotation,
   BaseChannel,
   BaseCheckpointSaver,
+  type BinaryOperatorAggregate,
   type Checkpoint,
   type CheckpointMetadata,
   MemorySaver,
