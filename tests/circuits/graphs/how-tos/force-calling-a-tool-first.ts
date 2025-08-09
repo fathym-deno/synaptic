@@ -13,6 +13,7 @@ import {
 import { AI_LOOKUP, buildTestIoC } from "../../../test-eac-setup.ts";
 import { EaCAzureOpenAILLMDetails } from "../../../../src/eac/llms/EaCAzureOpenAILLMDetails.ts";
 import { EaCDynamicToolDetails } from "../../../../src/eac/tools/EaCDynamicToolDetails.ts";
+import { ToolBuilder } from "../../../../src/fluent/resources/ToolBuilder.ts";
 import { EaCPassthroughNeuron } from "../../../../src/eac/neurons/EaCPassthroughNeuron.ts";
 import { EaCLLMNeuron } from "../../../../src/eac/neurons/EaCLLMNeuron.ts";
 import { EaCToolExecutorNeuron } from "../../../../src/eac/neurons/EaCToolExecutorNeuron.ts";
@@ -23,6 +24,19 @@ import { EverythingAsCodeSynaptic } from "../../../../src/eac/EverythingAsCodeSy
 // https://github.com/langchain-ai/langgraphjs/blob/main/examples/how-tos/force-calling-a-tool-first.ipynb
 
 Deno.test("Graph Force Calling a Tool First Circuits", async (t) => {
+  const testTool = new ToolBuilder("test", {
+    Type: "Dynamic",
+    Name: "search",
+    Description:
+      "Use to surf the web, fetch current information, check the weather, and retrieve other information.",
+    Schema: z.object({
+      query: z.string().describe("The query to use in your search."),
+    }),
+    Action: ({}: { query: string }) => {
+      return Promise.resolve("Cold, with a low of 13 ℃");
+    },
+  } as EaCDynamicToolDetails);
+
   const eac = {
     AIs: {
       [AI_LOOKUP]: {
@@ -38,25 +52,12 @@ Deno.test("Graph Force Calling a Tool First Circuits", async (t) => {
               ModelName: "gpt-4o",
               Streaming: true,
               Verbose: false,
-              ToolLookups: ["thinky|test"],
+              ToolLookups: [`${AI_LOOKUP}|${testTool.id}`],
             } as EaCAzureOpenAILLMDetails,
           },
         },
         Tools: {
-          test: {
-            Details: {
-              Type: "Dynamic",
-              Name: "search",
-              Description:
-                "Use to surf the web, fetch current information, check the weather, and retrieve other information.",
-              Schema: z.object({
-                query: z.string().describe("The query to use in your search."),
-              }),
-              Action: ({}: { query: string }) => {
-                return Promise.resolve("Cold, with a low of 13 ℃");
-              },
-            } as EaCDynamicToolDetails,
-          },
+          ...testTool.build(),
         },
       },
     },
@@ -71,7 +72,7 @@ Deno.test("Graph Force Calling a Tool First Circuits", async (t) => {
         } as EaCLLMNeuron,
         "thinky-tools": {
           Type: "ToolExecutor",
-          ToolLookups: ["thinky|test"],
+          ToolLookups: [`${AI_LOOKUP}|${testTool.id}`],
           MessagesPath: "$.messages",
           BootstrapOutput(msgs: BaseMessage[]) {
             return { messages: msgs };
