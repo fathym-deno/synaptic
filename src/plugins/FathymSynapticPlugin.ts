@@ -128,19 +128,19 @@ import {
   isEaCSchemaDocumentLoaderDetails,
 } from "../eac/EaCSchemaDocumentLoaderDetails.ts";
 import {
-  ai as aiToken,
-  chatHistory as chatHistoryToken,
-  circuit as circuitToken,
-  documentLoader as documentLoaderToken,
-  embeddings as embeddingsToken,
-  indexer as indexerToken,
-  llm as llmToken,
-  persistence as persistenceToken,
-  personality as personalityToken,
-  retriever as retrieverToken,
-  textSplitter as textSplitterToken,
-  tool as toolToken,
-  vectorStore as vectorStoreToken,
+  AI as aiToken,
+  ChatHistory as chatHistoryToken,
+  Circuit as circuitToken,
+  DocumentLoader as documentLoaderToken,
+  Embeddings as embeddingsToken,
+  Indexer as indexerToken,
+  LLM as llmToken,
+  Persistence as persistenceToken,
+  Personality as personalityToken,
+  Retriever as retrieverToken,
+  TextSplitter as textSplitterToken,
+  Tool as toolToken,
+  VectorStore as vectorStoreToken,
 } from "../fluent/lookups/index.ts";
 
 export default class FathymSynapticPlugin implements EaCRuntimePlugin {
