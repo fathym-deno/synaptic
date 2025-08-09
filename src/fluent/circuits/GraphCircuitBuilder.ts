@@ -7,6 +7,32 @@ import {
 import { StateDefinition } from "../../src.deps.ts";
 import { NeuronBuilder } from "./neurons/NeuronBuilder.ts";
 
+type NeuronIdLike = string | { id: string };
+
+type EdgeTarget<T extends Record<string, NeuronBuilder<any>>> =
+  | string
+  | T[keyof T]
+  | (string | T[keyof T])[]
+  | Record<string, string | T[keyof T]>;
+
+function toNodeIds(
+  target: NeuronIdLike | NeuronIdLike[] | Record<string, NeuronIdLike>,
+): string | string[] | Record<string, string> {
+  const toId = (n: NeuronIdLike): string => typeof n === "string" ? n : n.id;
+
+  if (Array.isArray(target)) {
+    return target.map((t) => toId(t));
+  }
+
+  if (typeof target === "object" && !("id" in target)) {
+    return Object.fromEntries(
+      Object.entries(target).map(([k, v]) => [k, toId(v)]),
+    );
+  }
+
+  return toId(target as NeuronIdLike);
+}
+
 export class GraphCircuitBuilder<
   TNeurons extends Record<string, NeuronBuilder<any>> = {},
 > {
@@ -32,31 +58,19 @@ export class GraphCircuitBuilder<
   Edge<From extends keyof TNeurons>(from: TNeurons[From]) {
     const fromId = from.id;
     return {
-      To: <
-        Target extends
-          | TNeurons[keyof TNeurons]
-          | TNeurons[keyof TNeurons][]
-          | Record<string, TNeurons[keyof TNeurons]>,
-      >(
+      To: <Target extends EdgeTarget<TNeurons>>(
         target: Target,
         options?: Omit<EaCGraphCircuitEdge, "Node">,
       ): GraphCircuitBuilder<TNeurons> => {
-        let node: string | string[] | Record<string, string>;
-        if (Array.isArray(target)) {
-          node = target.map((t) => t.id);
-        } else if ("id" in target) {
-          node = target.id;
-        } else {
-          node = Object.fromEntries(
-            Object.entries(target).map(([k, v]) => [k, v.id]),
-          );
-        }
+        const nodeIds = toNodeIds(target);
 
         let edge: EaCGraphCircuitEdgeLike;
-        if (options || (typeof node === "object" && !Array.isArray(node))) {
-          edge = { Node: node, ...options } as EaCGraphCircuitEdge;
+        if (
+          options || (typeof nodeIds === "object" && !Array.isArray(nodeIds))
+        ) {
+          edge = { Node: nodeIds, ...options } as EaCGraphCircuitEdge;
         } else {
-          edge = node;
+          edge = nodeIds;
         }
 
         this.#edges[fromId] = edge;
