@@ -1,5 +1,4 @@
 import {
-  Annotation,
   assert,
   assertEquals,
   END,
@@ -7,6 +6,7 @@ import {
   Runnable,
   START,
 } from "../../../tests.deps.ts";
+import { StateBuilder } from "../../../../src/fluent/state/StateBuilder.ts";
 import { buildTestIoC } from "../../../test-eac-setup.ts";
 import { EaCPassthroughNeuron } from "../../../../src/eac/neurons/EaCPassthroughNeuron.ts";
 import { EaCNeuron } from "../../../../src/eac/EaCNeuron.ts";
@@ -37,6 +37,24 @@ Deno.test("Graph Branching Circuits", async (t) => {
     };
   };
 
+  const fanOutFanInState = new StateBuilder()
+    .Field("aggregate", {
+      reducer: (x: string[], y: string[]) => x.concat(y),
+      default: () => [],
+    })
+    .Build();
+
+  const conditionalState = new StateBuilder()
+    .Field("aggregate", {
+      reducer: (x: string[], y: string[]) => x.concat(y),
+      default: () => [],
+    })
+    .Field("which", {
+      reducer: (x: string, y: string) => (y ? y : x),
+      default: () => "",
+    })
+    .Build();
+
   const eac = {
     Circuits: {
       $neurons: {
@@ -48,12 +66,7 @@ Deno.test("Graph Branching Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            aggregate: Annotation<string[]>({
-              reducer: (x, y) => x.concat(y),
-              default: () => [],
-            }),
-          },
+          State: fanOutFanInState,
           Neurons: {
             a: {
               BootstrapInput: loadSimpleBootstrap("A"),
@@ -81,16 +94,7 @@ Deno.test("Graph Branching Circuits", async (t) => {
         Details: {
           Type: "Graph",
           Priority: 100,
-          State: {
-            aggregate: Annotation<string[]>({
-              reducer: (x, y) => x.concat(y),
-              default: () => [],
-            }),
-            which: Annotation<string>({
-              reducer: (x, y) => (y ? y : x),
-              default: () => "",
-            }),
-          },
+          State: conditionalState,
           Neurons: {
             a: {
               BootstrapInput: loadSimpleBootstrap("A"),

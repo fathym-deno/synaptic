@@ -5,7 +5,6 @@ import FathymSynapticPlugin from "../../../src/plugins/FathymSynapticPlugin.ts";
 import { buildTestIoC } from "../../test-eac-setup.ts";
 import {
   AIMessage,
-  Annotation,
   assert,
   assertEquals,
   BaseMessage,
@@ -18,30 +17,41 @@ import {
   START,
   z,
 } from "../../tests.deps.ts";
+import {
+  InferSynapticState,
+  InputBuilder,
+  StateBuilder,
+} from "../../../mod.ts";
 import { EaCGraphCircuitDetails } from "../../../src/eac/EaCGraphCircuitDetails.ts";
-import { InferSynapticState } from "../../../src/utils/types.ts";
 import { EaCDenoKVSaverPersistenceDetails } from "../../../src/eac/EaCDenoKVSaverPersistenceDetails.ts";
 import { EaCAzureOpenAILLMDetails } from "../../../src/eac/llms/EaCAzureOpenAILLMDetails.ts";
 import { EaCLLMNeuron } from "../../../src/eac/neurons/EaCLLMNeuron.ts";
 
-export const LovelaceSourceInformationInputSchema = z.object({
-  Input: z.string().optional(),
-});
-
-export type LovelaceSourceInformationInputSchema = z.infer<
-  typeof LovelaceSourceInformationInputSchema
->;
-
-export const LovelaceSourceInformationGraphStateSchema = {
-  Messages: Annotation<BaseMessage[]>({
-    reducer: (x, y) => x.concat(y),
+const LovelaceSourceInformationGraphStateBuilder = new StateBuilder()
+  .Field("Messages", {
+    reducer: (x: BaseMessage[], y: BaseMessage[]) => x.concat(y),
     default: () => [],
-  }),
-};
+  });
+
+export const LovelaceSourceInformationGraphStateSchema =
+  LovelaceSourceInformationGraphStateBuilder.Build();
 
 export type LovelaceSourceInformationGraphStateSchema = InferSynapticState<
   typeof LovelaceSourceInformationGraphStateSchema
 >;
+
+const LovelaceSourceInformationInput = InputBuilder(
+  LovelaceSourceInformationGraphStateSchema,
+  {
+    Input: z.string().optional(),
+  },
+);
+
+export const LovelaceSourceInformationInputSchema =
+  LovelaceSourceInformationInput.Schema;
+
+export type LovelaceSourceInformationInputSchema =
+  typeof LovelaceSourceInformationInput.Type;
 
 Deno.test("EaCChatPromptNeuron Tests", async (t) => {
   const eac = {
