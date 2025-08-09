@@ -35,13 +35,13 @@ import {
   GraphCircuitBuilder,
 } from "../../src/fluent/circuits/_exports.ts";
 import { PersonalityBuilder } from "../../src/fluent/resources/PersonalityBuilder.ts";
-import { buildState } from "../../src/fluent/state/StateBuilder.ts";
+import { BuildState } from "../../src/fluent/state/StateBuilder.ts";
 
 const persona = new PersonalityBuilder("pirate", {
   Instructions: ["Answer like a pirate"],
 });
 
-const state = buildState((s) =>
+const state = BuildState((s) =>
   s.Field("messages", {
     reducer: (x: string[], y: string[]) => x.concat(y),
     default: () => [],
@@ -112,10 +112,10 @@ import {
 } from "../../src/fluent/circuits/_exports.ts";
 import { PersonalityBuilder } from "../../src/fluent/resources/PersonalityBuilder.ts";
 import { ToolBuilder } from "../../src/fluent/resources/ToolBuilder.ts";
-import { buildState } from "../../src/fluent/state/StateBuilder.ts";
+import { BuildState } from "../../src/fluent/state/StateBuilder.ts";
 import { InputBuilder } from "../../src/fluent/state/InputBuilder.ts";
 
-const state = buildState((s) =>
+const state = BuildState((s) =>
   s.Field("text", {
     reducer: (_x, y: string) => y,
     default: () => "",
@@ -155,7 +155,7 @@ const circuit = new LinearCircuitBuilder()
   .Build();
 ```
 
-Using `buildState` and `InputBuilder` provides typed state and inputs, while `persona.id` and `extractTool.id` remove fragile string lookups from the JSON version. See the full example in [`examples/fluent/user-requirement-extract.ts`](../../examples/fluent/user-requirement-extract.ts).
+Using `BuildState` and `InputBuilder` provides typed state and inputs, while `persona.id` and `extractTool.id` remove fragile string lookups from the JSON version. See the full example in [`examples/fluent/user-requirement-extract.ts`](../../examples/fluent/user-requirement-extract.ts).
 
 
 ## Graph circuit with branching
@@ -247,7 +247,7 @@ import {
   PersonalityBuilder,
   ToolBuilder,
 } from "../../src/fluent/resources/index.ts";
-import { buildState } from "../../src/fluent/state/StateBuilder.ts";
+import { BuildState } from "../../src/fluent/state/StateBuilder.ts";
 
 const llm = new LLMBuilder("thinky-llm", {
   Type: "OpenAI",
@@ -267,7 +267,7 @@ const persona = new PersonalityBuilder("workflow-analyst", {
     Action: ({ query }: { query: string }) => `results for ${query}`,
   });
 
-const state = buildState((s) =>
+const state = BuildState((s) =>
   s.Field("messages", {
     reducer: (x: string[], y: string[]) => x.concat(y),
     default: () => [],

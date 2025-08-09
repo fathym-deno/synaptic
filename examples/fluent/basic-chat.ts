@@ -4,7 +4,7 @@ import {
   GraphCircuitBuilder,
 } from "../../src/fluent/circuits/_exports.ts";
 import { PersonalityBuilder } from "../../src/fluent/resources/PersonalityBuilder.ts";
-import { buildState } from "../../src/fluent/state/StateBuilder.ts";
+import { BuildState } from "../../src/fluent/state/StateBuilder.ts";
 
 // Define a personality resource that the chat prompt will use
 const piratePersona = new PersonalityBuilder("pirate", {
@@ -12,7 +12,7 @@ const piratePersona = new PersonalityBuilder("pirate", {
 });
 
 // Describe the circuit state: an accumulating list of messages
-const state = buildState((s) =>
+const state = BuildState((s) =>
   s.Field("messages", {
     reducer: (x: string[], y: string[]) => x.concat(y),
     default: () => [],

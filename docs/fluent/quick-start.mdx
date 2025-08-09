@@ -21,13 +21,13 @@ The snippet below assembles a simple chat circuit and exports an EverythingAsCod
 import { Annotation, START, END } from "npm:@langchain/langgraph@0.2.56";
 import { GraphCircuitBuilder, ChatPromptNeuronBuilder } from "../../src/fluent/circuits/_exports.ts";
 import { PersonalityBuilder } from "../../src/fluent/resources/PersonalityBuilder.ts";
-import { buildState } from "../../src/fluent/state/StateBuilder.ts";
+import { BuildState } from "../../src/fluent/state/StateBuilder.ts";
 
 const pirate = new PersonalityBuilder("pirate", {
   Instructions: ["Answer like a pirate"],
 });
 
-const state = buildState((s) =>
+const state = BuildState((s) =>
   s.Field("messages", {
     reducer: (x: string[], y: string[]) => x.concat(y),
     default: () => [],
