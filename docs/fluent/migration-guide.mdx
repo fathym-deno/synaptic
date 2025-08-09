@@ -112,6 +112,22 @@ import {
 } from "../../src/fluent/circuits/_exports.ts";
 import { PersonalityBuilder } from "../../src/fluent/resources/PersonalityBuilder.ts";
 import { ToolBuilder } from "../../src/fluent/resources/ToolBuilder.ts";
+import { buildState } from "../../src/fluent/state/StateBuilder.ts";
+import { InputBuilder } from "../../src/fluent/state/InputBuilder.ts";
+
+const state = buildState((s) =>
+  s.Field("text", {
+    reducer: (_x, y: string) => y,
+    default: () => "",
+  }).Field("requirement", {
+    reducer: (_x, y: string) => y,
+    default: () => "",
+  })
+);
+
+const input = InputBuilder(state, {
+  text: z.string(),
+});
 
 const persona = new PersonalityBuilder("analyst", {
   Instructions: ["Extract the user's requirement and summarize it."],
@@ -122,7 +138,7 @@ const extractTool = new ToolBuilder("extract", {
   Name: "extract",
   Description: "Extract user requirements from text",
   Schema: z.object({ text: z.string() }),
-  Action: async (input: { text: string }) => `User requires: ${input.text}`,
+  Action: ({ text }: { text: string }) => `User requires: ${text}`,
 });
 
 const agent = new ChatPromptNeuronBuilder("agent", {
@@ -139,7 +155,7 @@ const circuit = new LinearCircuitBuilder()
   .build();
 ```
 
-Using `persona.id` and `extractTool.id` removes fragile string lookups from the JSON version. See the full example in [`examples/fluent/linear-circuit-with-tools.ts`](../../examples/fluent/linear-circuit-with-tools.ts).
+Using `buildState` and `InputBuilder` provides typed state and inputs, while `persona.id` and `extractTool.id` remove fragile string lookups from the JSON version. See the full example in [`examples/fluent/user-requirement-extract.ts`](../../examples/fluent/user-requirement-extract.ts).
 
 
 ## Graph circuit with branching
@@ -213,6 +229,72 @@ const circuit = new GraphCircuitBuilder()
 ```
 
 Edges now reference builder instances directly instead of string IDs, eliminating string lookups. See [`examples/fluent/graph-circuit-with-branching.ts`](../../examples/fluent/graph-circuit-with-branching.ts) for the complete example.
+
+## Thinky UR Workflows graph circuit
+
+This example mirrors the Thinky user requirement workflows circuit using resource builders and typed edges.
+
+```ts
+import { START, END } from "npm:@langchain/langgraph@0.2.56";
+import { z } from "npm:zod";
+import {
+  ChatPromptNeuronBuilder,
+  GraphCircuitBuilder,
+  ToolNeuronBuilder,
+} from "../../src/fluent/circuits/_exports.ts";
+import {
+  LLMBuilder,
+  PersonalityBuilder,
+  ToolBuilder,
+} from "../../src/fluent/resources/index.ts";
+import { buildState } from "../../src/fluent/state/StateBuilder.ts";
+
+const llm = new LLMBuilder("thinky-llm", {
+  Type: "OpenAI",
+  ModelName: "gpt-4o-mini",
+  APIKey: "fake",
+});
+
+const persona = new PersonalityBuilder("workflow-analyst", {
+  Instructions: ["Assist with requirement workflows."],
+});
+
+  const searchTool = new ToolBuilder("search", {
+    Type: "Dynamic",
+    Name: "search",
+    Description: "Search existing requirements",
+    Schema: z.object({ query: z.string() }),
+    Action: ({ query }: { query: string }) => `results for ${query}`,
+  });
+
+const state = buildState((s) =>
+  s.Field("messages", {
+    reducer: (x: string[], y: string[]) => x.concat(y),
+    default: () => [],
+  })
+);
+
+const agent = new ChatPromptNeuronBuilder("agent", {
+  personality: persona.id,
+  newMessages: [["human", "{input}"]],
+});
+
+const tool = new ToolNeuronBuilder("search-tool", searchTool.id);
+
+  const circuit = new GraphCircuitBuilder()
+    .state(state)
+    .neuron(agent)
+    .neuron(tool)
+    .edge({ id: START } as { id: typeof START }).to(agent)
+    .edge(agent).to({ [END]: END, tools: tool }, {
+    Condition: (s: { messages: string[] }) =>
+      s.messages.at(-1)?.includes("search") ? "tools" : END,
+  })
+  .edge(tool).to(agent)
+  .build();
+```
+
+See [`examples/fluent/ur-workflows.ts`](../../examples/fluent/ur-workflows.ts) for the full example.
 
 ## Further Reading
 
