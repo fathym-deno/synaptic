@@ -21,17 +21,17 @@ function scoped<T extends string>(
 }
 
 export type AILookupToken = LookupToken<"AI">;
-export function ai(lookup: string, scope: string): AILookupToken {
+export function AI(lookup: string, scope: string): AILookupToken {
   return scoped<"AI">(lookup, scope);
 }
 
 export type CircuitLookupToken = LookupToken<"Circuit">;
-export function circuit(lookup: string, scope: string): CircuitLookupToken {
+export function Circuit(lookup: string, scope: string): CircuitLookupToken {
   return scoped<"Circuit">(lookup, scope);
 }
 
 export type ChatHistoryLookupToken = LookupToken<"ChatHistory">;
-export function chatHistory(
+export function ChatHistory(
   lookup: ChatHistoryId,
   scope: string,
 ): ChatHistoryLookupToken {
@@ -39,7 +39,7 @@ export function chatHistory(
 }
 
 export type DocumentLoaderLookupToken = LookupToken<"DocumentLoader">;
-export function documentLoader(
+export function DocumentLoader(
   lookup: DocumentLoaderId,
   scope: string,
 ): DocumentLoaderLookupToken {
@@ -47,7 +47,7 @@ export function documentLoader(
 }
 
 export type EmbeddingsLookupToken = LookupToken<"Embeddings">;
-export function embeddings(
+export function Embeddings(
   lookup: EmbeddingsId,
   scope: string,
 ): EmbeddingsLookupToken {
@@ -55,17 +55,20 @@ export function embeddings(
 }
 
 export type IndexerLookupToken = LookupToken<"Indexer">;
-export function indexer(lookup: IndexerId, scope: string): IndexerLookupToken {
+export function Indexer(
+  lookup: IndexerId,
+  scope: string,
+): IndexerLookupToken {
   return scoped<"Indexer">(lookup, scope);
 }
 
 export type LLMLookupToken = LookupToken<"LLM">;
-export function llm(lookup: LLMId, scope: string): LLMLookupToken {
+export function LLM(lookup: LLMId, scope: string): LLMLookupToken {
   return scoped<"LLM">(lookup, scope);
 }
 
 export type PersistenceLookupToken = LookupToken<"Persistence">;
-export function persistence(
+export function Persistence(
   lookup: PersistenceId,
   scope: string,
 ): PersistenceLookupToken {
@@ -73,7 +76,7 @@ export function persistence(
 }
 
 export type PersonalityLookupToken = LookupToken<"Personality">;
-export function personality(
+export function Personality(
   lookup: PersonalityId,
   scope: string,
 ): PersonalityLookupToken {
@@ -81,7 +84,7 @@ export function personality(
 }
 
 export type RetrieverLookupToken = LookupToken<"Retriever">;
-export function retriever(
+export function Retriever(
   lookup: RetrieverId,
   scope: string,
 ): RetrieverLookupToken {
@@ -89,7 +92,7 @@ export function retriever(
 }
 
 export type TextSplitterLookupToken = LookupToken<"TextSplitter">;
-export function textSplitter(
+export function TextSplitter(
   lookup: TextSplitterId,
   scope: string,
 ): TextSplitterLookupToken {
@@ -97,12 +100,12 @@ export function textSplitter(
 }
 
 export type ToolLookupToken = LookupToken<"Tool">;
-export function tool(lookup: ToolId, scope: string): ToolLookupToken {
+export function Tool(lookup: ToolId, scope: string): ToolLookupToken {
   return scoped<"Tool">(lookup, scope);
 }
 
 export type VectorStoreLookupToken = LookupToken<"VectorStore">;
-export function vectorStore(
+export function VectorStore(
   lookup: VectorStoreId,
   scope: string,
 ): VectorStoreLookupToken {
