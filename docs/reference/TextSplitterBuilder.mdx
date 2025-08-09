@@ -1,0 +1,25 @@
+---
+title: TextSplitterBuilder
+---
+
+# TextSplitterBuilder
+
+Creates `TextSplitter` resources for breaking text into chunks.
+
+## Constructor
+
+`new TextSplitterBuilder(lookup: string, details: EaCTextSplitterDetails)`
+
+- **lookup** – identifier for the splitter.
+- **details** – `EaCTextSplitterDetails` with splitting options.
+
+## Methods
+
+- `build(): Record<string, EaCTextSplitterAsCode>` – EverythingAsCode output.
+
+## Example
+
+```ts
+const splitter = new TextSplitterBuilder("chars", { /* EaCTextSplitterDetails */ });
+const eac = splitter.build();
+```

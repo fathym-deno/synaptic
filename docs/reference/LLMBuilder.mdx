@@ -1,0 +1,25 @@
+---
+title: LLMBuilder
+---
+
+# LLMBuilder
+
+Constructs Large Language Model resources.
+
+## Constructor
+
+`new LLMBuilder(lookup: string, details: EaCLLMDetails)`
+
+- **lookup** – identifier for the LLM.
+- **details** – `EaCLLMDetails` with provider and model options.
+
+## Methods
+
+- `build(): Record<string, EaCLLMAsCode>` – output EverythingAsCode fragment.
+
+## Example
+
+```ts
+const llm = new LLMBuilder("openai", { /* EaCLLMDetails */ });
+const eac = llm.build();
+```

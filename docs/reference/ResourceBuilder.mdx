@@ -1,0 +1,35 @@
+---
+title: ResourceBuilder
+---
+
+# ResourceBuilder
+
+Generic base class for creating EverythingAsCode resource fragments.
+
+## Constructor
+
+`protected constructor(lookup: string, details: TDetails)`
+
+Creates a builder with an identifier and resource `details`.
+
+## Properties
+
+- `id: Brand<string, TBrand>` – branded identifier for the resource.
+
+## Methods
+
+- `protected buildAs(): Record<string, TAsCode>` – helper that produces the EverythingAsCode representation used by subclasses.
+
+## Example
+
+```ts
+class MyBuilder extends ResourceBuilder<MyDetails, MyAsCode, "My"> {
+  constructor(lookup: string, details: MyDetails) {
+    super(lookup, details);
+  }
+
+  build() {
+    return this.buildAs();
+  }
+}
+```

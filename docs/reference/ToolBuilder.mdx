@@ -1,0 +1,25 @@
+---
+title: ToolBuilder
+---
+
+# ToolBuilder
+
+Defines `Tool` resources that can be invoked by neurons.
+
+## Constructor
+
+`new ToolBuilder(lookup: string, details: EaCToolDetails)`
+
+- **lookup** – identifier for the tool.
+- **details** – `EaCToolDetails` describing the implementation.
+
+## Methods
+
+- `build(): Record<string, EaCToolAsCode>` – EverythingAsCode fragment.
+
+## Example
+
+```ts
+const tool = new ToolBuilder("search", { /* EaCToolDetails */ });
+const eac = tool.build();
+```

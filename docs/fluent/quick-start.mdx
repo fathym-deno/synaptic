@@ -1,0 +1,65 @@
+---
+title: Fluent Quick Start
+---
+
+# Fluent Builder Quick Start
+
+The fluent builders provide a type-safe way to construct Synaptic resources, state and circuits directly in TypeScript.
+
+The full stack involves:
+
+1. **Resource builders** – define shared assets like personalities.
+2. **State builder** – describe the shape of circuit state.
+3. **Neuron builders** – create nodes that perform work.
+4. **Circuit builders** – wire neurons together into a runnable graph.
+
+## Minimal runnable example
+
+The snippet below assembles a simple chat circuit and exports an EverythingAsCode fragment that can be executed with Deno.
+
+```ts
+import { Annotation, START, END } from "npm:@langchain/langgraph@0.2.56";
+import { GraphCircuitBuilder, ChatPromptNeuronBuilder } from "../../src/fluent/circuits/_exports.ts";
+import { PersonalityBuilder } from "../../src/fluent/resources/PersonalityBuilder.ts";
+import { buildState } from "../../src/fluent/state/StateBuilder.ts";
+
+const pirate = new PersonalityBuilder("pirate", {
+  Instructions: ["Answer like a pirate"],
+});
+
+const state = buildState((s) =>
+  s.Field("messages", {
+    reducer: (x: string[], y: string[]) => x.concat(y),
+    default: () => [],
+  })
+);
+
+const agent = new ChatPromptNeuronBuilder("agent", {
+  personality: pirate.id,
+  newMessages: [["human", "{input}"]],
+});
+
+const circuit = new GraphCircuitBuilder()
+  .state(state)
+  .neuron(agent)
+  .edge({ id: START } as any).to(agent)
+  .edge(agent).to(END)
+  .build();
+
+export const eac = {
+  AIs: {
+    example: { Personalities: pirate.build() },
+  },
+  Circuits: {
+    "basic-chat": { Details: circuit },
+  },
+};
+```
+
+Run it with:
+
+```bash
+deno run -A examples/fluent/basic-chat.ts
+```
+
+The fluent builders let you extend this pattern with additional resources, neurons and complex graph topologies.

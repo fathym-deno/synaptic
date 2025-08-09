@@ -1,0 +1,32 @@
+---
+title: ChatPromptNeuronBuilder
+---
+
+# ChatPromptNeuronBuilder
+
+Builds a neuron that sends chat prompts to an LLM.
+
+## Constructor
+
+`new ChatPromptNeuronBuilder(id: string, options?: ChatPromptNeuronOptions)`
+
+`ChatPromptNeuronOptions`:
+- `instructions?: string[]`
+- `messages?: BaseMessagePromptTemplateLike[]`
+- `newMessages?: BaseMessagePromptTemplateLike[]`
+- `personality?: PersonalityId`
+- `systemMessage?: string`
+
+## Methods
+
+- `build(): Record<string, EaCChatPromptNeuron>` – EverythingAsCode fragment for the neuron.
+
+## Example
+
+```ts
+const agent = new ChatPromptNeuronBuilder("agent", {
+  personality: persona.id,
+  newMessages: [["human", "{input}"]],
+});
+const neuron = agent.build();
+```

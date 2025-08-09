@@ -1,0 +1,22 @@
+---
+title: InputBuilder
+---
+
+# InputBuilder
+
+Utility that derives an input schema from circuit state and additional fields.
+
+## Signature
+
+`InputBuilder<TStateSchema, TAdditional>(state: TStateSchema, additional: ZodRawShape)`
+
+Returns an object with:
+- `Schema` – a Zod schema for the combined input.
+- `Type` – inferred TypeScript type.
+
+## Example
+
+```ts
+const input = InputBuilder(state, { query: z.string() });
+// input.Schema is a Zod schema and input.Type is the inferred type
+```

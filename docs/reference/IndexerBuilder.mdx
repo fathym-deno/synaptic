@@ -1,0 +1,25 @@
+---
+title: IndexerBuilder
+---
+
+# IndexerBuilder
+
+Defines `Indexer` resources for ingesting documents.
+
+## Constructor
+
+`new IndexerBuilder(lookup: string, details: EaCIndexerDetails)`
+
+- **lookup** – identifier for the indexer.
+- **details** – `EaCIndexerDetails` describing the indexing strategy.
+
+## Methods
+
+- `build(): Record<string, EaCIndexerAsCode>` – export EverythingAsCode fragment.
+
+## Example
+
+```ts
+const indexer = new IndexerBuilder("basic", { /* EaCIndexerDetails */ });
+const eac = indexer.build();
+```

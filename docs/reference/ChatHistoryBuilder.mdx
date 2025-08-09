@@ -1,0 +1,25 @@
+---
+title: ChatHistoryBuilder
+---
+
+# ChatHistoryBuilder
+
+Builds `ChatHistory` resources for EverythingAsCode.
+
+## Constructor
+
+`new ChatHistoryBuilder(lookup: string, details: EaCChatHistoryDetails)`
+
+- **lookup** – unique identifier for the chat history resource.
+- **details** – `EaCChatHistoryDetails` options describing the history store.
+
+## Methods
+
+- `build(): Record<string, EaCChatHistoryAsCode>` – export the resource in EverythingAsCode format.
+
+## Example
+
+```ts
+const history = new ChatHistoryBuilder("mem", { /* EaCChatHistoryDetails */ });
+const eac = history.build();
+```
