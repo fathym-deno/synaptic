@@ -64,6 +64,156 @@ const circuit = new GraphCircuitBuilder()
 The fluent version uses builders to define resources, state, and edges in a concise, expressive way. See the full example in [`examples/fluent/basic-chat.ts`](../../examples/fluent/basic-chat.ts).
 
 
+## Linear circuit with tools
+
+### Previous JSON Circuit
+
+```ts
+{
+  "Personalities": {
+    "analyst": {
+      "Details": {
+        "Instructions": ["Extract the user's requirement and summarize it."]
+      }
+    }
+  },
+  "Tools": {
+    "extract": {
+      "Details": {
+        "Type": "Dynamic",
+        "Name": "extract",
+        "Description": "Extract user requirements from text"
+      }
+    }
+  },
+  "Circuits": {
+    "user-requirement-extract": {
+      "Details": {
+        "Type": "Linear",
+        "Neurons": {
+          "": "agent",
+          "agent": { "Neurons": { "": "extract-tool" } },
+          "extract-tool": { "Type": "Tool", "ToolLookup": "extract" }
+        }
+      }
+    }
+  }
+}
+```
+
+### Fluent Builder Version
+
+```ts
+import { z } from "npm:zod";
+import {
+  ChatPromptNeuronBuilder,
+  LinearCircuitBuilder,
+  ToolNeuronBuilder,
+} from "../../src/fluent/circuits/_exports.ts";
+import { PersonalityBuilder } from "../../src/fluent/resources/PersonalityBuilder.ts";
+import { ToolBuilder } from "../../src/fluent/resources/ToolBuilder.ts";
+
+const persona = new PersonalityBuilder("analyst", {
+  Instructions: ["Extract the user's requirement and summarize it."],
+});
+
+const extractTool = new ToolBuilder("extract", {
+  Type: "Dynamic",
+  Name: "extract",
+  Description: "Extract user requirements from text",
+  Schema: z.object({ text: z.string() }),
+  Action: async (input: { text: string }) => `User requires: ${input.text}`,
+});
+
+const agent = new ChatPromptNeuronBuilder("agent", {
+  personality: persona.id,
+  newMessages: [["human", "{text}"]],
+});
+
+const tool = new ToolNeuronBuilder("extract-tool", extractTool.id);
+
+const circuit = new LinearCircuitBuilder()
+  .neuron(agent)
+  .neuron(tool)
+  .chain(agent, tool)
+  .build();
+```
+
+Using `persona.id` and `extractTool.id` removes fragile string lookups from the JSON version. See the full example in [`examples/fluent/linear-circuit-with-tools.ts`](../../examples/fluent/linear-circuit-with-tools.ts).
+
+
+## Graph circuit with branching
+
+### Previous JSON Circuit
+
+```ts
+{
+  "Circuits": {
+    "branching-example": {
+      "Details": {
+        "Type": "Graph",
+        "Neurons": { "a": {}, "b": {}, "c": {}, "d": {} },
+        "Edges": {
+          "[START]": "a",
+          "a": ["b", "c"],
+          "b": "d",
+          "c": "d",
+          "d": "[END]"
+        }
+      }
+    }
+  }
+}
+```
+
+### Fluent Builder Version
+
+```ts
+import { START, END } from "npm:@langchain/langgraph@0.2.56";
+import { GraphCircuitBuilder } from "../../src/fluent/circuits/_exports.ts";
+import { NeuronBuilder } from "../../src/fluent/circuits/neurons/NeuronBuilder.ts";
+import { EaCPassthroughNeuron } from "../../src/eac/neurons/EaCPassthroughNeuron.ts";
+import { StateBuilder } from "../../src/fluent/state/StateBuilder.ts";
+
+class SimpleNeuron extends NeuronBuilder<EaCPassthroughNeuron> {
+  constructor(id: string, value: string) {
+    super(id, {
+      Type: "Passthrough",
+      BootstrapInput: (state: { aggregate: string[] }) => ({
+        aggregate: state.aggregate.concat(`I'm ${value}`),
+      }),
+    });
+  }
+}
+
+const state = new StateBuilder()
+  .Field("aggregate", {
+    reducer: (x: string[], y: string[]) => x.concat(y),
+    default: () => [],
+  })
+  .Build();
+
+const a = new SimpleNeuron("a", "A");
+const b = new SimpleNeuron("b", "B");
+const c = new SimpleNeuron("c", "C");
+const d = new SimpleNeuron("d", "D");
+
+const circuit = new GraphCircuitBuilder()
+  .state(state)
+  .neuron(a)
+  .neuron(b)
+  .neuron(c)
+  .neuron(d)
+  .edge({ id: START } as any).to(a)
+  .edge(a).to([b, c])
+  .edge(b).to(d)
+  .edge(c).to(d)
+  .edge(d).to(END)
+  .build();
+```
+
+Edges now reference builder instances directly instead of string IDs, eliminating string lookups. See [`examples/fluent/graph-circuit-with-branching.ts`](../../examples/fluent/graph-circuit-with-branching.ts) for the complete example.
+
 ## Further Reading
 
 - [Fluent Quick Start](./quick-start.mdx)
