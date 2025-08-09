@@ -127,6 +127,21 @@ import {
   EaCSchemaDocumentLoaderDetails,
   isEaCSchemaDocumentLoaderDetails,
 } from "../eac/EaCSchemaDocumentLoaderDetails.ts";
+import {
+  ai as aiToken,
+  chatHistory as chatHistoryToken,
+  circuit as circuitToken,
+  documentLoader as documentLoaderToken,
+  embeddings as embeddingsToken,
+  indexer as indexerToken,
+  llm as llmToken,
+  persistence as persistenceToken,
+  personality as personalityToken,
+  retriever as retrieverToken,
+  textSplitter as textSplitterToken,
+  tool as toolToken,
+  vectorStore as vectorStoreToken,
+} from "../fluent/lookups/index.ts";
 
 export default class FathymSynapticPlugin implements EaCRuntimePlugin {
   protected dfsHandlerResolver: DFSFileHandlerResolver | undefined;
@@ -242,7 +257,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
             const ctx: CircuitContext = {
               AIaCLookup(lookup, scope) {
-                return `${scope ?? circuitLookup}|${lookup}`;
+                return aiToken(lookup, scope ?? circuitLookup);
               },
               CircuitLookup: circuitLookup,
               EaC: eac,
@@ -328,7 +343,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             },
             {
               Lazy: false,
-              Name: `${aiLookup}|${chatHistoryLookup}`,
+              Name: chatHistoryToken(chatHistoryLookup, aiLookup),
               Type: ioc.Symbol("ChatHistory"),
             },
           );
@@ -387,11 +402,13 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             () => {
               return new RemoteRunnable({
                 url: new URL(circuitLookup, remoteCircuitUrl).href,
-              }).withConfig({ runName: `${remoteLookup}|${circuitLookup}` });
+              }).withConfig({
+                runName: circuitToken(circuitLookup, remoteLookup),
+              });
             },
             {
               Lazy: false,
-              Name: `${remoteLookup}|${circuitLookup}`,
+              Name: circuitToken(circuitLookup, remoteLookup),
               Type: ioc.Symbol("Circuit"),
             },
           );
@@ -490,7 +507,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               }),
             {
               Lazy: false,
-              Name: `${aiLookup}|${embeddingsLookup}`,
+              Name: embeddingsToken(embeddingsLookup, aiLookup),
               Type: ioc.Symbol(Embeddings.name),
             },
           );
@@ -524,7 +541,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               }),
             {
               Lazy: false,
-              Name: `${aiLookup}|${indexerLookup}`,
+              Name: indexerToken(indexerLookup, aiLookup),
               Type: ioc.Symbol("RecordManager"),
             },
           );
@@ -584,7 +601,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             },
             {
               Lazy: false,
-              Name: `${aiLookup}|${llmLookup}`,
+              Name: llmToken(llmLookup, aiLookup),
               Type: ioc.Symbol(BaseLanguageModel.name),
             },
           );
@@ -619,7 +636,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             },
             {
               Lazy: false,
-              Name: `${aiLookup}|${llmLookup}`,
+              Name: llmToken(llmLookup, aiLookup),
               Type: ioc.Symbol(BaseLanguageModel.name),
             },
           );
@@ -673,7 +690,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               }),
             {
               Lazy: false,
-              Name: `${aiLookup}|${llmLookup}`,
+              Name: llmToken(llmLookup, aiLookup),
               Type: ioc.Symbol(BaseLanguageModel.name),
             },
           );
@@ -703,7 +720,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
           ioc.Register(() => new CheerioWebBaseLoader(details.URL), {
             Lazy: false,
-            Name: `${aiLookup}|${loaderLookup}`,
+            Name: documentLoaderToken(loaderLookup, aiLookup),
             Type: ioc.Symbol("DocumentLoader"),
           });
         } else if (isEaCDFSDocumentLoaderDetails(loader.Details)) {
@@ -774,7 +791,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             },
             {
               Lazy: false,
-              Name: `${aiLookup}|${loaderLookup}`,
+              Name: documentLoaderToken(loaderLookup, aiLookup),
               Type: ioc.Symbol("DocumentLoader"),
             },
           );
@@ -804,7 +821,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             },
             {
               Lazy: false,
-              Name: `${aiLookup}|${loaderLookup}`,
+              Name: documentLoaderToken(loaderLookup, aiLookup),
               Type: ioc.Symbol("DocumentLoader"),
             },
           );
@@ -848,7 +865,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             },
             {
               Lazy: false,
-              Name: `${aiLookup}|${loaderLookup}`,
+              Name: documentLoaderToken(loaderLookup, aiLookup),
               Type: ioc.Symbol("DocumentLoader"),
             },
           );
@@ -876,7 +893,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
         if (isEaCMemorySaverPersistenceDetails(details)) {
           ioc.Register(() => new MemorySaver(), {
             Lazy: false,
-            Name: `${aiLookup}|${persistenceLookup}`,
+            Name: persistenceToken(persistenceLookup, aiLookup),
             Type: ioc.Symbol("Persistence"),
           });
         } else if (isEaCDenoKVSaverPersistenceDetails(details)) {
@@ -892,7 +909,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             },
             {
               Lazy: false,
-              Name: `${aiLookup}|${persistenceLookup}`,
+              Name: persistenceToken(persistenceLookup, aiLookup),
               Type: ioc.Symbol("Persistence"),
             },
           );
@@ -959,7 +976,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
         ioc.Register(() => resultDetails, {
           Lazy: false,
-          Name: `${aiLookup}|${personalityLookup}`,
+          Name: personalityToken(personalityLookup, aiLookup),
           Type: ioc.Symbol("Personality"),
         });
       });
@@ -989,7 +1006,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
             await ioc.Register(() => vectorStore.asRetriever(), {
               Lazy: false,
-              Name: `${aiLookup}|${retrieverLookup}`,
+              Name: retrieverToken(retrieverLookup, aiLookup),
               Type: ioc.Symbol("Retriever"),
             });
 
@@ -1049,7 +1066,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
           ioc.Register(() => textSplitter, {
             Lazy: false,
-            Name: `${aiLookup}|${textSplitterLookup}`,
+            Name: textSplitterToken(textSplitterLookup, aiLookup),
             Type: ioc.Symbol(TextSplitter.name),
           });
         }
@@ -1080,7 +1097,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             },
             {
               Lazy: false,
-              Name: `${aiLookup}|${toolLookup}`,
+              Name: toolToken(toolLookup, aiLookup),
               Type: ioc.Symbol("Tool"),
             },
           );
@@ -1093,7 +1110,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             },
             {
               Lazy: false,
-              Name: `${aiLookup}|${toolLookup}`,
+              Name: toolToken(toolLookup, aiLookup),
               Type: ioc.Symbol("Tool"),
             },
           );
@@ -1115,7 +1132,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             },
             {
               Lazy: false,
-              Name: `${aiLookup}|${toolLookup}`,
+              Name: toolToken(toolLookup, aiLookup),
               Type: ioc.Symbol("Tool"),
             },
           );
@@ -1159,7 +1176,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             },
             {
               Lazy: false,
-              Name: `${aiLookup}|${toolLookup}`,
+              Name: toolToken(toolLookup, aiLookup),
               Type: ioc.Symbol("Tool"),
             },
           );
@@ -1174,7 +1191,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
             },
             {
               Lazy: false,
-              Name: `${aiLookup}|${toolLookup}`,
+              Name: toolToken(toolLookup, aiLookup),
               Type: ioc.Symbol("Tool"),
             },
           );
@@ -1220,7 +1237,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
               },
               {
                 Lazy: false,
-                Name: `${aiLookup}|${vectorStoreLookup}`,
+                Name: vectorStoreToken(vectorStoreLookup, aiLookup),
                 Type: ioc.Symbol(VectorStore.name),
               },
             );
@@ -1235,14 +1252,14 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
                 }),
               {
                 Lazy: false,
-                Name: `${aiLookup}|${vectorStoreLookup}`,
+                Name: vectorStoreToken(vectorStoreLookup, aiLookup),
                 Type: ioc.Symbol(VectorStore.name),
               },
             );
           } else if (isEaCMemoryVectorStoreDetails(vectorStore.Details)) {
             ioc.Register(() => new MemoryVectorStore(embeddings), {
               Lazy: false,
-              Name: `${aiLookup}|${vectorStoreLookup}`,
+              Name: vectorStoreToken(vectorStoreLookup, aiLookup),
               Type: ioc.Symbol(VectorStore.name),
             });
           }
