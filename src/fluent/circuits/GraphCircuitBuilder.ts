@@ -18,7 +18,7 @@ type EdgeTarget<T extends Record<string, NeuronBuilder<any>>> =
 function toNodeIds(
   target: NeuronIdLike | NeuronIdLike[] | Record<string, NeuronIdLike>,
 ): string | string[] | Record<string, string> {
-  const toId = (n: NeuronIdLike): string => typeof n === "string" ? n : n.id;
+  const toId = (n: NeuronIdLike): string => (typeof n === "string" ? n : n.id);
 
   if (Array.isArray(target)) {
     return target.map((t) => toId(t));
@@ -45,17 +45,21 @@ export class GraphCircuitBuilder<
     return this;
   }
 
-  Neuron<
-    K extends string,
-    N extends NeuronBuilder<any> & { id: K },
-  >(builder: N): GraphCircuitBuilder<TNeurons & { [P in K]: N }> {
+  Neuron<K extends string, N extends NeuronBuilder<any> & { id: K }>(
+    builder: N,
+  ): GraphCircuitBuilder<TNeurons & { [P in K]: N }> {
     this.#neurons[builder.id] = builder;
-    return this as unknown as GraphCircuitBuilder<
-      TNeurons & { [P in K]: N }
-    >;
+    return this as unknown as GraphCircuitBuilder<TNeurons & { [P in K]: N }>;
   }
 
-  Edge<From extends keyof TNeurons>(from: TNeurons[From]) {
+  Edge<From extends keyof TNeurons>(
+    from: TNeurons[From],
+  ): {
+    To: <Target extends EdgeTarget<TNeurons>>(
+      target: Target,
+      options?: Omit<EaCGraphCircuitEdge, "Node">,
+    ) => GraphCircuitBuilder<TNeurons>;
+  } {
     const fromId = from.id;
     return {
       To: <Target extends EdgeTarget<TNeurons>>(
@@ -66,7 +70,8 @@ export class GraphCircuitBuilder<
 
         let edge: EaCGraphCircuitEdgeLike;
         if (
-          options || (typeof nodeIds === "object" && !Array.isArray(nodeIds))
+          options ||
+          (typeof nodeIds === "object" && !Array.isArray(nodeIds))
         ) {
           edge = { Node: nodeIds, ...options } as EaCGraphCircuitEdge;
         } else {
