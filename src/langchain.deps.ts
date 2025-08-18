@@ -33,10 +33,6 @@ export { CheerioWebBaseLoader } from "npm:@langchain/community@0.3.36/document_l
 // export { PDFLoader } from "npm:@langchain/community@0.3.36/document_loaders/fs/pdf";
 export { HtmlToTextTransformer } from "npm:@langchain/community@0.3.36/document_transformers/html_to_text";
 export { WatsonxAI } from "npm:@langchain/community@0.3.36/llms/watsonx_ai";
-export {
-  AzureAISearchQueryType,
-  AzureAISearchVectorStore,
-} from "npm:@langchain/community@0.3.36/vectorstores/azure_aisearch";
 export { SerpAPI } from "npm:@langchain/community@0.3.36/tools/serpapi";
 export { TavilySearchResults } from "npm:@langchain/community@0.3.36/tools/tavily_search";
 export { HNSWLib } from "npm:@langchain/community@0.3.36/vectorstores/hnswlib";

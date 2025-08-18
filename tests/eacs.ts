@@ -10,11 +10,14 @@ import { EaCRecursiveCharacterTextSplitterDetails } from "../src/eac/EaCRecursiv
 import { EaCSERPToolDetails } from "../src/eac/tools/EaCSERPToolDetails.ts";
 import { EaCTavilySearchResultsToolDetails } from "../src/eac/tools/EaCTavilySearchResultsToolDetails.ts";
 import {
-  AzureAISearchQueryType,
   EaCDenoKVAsCode,
   EaCDenoKVDetails,
   EaCLocalDistributedFileSystemDetails,
 } from "./tests.deps.ts";
+
+import {
+  AzureAISearchQueryType,
+} from "npm:@langchain/community@0.3.36/vectorstores/azure_aisearch";
 
 export const eacAIsRoot = {
   Details: {

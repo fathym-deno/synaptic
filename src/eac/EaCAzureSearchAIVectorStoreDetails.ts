@@ -1,4 +1,4 @@
-import { AzureAISearchQueryType } from "../src.deps.ts";
+import { AzureAISearchQueryType } from "npm:@langchain/community@0.3.36/vectorstores/azure_aisearch";
 import {
   EaCVectorStoreDetails,
   isEaCVectorStoreDetails,

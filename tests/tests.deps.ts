@@ -28,7 +28,6 @@ export { IoCContainer } from "jsr:@fathym/ioc@0.0.14";
 export { z } from "npm:zod@3.24.2";
 export { zodToJsonSchema } from "npm:zod-to-json-schema@3.23.2";
 
-export { AzureAISearchQueryType } from "npm:@langchain/community@0.3.36/vectorstores/azure_aisearch";
 export { type AgentAction } from "npm:@langchain/core@0.3.42/agents";
 export { dispatchCustomEvent } from "npm:@langchain/core@0.3.42/callbacks/dispatch";
 export { BaseListChatMessageHistory } from "npm:@langchain/core@0.3.42/chat_history";

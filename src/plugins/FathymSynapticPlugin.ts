@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
+import { AzureAISearchVectorStore } from "npm:@langchain/community@0.3.36/vectorstores/azure_aisearch";
 import {
-  AzureAISearchVectorStore,
   AzureChatOpenAI,
   AzureOpenAIEmbeddings,
   BaseDocumentLoader,
@@ -1001,10 +1001,7 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
 
             const vectorStore = await ioc.Resolve<VectorStore>(
               ioc.Symbol(VectorStore.name),
-              vectorStoreToken(
-                retriever.Details!.VectorStoreLookup,
-                aiLookup,
-              ),
+              vectorStoreToken(retriever.Details!.VectorStoreLookup, aiLookup),
             );
 
             await ioc.Register(() => vectorStore.asRetriever(), {
