@@ -1,3 +1,5 @@
+import * as _azureSearch from "npm:@azure/search-documents@12.0.0";
+
 export {
   createOpenAIFunctionsAgent,
   // createOpenAIFunctionsAgent,
