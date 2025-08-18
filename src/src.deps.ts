@@ -55,8 +55,6 @@ export { jsonSchemaToZod } from "npm:json-schema-to-zod@2.6.0";
 import jsonpath from "npm:jsonpath@1.1.1";
 export { jsonpath };
 
-export type { IndexingResult } from "npm:@azure/search-documents@12.1.0";
-
 export * from "./langchain.deps.ts";
 
 export * from "./langgraph.deps.ts";
