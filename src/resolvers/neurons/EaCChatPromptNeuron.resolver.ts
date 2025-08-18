@@ -64,10 +64,6 @@ export default {
       // cfg.configurable!.llmPatch = mergeWithArrays(prevLlmPatch, llmPatch);
 
       return ChatPromptTemplate.fromMessages(messages);
-
-      // return RunnableMap.from(input).pipe(
-      //   ChatPromptTemplate.fromMessages(messages),
-      // );
     });
   },
 } as SynapticNeuronResolver<EaCChatPromptNeuron>;
