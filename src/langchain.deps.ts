@@ -78,6 +78,7 @@ export {
   BasePromptTemplate,
   ChatPromptTemplate,
   PromptTemplate,
+  MessagesPlaceholder,
 } from "npm:@langchain/core@0.3.42/prompts";
 export {
   Runnable,
