@@ -4,22 +4,22 @@ import {
   EaCVertexDetails,
   EaCVertexDetailsSchema,
   z,
-} from '../src.deps.ts';
+} from "../src.deps.ts";
 
 /**
  * Supported message roles for prompt construction.
  * Includes OpenAI-style roles plus `tool`. `ai` is treated as an alias of `assistant`.
  */
-const RoleSchema: z.ZodEnum<['system', 'assistant', 'ai', 'user', 'tool']> = z
-  .enum(['system', 'assistant', 'ai', 'user', 'tool'])
+const RoleSchema: z.ZodEnum<["system", "assistant", "ai", "user", "tool"]> = z
+  .enum(["system", "assistant", "ai", "user", "tool"])
   .describe(
-    'Message role. `ai` is an alias of `assistant`. `tool` carries tool-call results or tool context.'
+    "Message role. `ai` is an alias of `assistant`. `tool` carries tool-call results or tool context.",
   );
 
 /** Tuple form: [role, content] */
 const TupleMsgSchema: z.ZodTuple<[typeof RoleSchema, z.ZodString], null> = z
   .tuple([RoleSchema, z.string()])
-  .describe('Tuple message: [role, content]. Minimal, library-friendly shape.');
+  .describe("Tuple message: [role, content]. Minimal, library-friendly shape.");
 
 /** Object form for normal roles: { role, content } */
 const ObjectMsgSchema: z.ZodObject<{
@@ -28,43 +28,43 @@ const ObjectMsgSchema: z.ZodObject<{
 }> = z
   .object({ role: RoleSchema, content: z.string() })
   .strict()
-  .describe('Object message: { role, content }. General form for all roles.');
+  .describe("Object message: { role, content }. General form for all roles.");
 
 /** Tool message form: { role: 'tool', content, name?, toolCallId? } */
 const ToolMsgSchema: z.ZodObject<{
-  role: z.ZodLiteral<'tool'>;
+  role: z.ZodLiteral<"tool">;
   content: z.ZodString;
   name: z.ZodOptional<z.ZodString>;
   toolCallId: z.ZodOptional<z.ZodString>;
 }> = z
   .object({
-    role: z.literal('tool'),
+    role: z.literal("tool"),
     content: z.string(),
     name: z.string().optional(),
     toolCallId: z.string().optional(), // OpenAI-style interop; optional
   })
   .strict()
   .describe(
-    'Tool message object. Optional `name`/`toolCallId` support OpenAI/LangChain tool flows.'
+    "Tool message object. Optional `name`/`toolCallId` support OpenAI/LangChain tool flows.",
   );
 
 /**
  * Best-effort runtime validator for BaseMessagePromptTemplateLike.
  * Accepts tuple, object, tool-object, or passthrough for custom formats.
  */
-export const BaseMessagePromptTemplateLikeSchema = ObjectMsgSchema;
-// export const BaseMessagePromptTemplateLikeSchema: z.ZodUnion<
-//   [
-//     typeof TupleMsgSchema,
-//     typeof ToolMsgSchema,
-//     typeof ObjectMsgSchema,
-//     z.ZodAny
-//   ]
-// > = z
-//   .union([TupleMsgSchema, ToolMsgSchema, ObjectMsgSchema, z.any()])
-//   .describe(
-//     'Union for validating messages accepted by prompt builders. Supports tuples, objects, and tool-object variants.'
-//   );
+// export const BaseMessagePromptTemplateLikeSchema = ObjectMsgSchema;
+export const BaseMessagePromptTemplateLikeSchema: z.ZodUnion<
+  [
+    typeof TupleMsgSchema,
+    typeof ToolMsgSchema,
+    typeof ObjectMsgSchema,
+    z.ZodAny,
+  ]
+> = z
+  .union([TupleMsgSchema, ToolMsgSchema, ObjectMsgSchema, z.any()])
+  .describe(
+    "Union for validating messages accepted by prompt builders. Supports tuples, objects, and tool-object variants.",
+  );
 
 export type EaCPersonalityDetails = {
   /** System-level constraints and stance. */
@@ -89,7 +89,7 @@ export type EaCPersonalityDetails = {
   Locale?: string;
 
   /** Preferred output format hint for downstream renderers. */
-  OutputFormat?: 'text' | 'markdown' | 'mdx' | 'json';
+  OutputFormat?: "text" | "markdown" | "mdx" | "json";
 
   /** Target reader shorthand (e.g., "players", "editors", "exec brief"). */
   Audience?: string;
@@ -145,7 +145,7 @@ export const EaCPersonalityDetailsSchema: z.ZodType<EaCPersonalityDetails> =
       .array(BaseMessagePromptTemplateLikeSchema)
       .optional()
       .describe(
-        'Seed messages (few-shot/priming) included early in the prompt.'
+        "Seed messages (few-shot/priming) included early in the prompt.",
       ),
 
     // NewMessages: z
@@ -168,17 +168,16 @@ export const EaCPersonalityDetailsSchema: z.ZodType<EaCPersonalityDetails> =
       .describe('Language/region hint (e.g., "en-US").'),
 
     OutputFormat: z
-      .enum(['text', 'markdown', 'mdx', 'json'])
+      .enum(["text", "markdown", "mdx", "json"])
       .optional()
-      .describe('Preferred output format for downstream renderers.'),
+      .describe("Preferred output format for downstream renderers."),
 
     Audience: z
       .string()
       .optional()
       .describe(
-        "Target reader shorthand (e.g., 'players', 'editors', 'exec brief')."
+        "Target reader shorthand (e.g., 'players', 'editors', 'exec brief').",
       ),
-
     // MessageOrder: z
     //   .array(
     //     z.enum(['PreludeMessages', 'Messages', 'NewMessages', 'PostMessages'])
@@ -228,16 +227,16 @@ export const EaCPersonalityDetailsSchema: z.ZodType<EaCPersonalityDetails> =
     //   .optional()
     //   .describe('Stop sequences that truncate output when matched.'),
   }).describe(
-    'Personality payload consumed by prompt builders. ' +
-      'The system block is formed from SystemMessages + Instructions; ' +
-      'then banks are applied in order: PreludeMessages → Messages → NewMessages → PostMessages. ' +
-      'Tool-role messages are permitted inside any bank and will be emitted in sequence. ' +
+    "Personality payload consumed by prompt builders. " +
+      "The system block is formed from SystemMessages + Instructions; " +
+      "then banks are applied in order: PreludeMessages → Messages → NewMessages → PostMessages. " +
+      "Tool-role messages are permitted inside any bank and will be emitted in sequence. " +
       // 'Generation knobs (Temperature/TopP, penalties, MaxTokens, Stop) guide sampling; ' +
-      'Locale/Audience/OutputFormat hint tone and rendering.'
+      "Locale/Audience/OutputFormat hint tone and rendering.",
   );
 
 export function isEaCPersonalityDetails(
-  details: unknown
+  details: unknown,
 ): details is EaCPersonalityDetails {
   return EaCPersonalityDetailsSchema.safeParse(details).success;
 }
