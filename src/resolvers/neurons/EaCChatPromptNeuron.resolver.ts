@@ -5,7 +5,6 @@ import {
   BaseMessagePromptTemplateLike,
   ChatPromptTemplate,
   mergeWithArrays,
-  MessagesPlaceholder,
   RunnableLambda,
 } from "../../src.deps.ts";
 import { EaCPersonalityDetails } from "../../eac/EaCPersonalityDetails.ts";
@@ -64,10 +63,8 @@ export default {
 
       // cfg.configurable!.llmPatch = mergeWithArrays(prevLlmPatch, llmPatch);
 
-      return { Messages: messages };
-    }).pipe(
-      ChatPromptTemplate.fromMessages([new MessagesPlaceholder("Messages")]),
-    );
+      return ChatPromptTemplate.fromMessages(messages);
+    });
   },
 } as SynapticNeuronResolver<EaCChatPromptNeuron>;
 
