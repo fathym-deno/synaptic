@@ -31,7 +31,7 @@ export default {
       )
       : ({} as EaCPersonalityDetails);
 
-    return RunnableLambda.from((_, cfg) => {
+    return RunnableLambda.from((_input, cfg) => {
       const personalityCfg = cfg.configurable?.personality ?? {};
 
       const personality = mergeWithArrays<EaCPersonalityDetails>(
@@ -64,6 +64,10 @@ export default {
       // cfg.configurable!.llmPatch = mergeWithArrays(prevLlmPatch, llmPatch);
 
       return ChatPromptTemplate.fromMessages(messages);
+
+      // return RunnableMap.from(input).pipe(
+      //   ChatPromptTemplate.fromMessages(messages),
+      // );
     });
   },
 } as SynapticNeuronResolver<EaCChatPromptNeuron>;
