@@ -1005,9 +1005,19 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
           retrieverLookups.map(async (retrieverLookup) => {
             const retriever = ai.Retrievers![retrieverLookup]!;
 
+            const vsAiScope = retriever.Details!.VectorStoreLookup.includes('|')
+              ? retriever.Details!.VectorStoreLookup.split('|')[0]
+              : aiLookup;
+
+            const vsAiLookup = retriever.Details!.VectorStoreLookup.includes(
+              '|'
+            )
+              ? retriever.Details!.VectorStoreLookup.split('|')[1]
+              : retriever.Details!.VectorStoreLookup;
+
             const vectorStore = await ioc.Resolve<VectorStore>(
               ioc.Symbol(VectorStore.name),
-              vectorStoreToken(retriever.Details!.VectorStoreLookup, aiLookup)
+              vectorStoreToken(vsAiLookup, vsAiScope)
             );
 
             await ioc.Register(() => vectorStore.asRetriever(), {
@@ -1221,9 +1231,19 @@ export default class FathymSynapticPlugin implements EaCRuntimePlugin {
         async (vectorStoreLookup) => {
           const vectorStore = ai.VectorStores![vectorStoreLookup]!;
 
+          const embAiScope = vectorStore.Details!.EmbeddingsLookup.includes('|')
+            ? vectorStore.Details!.EmbeddingsLookup.split('|')[0]
+            : aiLookup;
+
+          const embAiLookup = vectorStore.Details!.EmbeddingsLookup.includes(
+            '|'
+          )
+            ? vectorStore.Details!.EmbeddingsLookup.split('|')[1]
+            : vectorStore.Details!.EmbeddingsLookup;
+
           const embeddings = await ioc.Resolve<Embeddings>(
             ioc.Symbol(Embeddings.name),
-            embeddingsToken(vectorStore.Details!.EmbeddingsLookup, aiLookup)
+            embeddingsToken(embAiLookup, embAiScope)
           );
 
           if (isEaCAzureSearchAIVectorStoreDetails(vectorStore.Details)) {
