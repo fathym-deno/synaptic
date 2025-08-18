@@ -1,35 +1,35 @@
-import { SynapticNeuronResolver } from '../SynapticNeuronResolver.ts';
-import { SynapticResolverConfiguration } from '../SynapticResolverConfiguration.ts';
-import { EaCChatPromptNeuron } from '../../eac/neurons/EaCChatPromptNeuron.ts';
+import { SynapticNeuronResolver } from "../SynapticNeuronResolver.ts";
+import { SynapticResolverConfiguration } from "../SynapticResolverConfiguration.ts";
+import { EaCChatPromptNeuron } from "../../eac/neurons/EaCChatPromptNeuron.ts";
 import {
   BaseMessagePromptTemplateLike,
   ChatPromptTemplate,
   mergeWithArrays,
   MessagesPlaceholder,
   RunnableLambda,
-} from '../../src.deps.ts';
-import { EaCPersonalityDetails } from '../../eac/EaCPersonalityDetails.ts';
+} from "../../src.deps.ts";
+import { EaCPersonalityDetails } from "../../eac/EaCPersonalityDetails.ts";
 
 export const SynapticResolverConfig: SynapticResolverConfiguration = {
-  Type: 'neuron',
-  Name: 'ChatPrompt',
+  Type: "neuron",
+  Name: "ChatPrompt",
 };
 
-type BankKey = 'PreludeMessages' | 'Messages' | 'NewMessages' | 'PostMessages';
+type BankKey = "PreludeMessages" | "Messages" | "NewMessages" | "PostMessages";
 const DEFAULT_ORDER: BankKey[] = [
-  'PreludeMessages',
-  'Messages',
-  'NewMessages',
-  'PostMessages',
+  "PreludeMessages",
+  "Messages",
+  "NewMessages",
+  "PostMessages",
 ];
 
 export default {
   async Resolve(_neuronLookup, neuron, ioc) {
     const iocPersonality: EaCPersonalityDetails = neuron.PersonalityLookup
       ? await ioc.Resolve<EaCPersonalityDetails>(
-          ioc.Symbol('Personality'),
-          neuron.PersonalityLookup
-        )
+        ioc.Symbol("Personality"),
+        neuron.PersonalityLookup,
+      )
       : ({} as EaCPersonalityDetails);
 
     return RunnableLambda.from((_, cfg) => {
@@ -45,7 +45,7 @@ export default {
           Messages: neuron.Messages ?? [],
           NewMessages: neuron.NewMessages ?? [],
           PostMessages: neuron.PostMessages ?? [],
-        } as Partial<EaCPersonalityDetails>
+        } as Partial<EaCPersonalityDetails>,
       );
 
       const messages: BaseMessagePromptTemplateLike[] =
@@ -66,13 +66,13 @@ export default {
 
       return { Messages: messages };
     }).pipe(
-      ChatPromptTemplate.fromMessages([new MessagesPlaceholder('Messages')])
+      ChatPromptTemplate.fromMessages([new MessagesPlaceholder("Messages")]),
     );
   },
 } as SynapticNeuronResolver<EaCChatPromptNeuron>;
 
 export function buildMessagesFromPersonality(
-  personality: EaCPersonalityDetails
+  personality: EaCPersonalityDetails,
 ): BaseMessagePromptTemplateLike[] {
   const messages: BaseMessagePromptTemplateLike[] = [];
 
@@ -87,11 +87,11 @@ export function buildMessagesFromPersonality(
     const parts: string[] = [];
 
     if (personality.SystemMessages?.length) {
-      parts.push(personality.SystemMessages.join('\n'));
+      parts.push(personality.SystemMessages.join("\n"));
     }
 
     if (personality.Instructions?.length) {
-      parts.push(personality.Instructions.join('\n\n'));
+      parts.push(personality.Instructions.join("\n\n"));
     }
 
     const hintBits: string[] = [];
@@ -109,10 +109,10 @@ export function buildMessagesFromPersonality(
     }
 
     if (hintBits.length) {
-      parts.push(hintBits.join(' | '));
+      parts.push(hintBits.join(" | "));
     }
 
-    messages.push(['system', parts.join('\n\n')]);
+    messages.push(["system", parts.join("\n\n")]);
   }
 
   // Order banks and push messages
@@ -123,7 +123,7 @@ export function buildMessagesFromPersonality(
 
   const pushBank = (
     out: BaseMessagePromptTemplateLike[],
-    bank?: BaseMessagePromptTemplateLike[]
+    bank?: BaseMessagePromptTemplateLike[],
   ) => {
     bank?.forEach((m) => out.push(normalizeMessage(m)));
   };
@@ -136,15 +136,15 @@ export function buildMessagesFromPersonality(
 }
 
 function normalizeMessage(
-  msg: BaseMessagePromptTemplateLike
+  msg: BaseMessagePromptTemplateLike,
 ): BaseMessagePromptTemplateLike {
-  if (Array.isArray(msg) && typeof msg[0] === 'string') {
-    const role = msg[0] === 'ai' ? 'assistant' : msg[0];
+  if (Array.isArray(msg) && typeof msg[0] === "string") {
+    const role = msg[0] === "ai" ? "assistant" : msg[0];
     return [role, String(msg[1])];
   }
-  if (msg && typeof msg === 'object' && 'role' in msg) {
+  if (msg && typeof msg === "object" && "role" in msg) {
     const o = msg;
-    const role = o.role === 'ai' ? 'assistant' : o.role;
+    const role = o.role === "ai" ? "assistant" : o.role;
     return {
       ...o,
       role,
@@ -154,11 +154,11 @@ function normalizeMessage(
   return msg;
 }
 
-function stripUndefined<T extends Record<string, unknown>>(o: T): Partial<T> {
-  const r: Partial<T> = {};
-  for (const k in o) if (o[k] !== undefined) r[k] = o[k];
-  return r;
-}
+// function stripUndefined<T extends Record<string, unknown>>(o: T): Partial<T> {
+//   const r: Partial<T> = {};
+//   for (const k in o) if (o[k] !== undefined) r[k] = o[k];
+//   return r;
+// }
 
 // 2) Merge neuron-provided overrides/additions (arrays stack)
 // personality = mergeWithArrays(personality, personalityCfg, {

@@ -77,8 +77,8 @@ export {
   type BaseMessagePromptTemplateLike,
   BasePromptTemplate,
   ChatPromptTemplate,
-  PromptTemplate,
   MessagesPlaceholder,
+  PromptTemplate,
 } from "npm:@langchain/core@0.3.42/prompts";
 export {
   Runnable,
