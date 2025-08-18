@@ -17,7 +17,7 @@ import {
 
 import {
   AzureAISearchQueryType,
-} from "npm:@langchain/community@0.3.36/vectorstores/azure_aisearch";
+} from "npm:@langchain/community@0.3.51/vectorstores/azure_aisearch";
 
 export const eacAIsRoot = {
   Details: {

@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { AzureAISearchVectorStore } from "npm:@langchain/community@0.3.36/vectorstores/azure_aisearch";
+import { AzureAISearchVectorStore } from "npm:@langchain/community@0.3.51/vectorstores/azure_aisearch";
 import {
   AzureChatOpenAI,
   AzureOpenAIEmbeddings,

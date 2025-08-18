@@ -28,10 +28,10 @@ export { IoCContainer } from "jsr:@fathym/ioc@0.0.14";
 export { z } from "npm:zod@3.24.2";
 export { zodToJsonSchema } from "npm:zod-to-json-schema@3.23.2";
 
-export { type AgentAction } from "npm:@langchain/core@0.3.42/agents";
-export { dispatchCustomEvent } from "npm:@langchain/core@0.3.42/callbacks/dispatch";
-export { BaseListChatMessageHistory } from "npm:@langchain/core@0.3.42/chat_history";
-export { BaseLanguageModel } from "npm:@langchain/core@0.3.42/language_models/base";
+export { type AgentAction } from "npm:@langchain/core@0.3.71/agents";
+export { dispatchCustomEvent } from "npm:@langchain/core@0.3.71/callbacks/dispatch";
+export { BaseListChatMessageHistory } from "npm:@langchain/core@0.3.71/chat_history";
+export { BaseLanguageModel } from "npm:@langchain/core@0.3.71/language_models/base";
 export {
   AIMessage,
   AIMessageChunk,
@@ -39,22 +39,22 @@ export {
   FunctionMessage,
   HumanMessage,
   ToolMessage,
-} from "npm:@langchain/core@0.3.42/messages";
-export { ChatPromptValue } from "npm:@langchain/core@0.3.42/prompt_values";
+} from "npm:@langchain/core@0.3.71/messages";
+export { ChatPromptValue } from "npm:@langchain/core@0.3.71/prompt_values";
 export {
   type BaseMessagePromptTemplateLike,
   ChatPromptTemplate,
   MessagesPlaceholder,
-} from "npm:@langchain/core@0.3.42/prompts";
-export { Runnable, RunnableLambda } from "npm:@langchain/core@0.3.42/runnables";
-export { StructuredTool } from "npm:@langchain/core@0.3.42/tools";
+} from "npm:@langchain/core@0.3.71/prompts";
+export { Runnable, RunnableLambda } from "npm:@langchain/core@0.3.71/runnables";
+export { StructuredTool } from "npm:@langchain/core@0.3.71/tools";
 export {
   Annotation,
   END,
   START,
   StateGraph,
-} from "npm:@langchain/langgraph@0.2.56";
+} from "npm:@langchain/langgraph@0.4.5";
 export {
   ToolExecutor,
   ToolNode,
-} from "npm:@langchain/langgraph@0.2.56/prebuilt";
+} from "npm:@langchain/langgraph@0.4.5/prebuilt";

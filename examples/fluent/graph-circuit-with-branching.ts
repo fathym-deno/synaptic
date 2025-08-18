@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { END, START } from "npm:@langchain/langgraph@0.2.56";
+import { END, START } from "npm:@langchain/langgraph@0.4.5";
 import { GraphCircuitBuilder } from "../../src/fluent/circuits/_exports.ts";
 import { NeuronBuilder } from "../../src/fluent/circuits/neurons/NeuronBuilder.ts";
 import { EaCPassthroughNeuron } from "../../src/eac/neurons/EaCPassthroughNeuron.ts";

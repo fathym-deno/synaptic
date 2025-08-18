@@ -1,4 +1,4 @@
-import { END, START } from "npm:@langchain/langgraph@0.2.56";
+import { END, START } from "npm:@langchain/langgraph@0.4.5";
 import { z } from "npm:zod";
 import {
   ChatPromptNeuronBuilder,
