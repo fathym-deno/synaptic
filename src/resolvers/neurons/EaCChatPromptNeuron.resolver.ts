@@ -88,7 +88,7 @@ export function buildMessagesFromPersonality(
     }
 
     if (personality.Instructions?.length) {
-      parts.push(personality.Instructions.join("\n\n"));
+      parts.push(personality.Instructions.join("\n"));
     }
 
     const hintBits: string[] = [];
