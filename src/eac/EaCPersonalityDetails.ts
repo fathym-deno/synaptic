@@ -17,9 +17,9 @@ const RoleSchema: z.ZodEnum<["system", "assistant", "ai", "user", "tool"]> = z
   );
 
 /** Tuple form: [role, content] */
-const TupleMsgSchema: z.ZodTuple<[typeof RoleSchema, z.ZodString], null> = z
-  .tuple([RoleSchema, z.string()])
-  .describe("Tuple message: [role, content]. Minimal, library-friendly shape.");
+// const TupleMsgSchema: z.ZodTuple<[typeof RoleSchema, z.ZodString], null> = z
+//   .tuple([RoleSchema, z.string()])
+//   .describe("Tuple message: [role, content]. Minimal, library-friendly shape.");
 
 /** Object form for normal roles: { role, content } */
 const ObjectMsgSchema: z.ZodObject<{
@@ -55,13 +55,18 @@ const ToolMsgSchema: z.ZodObject<{
 // export const BaseMessagePromptTemplateLikeSchema = ObjectMsgSchema;
 export const BaseMessagePromptTemplateLikeSchema: z.ZodUnion<
   [
-    typeof TupleMsgSchema,
+    // typeof TupleMsgSchema,
     typeof ToolMsgSchema,
     typeof ObjectMsgSchema,
     z.ZodAny,
   ]
 > = z
-  .union([TupleMsgSchema, ToolMsgSchema, ObjectMsgSchema, z.any()])
+  .union([
+    // TupleMsgSchema,
+    ToolMsgSchema,
+    ObjectMsgSchema,
+    z.any(),
+  ])
   .describe(
     "Union for validating messages accepted by prompt builders. Supports tuples, objects, and tool-object variants.",
   );

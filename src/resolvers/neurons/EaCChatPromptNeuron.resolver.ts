@@ -31,8 +31,8 @@ export default {
       )
       : ({} as EaCPersonalityDetails);
 
-    return RunnableLambda.from((_input, cfg) => {
-      const personalityCfg = cfg.configurable?.personality ?? {};
+    return RunnableLambda.from((input) => {
+      const personalityCfg = input?.$Personality ?? {};
 
       const personality = mergeWithArrays<EaCPersonalityDetails>(
         iocPersonality,

@@ -190,7 +190,7 @@ export async function buildEaCTestIoC(
     }
 
     if (!plugins.some((p) => p instanceof FathymSynapticPlugin)) {
-      plugins.push(new FathymSynapticPlugin());
+      plugins.push(new FathymSynapticPlugin(true));
     }
   }
 
