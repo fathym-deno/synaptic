@@ -9,11 +9,10 @@ import { NeuronBuilder } from "./neurons/NeuronBuilder.ts";
 
 type NeuronIdLike = string | { id: string };
 
-type EdgeTarget<T extends Record<string, NeuronBuilder<any>>> =
-  | string
-  | T[keyof T]
-  | (string | T[keyof T])[]
-  | Record<string, string | T[keyof T]>;
+type EdgeTargetLike =
+  | NeuronIdLike
+  | NeuronIdLike[]
+  | Record<string, NeuronIdLike>;
 
 function toNodeIds(
   target: NeuronIdLike | NeuronIdLike[] | Record<string, NeuronIdLike>,
@@ -52,18 +51,18 @@ export class GraphCircuitBuilder<
     return this as unknown as GraphCircuitBuilder<TNeurons & { [P in K]: N }>;
   }
 
-  Edge<From extends keyof TNeurons>(
-    from: TNeurons[From],
+  Edge(
+    from: NeuronIdLike,
   ): {
-    To: <Target extends EdgeTarget<TNeurons>>(
-      target: Target,
+    To: (
+      target: EdgeTargetLike,
       options?: Omit<EaCGraphCircuitEdge, "Node">,
     ) => GraphCircuitBuilder<TNeurons>;
   } {
-    const fromId = from.id;
+    const fromId = typeof from === "string" ? from : from.id;
     return {
-      To: <Target extends EdgeTarget<TNeurons>>(
-        target: Target,
+      To: (
+        target: EdgeTargetLike,
         options?: Omit<EaCGraphCircuitEdge, "Node">,
       ): GraphCircuitBuilder<TNeurons> => {
         const nodeIds = toNodeIds(target);

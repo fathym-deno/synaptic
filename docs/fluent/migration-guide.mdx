@@ -30,10 +30,7 @@ Synaptic originally defined circuits using JSON structures. The new fluent build
 
 ```ts
 import { Annotation, START, END } from "npm:@langchain/langgraph@0.4.5";
-import {
-  ChatPromptNeuronBuilder,
-  GraphCircuitBuilder,
-} from "../../src/fluent/circuits/_exports.ts";
+import { ChatPromptNeuronBuilder, GraphCircuitBuilder } from "../../src/fluent/circuits/.exports.ts";
 import { PersonalityBuilder } from "../../src/fluent/resources/PersonalityBuilder.ts";
 import { BuildState } from "../../src/fluent/state/StateBuilder.ts";
 
@@ -105,11 +102,7 @@ The fluent version uses builders to define resources, state, and edges in a conc
 
 ```ts
 import { z } from "npm:zod";
-import {
-  ChatPromptNeuronBuilder,
-  LinearCircuitBuilder,
-  ToolNeuronBuilder,
-} from "../../src/fluent/circuits/_exports.ts";
+import { ChatPromptNeuronBuilder, LinearCircuitBuilder, ToolNeuronBuilder } from "../../src/fluent/circuits/.exports.ts";
 import { PersonalityBuilder } from "../../src/fluent/resources/PersonalityBuilder.ts";
 import { ToolBuilder } from "../../src/fluent/resources/ToolBuilder.ts";
 import { BuildState } from "../../src/fluent/state/StateBuilder.ts";
@@ -186,7 +179,7 @@ Using `BuildState` and `InputBuilder` provides typed state and inputs, while `pe
 
 ```ts
 import { START, END } from "npm:@langchain/langgraph@0.4.5";
-import { GraphCircuitBuilder } from "../../src/fluent/circuits/_exports.ts";
+import { GraphCircuitBuilder } from "../../src/fluent/circuits/.exports.ts";
 import { NeuronBuilder } from "../../src/fluent/circuits/neurons/NeuronBuilder.ts";
 import { EaCPassthroughNeuron } from "../../src/eac/neurons/EaCPassthroughNeuron.ts";
 import { StateBuilder } from "../../src/fluent/state/StateBuilder.ts";
@@ -237,11 +230,7 @@ This example mirrors the Thinky user requirement workflows circuit using resourc
 ```ts
 import { START, END } from "npm:@langchain/langgraph@0.4.5";
 import { z } from "npm:zod";
-import {
-  ChatPromptNeuronBuilder,
-  GraphCircuitBuilder,
-  ToolNeuronBuilder,
-} from "../../src/fluent/circuits/_exports.ts";
+import { ChatPromptNeuronBuilder, GraphCircuitBuilder, ToolNeuronBuilder } from "../../src/fluent/circuits/.exports.ts";
 import {
   LLMBuilder,
   PersonalityBuilder,

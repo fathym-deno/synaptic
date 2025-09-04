@@ -1,10 +1,6 @@
 import { END, START } from "npm:@langchain/langgraph@0.4.5";
 import { z } from "npm:zod";
-import {
-  ChatPromptNeuronBuilder,
-  GraphCircuitBuilder,
-  ToolNeuronBuilder,
-} from "../../src/fluent/circuits/_exports.ts";
+import { ChatPromptNeuronBuilder, GraphCircuitBuilder, ToolNeuronBuilder } from "../../src/fluent/circuits/.exports.ts";
 import {
   LLMBuilder,
   PersonalityBuilder,

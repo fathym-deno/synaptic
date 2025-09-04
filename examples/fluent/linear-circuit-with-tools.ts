@@ -1,9 +1,5 @@
 import { z } from "npm:zod";
-import {
-  ChatPromptNeuronBuilder,
-  LinearCircuitBuilder,
-  ToolNeuronBuilder,
-} from "../../src/fluent/circuits/_exports.ts";
+import { ChatPromptNeuronBuilder, LinearCircuitBuilder, ToolNeuronBuilder } from "../../src/fluent/circuits/.exports.ts";
 import { PersonalityBuilder } from "../../src/fluent/resources/PersonalityBuilder.ts";
 import { ToolBuilder } from "../../src/fluent/resources/ToolBuilder.ts";
 

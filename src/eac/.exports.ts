@@ -1,6 +1,6 @@
 export * from "./neurons/.exports.ts";
 export * from "./llms/.exports.ts";
-export * from "./tools/_exports.ts";
+export * from "./tools/.exports.ts";
 export * from "./composeRunnableCircuit.ts";
 export * from "./EaCAIAsCode.ts";
 export * from "./EaCAIDetails.ts";

@@ -3,7 +3,7 @@ import {
   ChatPromptNeuronBuilder,
   LinearCircuitBuilder,
   ToolNeuronBuilder,
-} from "../../../src/fluent/circuits/_exports.ts";
+} from "../../../src/fluent/circuits/.exports.ts";
 import { PersonalityId } from "../../../src/fluent/resources/PersonalityBuilder.ts";
 import { ToolId } from "../../../src/fluent/resources/ToolBuilder.ts";
 
