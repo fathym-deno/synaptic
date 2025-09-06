@@ -1,6 +1,9 @@
 // deno-lint-ignore-file no-explicit-any
 import { END, START } from "npm:@langchain/langgraph@0.4.5";
-import { ChatPromptNeuronBuilder, GraphCircuitBuilder } from "../../src/fluent/circuits/.exports.ts";
+import {
+  ChatPromptNeuronBuilder,
+  GraphCircuitBuilder,
+} from "../../src/fluent/circuits/.exports.ts";
 import { PersonalityBuilder } from "../../src/fluent/resources/PersonalityBuilder.ts";
 import { BuildState } from "../../src/fluent/state/StateBuilder.ts";
 

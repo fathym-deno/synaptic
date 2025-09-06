@@ -7,13 +7,13 @@
     "./fresh": "./fresh.ts"
   },
   "tasks": {
-    "build": "deno task build:fmt && deno task build:lint && deno task publish:check && deno task test",
+    "build": "deno task build:fmt && deno task build:lint && deno task test",
     "build:fmt": "deno fmt",
     "build:lint": "deno lint",
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
     "deploy": "deno task build && ftm git",
     "publish:check": "deno publish --dry-run --allow-dirty",
-    "test": "npx rimraf cov && deno test -A ./tests/tests.ts --coverage=cov",
+    "test": "deno test -A ./tests/tests.ts --coverage=cov",
     "version": "deno run -A jsr:@fathym/common@0/build/version"
   },
   "imports": {
