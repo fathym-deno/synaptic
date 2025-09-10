@@ -22,16 +22,27 @@ import { EaCVectorStoreAsCode } from "../../eac/EaCVectorStoreAsCode.ts";
 import { EaCChatHistoryAsCode } from "../../eac/EaCChatHistoryAsCode.ts";
 import {
   ChatHistory as ChatHistoryLookup,
+  ChatHistoryLookupToken,
   DocumentLoader as DocumentLoaderLookup,
+  DocumentLoaderLookupToken,
   Embeddings as EmbeddingsLookup,
+  EmbeddingsLookupToken,
   Indexer as IndexerLookup,
+  IndexerLookupToken,
   LLM as LLMLookup,
+  LLMLookupToken,
   Persistence as PersistenceLookup,
+  PersistenceLookupToken,
   Personality as PersonalityLookup,
+  PersonalityLookupToken,
   Retriever as RetrieverLookup,
+  RetrieverLookupToken,
   TextSplitter as TextSplitterLookup,
+  TextSplitterLookupToken,
   Tool as ToolLookup,
+  ToolLookupToken,
   VectorStore as VectorStoreLookup,
+  VectorStoreLookupToken,
 } from "../lookups/index.ts";
 
 export class AIWorkspace {
@@ -44,37 +55,52 @@ export class AIWorkspace {
     this.ai = { Details: {} } as EaCAIAsCode;
   }
 
-  public LLM(lookup: string, details: EaCLLMDetails) {
+  public LLM(lookup: string, details: EaCLLMDetails): LLMLookupToken {
     this.ai.LLMs = this.ai.LLMs || {};
     this.ai.LLMs[lookup] = { Details: details } as EaCLLMAsCode;
     return LLMLookup(lookup, this.aiName);
   }
 
-  public Embeddings(lookup: string, details: EaCEmbeddingsDetails) {
+  public Embeddings(
+    lookup: string,
+    details: EaCEmbeddingsDetails,
+  ): EmbeddingsLookupToken {
     this.ai.Embeddings = this.ai.Embeddings || {};
     this.ai.Embeddings[lookup] = { Details: details } as EaCEmbeddingsAsCode;
     return EmbeddingsLookup(lookup, this.aiName);
   }
 
-  public Indexer(lookup: string, details: EaCIndexerDetails) {
+  public Indexer(
+    lookup: string,
+    details: EaCIndexerDetails,
+  ): IndexerLookupToken {
     this.ai.Indexers = this.ai.Indexers || {};
     this.ai.Indexers[lookup] = { Details: details } as EaCIndexerAsCode;
     return IndexerLookup(lookup, this.aiName);
   }
 
-  public Loader(lookup: string, details: EaCDocumentLoaderDetails) {
+  public Loader(
+    lookup: string,
+    details: EaCDocumentLoaderDetails,
+  ): DocumentLoaderLookupToken {
     this.ai.Loaders = this.ai.Loaders || {};
     this.ai.Loaders[lookup] = { Details: details } as EaCDocumentLoaderAsCode;
     return DocumentLoaderLookup(lookup, this.aiName);
   }
 
-  public Persistence(lookup: string, details: EaCPersistenceDetails) {
+  public Persistence(
+    lookup: string,
+    details: EaCPersistenceDetails,
+  ): PersistenceLookupToken {
     this.ai.Persistence = this.ai.Persistence || {};
     this.ai.Persistence[lookup] = { Details: details } as EaCPersistenceAsCode;
     return PersistenceLookup(lookup, this.aiName);
   }
 
-  public Personality(lookup: string, details: EaCPersonalityDetails) {
+  public Personality(
+    lookup: string,
+    details: EaCPersonalityDetails,
+  ): PersonalityLookupToken {
     this.ai.Personalities = this.ai.Personalities || {};
     this.ai.Personalities[lookup] = {
       Details: details,
@@ -82,13 +108,19 @@ export class AIWorkspace {
     return PersonalityLookup(lookup, this.aiName);
   }
 
-  public Retriever(lookup: string, details: EaCRetrieverDetails) {
+  public Retriever(
+    lookup: string,
+    details: EaCRetrieverDetails,
+  ): RetrieverLookupToken {
     this.ai.Retrievers = this.ai.Retrievers || {};
     this.ai.Retrievers[lookup] = { Details: details } as EaCRetrieverAsCode;
     return RetrieverLookup(lookup, this.aiName);
   }
 
-  public TextSplitter(lookup: string, details: EaCTextSplitterDetails) {
+  public TextSplitter(
+    lookup: string,
+    details: EaCTextSplitterDetails,
+  ): TextSplitterLookupToken {
     this.ai.TextSplitters = this.ai.TextSplitters || {};
     this.ai.TextSplitters[lookup] = {
       Details: details,
@@ -96,19 +128,25 @@ export class AIWorkspace {
     return TextSplitterLookup(lookup, this.aiName);
   }
 
-  public Tool(lookup: string, details: EaCToolDetails) {
+  public Tool(lookup: string, details: EaCToolDetails): ToolLookupToken {
     this.ai.Tools = this.ai.Tools || {};
     this.ai.Tools[lookup] = { Details: details } as EaCToolAsCode;
     return ToolLookup(lookup, this.aiName);
   }
 
-  public VectorStore(lookup: string, details: EaCVectorStoreDetails) {
+  public VectorStore(
+    lookup: string,
+    details: EaCVectorStoreDetails,
+  ): VectorStoreLookupToken {
     this.ai.VectorStores = this.ai.VectorStores || {};
     this.ai.VectorStores[lookup] = { Details: details } as EaCVectorStoreAsCode;
     return VectorStoreLookup(lookup, this.aiName);
   }
 
-  public ChatHistory(lookup: string, details: Record<string, unknown>) {
+  public ChatHistory(
+    lookup: string,
+    details: Record<string, unknown>,
+  ): ChatHistoryLookupToken {
     this.ai.ChatHistories = this.ai.ChatHistories || {};
     // loosen for now; wire detailed type when available
     this.ai.ChatHistories[lookup] = {

@@ -98,9 +98,10 @@ export class SynapticBuilder {
 
   public ToEaC(): EverythingAsCodeSynaptic {
     const AIs = Object.fromEntries(
-      Object.entries(this.ais).map((
-        [k, v],
-      ) => [k, { ...(v || {}), Details: v.Details || {} } as EaCAIAsCode]),
+      Object.entries(this.ais).map(([k, v]) => [
+        k,
+        { ...(v || {}), Details: v.Details || {} } as EaCAIAsCode,
+      ]),
     );
 
     const Circuits = { ...(this.circuits || {}) } as Record<
@@ -115,7 +116,9 @@ export class SynapticBuilder {
   }
 }
 
-export const Synaptic = {
+export const Synaptic: {
+  Builder(scope?: string): SynapticBuilder;
+} = {
   Builder(scope?: string) {
     return new SynapticBuilder(scope);
   },
