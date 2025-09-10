@@ -2,9 +2,11 @@
 
 # Synaptic
 
-A Deno-first framework for building AI agents as composable circuits with strong typing, Everything-as-Code (EaC), and a fluent builder API.
+A Deno-first framework for building AI agents as composable circuits with strong
+typing, Everything-as-Code (EaC), and a fluent builder API.
 
-Synaptic helps you go beyond “just chat” by wiring prompt-driven neurons, tools, memory, and state into repeatable circuits you can run across runtimes.
+Synaptic helps you go beyond “just chat” by wiring prompt-driven neurons, tools,
+memory, and state into repeatable circuits you can run across runtimes.
 
 Status: early preview – APIs may change.
 
@@ -22,7 +24,10 @@ Define a minimal linear circuit with two prompt neurons:
 
 ```ts
 // deno run -A quick-start.ts
-import { LinearCircuitBuilder, ChatPromptNeuronBuilder } from "jsr:@fathym/synaptic/fluent";
+import {
+  ChatPromptNeuronBuilder,
+  LinearCircuitBuilder,
+} from "jsr:@fathym/synaptic/fluent";
 
 // A prep step that summarizes input
 const prep = new ChatPromptNeuronBuilder("prep", {
@@ -51,8 +56,11 @@ export const eac = {
 ```
 
 Next steps:
-- Read the [Fluent Quick Start](docs/fluent/quick-start.mdx) for concepts and patterns.
-- See the [Migration Guide](docs/fluent/migration-guide.mdx) to convert JSON circuits.
+
+- Read the [Fluent Quick Start](docs/fluent/quick-start.mdx) for concepts and
+  patterns.
+- See the [Migration Guide](docs/fluent/migration-guide.mdx) to convert JSON
+  circuits.
 
 ## Features
 
@@ -72,11 +80,13 @@ import { fluent } from "jsr:@fathym/synaptic";
 import { LinearCircuitBuilder } from "jsr:@fathym/synaptic/fluent";
 ```
 
-Project uses npm interop internally (e.g., LangGraph, Preact), which Deno resolves transparently.
+Project uses npm interop internally (e.g., LangGraph, Preact), which Deno
+resolves transparently.
 
 ## Runtimes
 
-This package focuses on modeling and building circuits. To execute circuits, use a compatible runtime. See `runtime/README.md` for notes and pointers.
+This package focuses on modeling and building circuits. To execute circuits, use
+a compatible runtime. See `runtime/README.md` for notes and pointers.
 
 ## Development
 
@@ -90,10 +100,12 @@ This package focuses on modeling and building circuits. To execute circuits, use
 
 - `src/fluent/`: fluent builders for circuits, neurons, state, and resources.
 - `src/eac/`: Everything-as-Code types and validators.
-- `src/circuits/`, `src/runnables/`, `src/memory/`: building blocks and utilities.
+- `src/circuits/`, `src/runnables/`, `src/memory/`: building blocks and
+  utilities.
 - `docs/fluent/`: quick start and migration guides.
 - `runtime/`: notes for runtime packages that consume Synaptic.
 
 ---
 
-We welcome feedback and issues as the API stabilizes. If you’d like a deeper tour or have a feature request, please open an issue.
+We welcome feedback and issues as the API stabilizes. If you’d like a deeper
+tour or have a feature request, please open an issue.

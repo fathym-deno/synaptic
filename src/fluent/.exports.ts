@@ -4,3 +4,4 @@ export * from "./EaCFluentBuilderProxy.ts";
 export * from "./state/.exports.ts";
 export * from "./circuits/.exports.ts";
 export * from "./lookups/.exports.ts";
+export * from "./SynapticBuilder.ts";

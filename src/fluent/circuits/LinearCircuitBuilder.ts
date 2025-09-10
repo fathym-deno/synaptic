@@ -15,12 +15,20 @@ export class LinearCircuitBuilder<
     return this as unknown as LinearCircuitBuilder<TNeurons & { [P in K]: N }>;
   }
 
+  // Typed chain using neuron instances
   Chain<
     A extends TNeurons[keyof TNeurons],
     B extends TNeurons[keyof TNeurons],
     Rest extends TNeurons[keyof TNeurons][] = [],
-  >(...nodes: [A, B, ...Rest]): this {
-    this.#sequence = nodes.map((n) => n.id);
+  >(...nodes: [A, B, ...Rest]): this;
+  // Simpler chain by ids to avoid inference issues
+  Chain(...ids: [string, string, ...string[]]): this;
+  Chain(
+    ...nodesOrIds: Array<NeuronBuilder<any> | string>
+  ): this {
+    this.#sequence = nodesOrIds.map((n) =>
+      typeof n === "string" ? n : (n as NeuronBuilder<any>).id
+    );
     return this;
   }
 
