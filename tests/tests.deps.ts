@@ -11,6 +11,7 @@ export {
 export { toText } from "jsr:@std/streams@1.0.1";
 
 export * from "jsr:@fathym/common@0.2.266";
+export * from "jsr:@fathym/eac@0.2.122/steward/status";
 
 export * from "jsr:@fathym/eac@0.2.122";
 export * from "jsr:@fathym/eac@0.2.122/runtime/plugins";
