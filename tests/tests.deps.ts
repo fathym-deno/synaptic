@@ -19,8 +19,6 @@ export * from "jsr:@fathym/eac-deno-kv@0.0.23";
 
 export * from "jsr:@fathym/eac@0.2.122/dfs";
 
-export * from "jsr:@fathym/eac-api@0.1.19";
-
 export { FathymEaCDenoKVPlugin } from "jsr:@fathym/eac-applications@0.0.191/runtime/plugins";
 
 export { IoCContainer } from "jsr:@fathym/ioc@0.0.14";
