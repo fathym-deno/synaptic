@@ -1,4 +1,4 @@
-import { z } from "npm:zod";
+import { z } from "jsr:@fathym/common@0.2.266/third-party/zod";
 import {
   ChatPromptNeuronBuilder,
   LinearCircuitBuilder,

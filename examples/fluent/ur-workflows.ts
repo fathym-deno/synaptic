@@ -1,5 +1,5 @@
 import { END, START } from "npm:@langchain/langgraph@0.4.5";
-import { z } from "npm:zod";
+import { z } from "jsr:@fathym/common@0.2.266/third-party/zod";
 import {
   ChatPromptNeuronBuilder,
   GraphCircuitBuilder,

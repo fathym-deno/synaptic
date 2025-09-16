@@ -16,7 +16,7 @@ Deno.test("SynapticBuilder builds AIs and returns handles", () => {
   assert(ai);
   assert(ai.LLMs);
   assert(ai.LLMs?.gpt4o);
-  assertEquals(ai.LLMs?.gpt4o?.Details.Type, "AzureOpenAI");
+  assertEquals(ai.LLMs?.gpt4o?.Details?.Type, "AzureOpenAI");
 });
 
 Deno.test("Builds Linear circuit referencing scoped handles", () => {
@@ -42,8 +42,8 @@ Deno.test("Builds Linear circuit referencing scoped handles", () => {
   assert(eac.Circuits);
   const circ = eac.Circuits!["unit:linear"];
   assert(circ);
-  assertEquals(circ.Details.Type, "Linear");
-  const neurons = circ.Details.Neurons as Record<
+  assertEquals(circ.Details?.Type, "Linear");
+  const neurons = circ.Details?.Neurons as Record<
     string,
     { Type: string } & Record<string, unknown>
   >;
